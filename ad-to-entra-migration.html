@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AD to Entra Migration | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html" class="active">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="hybrid-identity.html">Hybrid Identity</a>
+                <span class="separator">/</span>
+                <span class="current">Migration Guide</span>
+            </nav>
+
+            <h1>AD to Entra ID Migration Guide</h1>
+            
+            <p>Migrating from on-premises Active Directory to cloud-native Entra ID requires careful planning. This guide covers migration strategies, prerequisites, and step-by-step procedures.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#strategies">Migration Strategies</a></li>
+                    <li><a href="#assessment">Assessment & Planning</a></li>
+                    <li><a href="#prerequisites">Prerequisites</a></li>
+                    <li><a href="#staged">Staged Migration</a></li>
+                    <li><a href="#device">Device Migration</a></li>
+                    <li><a href="#app-migration">Application Migration</a></li>
+                    <li><a href="#cutover">Cutover Planning</a></li>
+                </ul>
+            </div>
+
+            <h2 id="strategies">Migration Strategies</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    MIGRATION STRATEGY OPTIONS
+    ═══════════════════════════
+
+    OPTION 1: HYBRID (Long-term coexistence)
+    ─────────────────────────────────────────
+    ┌──────────────┐         ┌──────────────┐
+    │     AD       │◀───────▶│   Entra ID   │
+    │ (On-Premises)│  Sync   │   (Cloud)    │
+    └──────────────┘         └──────────────┘
+    
+    • Keep AD as source of truth
+    • Sync users/groups to cloud
+    • Supports legacy apps requiring AD
+    • Indefinite coexistence
+
+
+    OPTION 2: CLOUD-FIRST (New deployments)
+    ────────────────────────────────────────
+    ┌──────────────┐
+    │   Entra ID   │  ← Single source of truth
+    │   (Cloud)    │
+    └──────────────┘
+    
+    • New organizations without AD
+    • Greenfield deployments
+    • No on-premises dependencies
+
+
+    OPTION 3: FULL MIGRATION (AD decommission)
+    ──────────────────────────────────────────
+    ┌──────────────┐         ┌──────────────┐         ┌──────────────┐
+    │     AD       │ ──────▶ │   Hybrid     │ ──────▶ │  Cloud-Only  │
+    │   (Start)    │         │   (Interim)  │         │   (Target)   │
+    └──────────────┘         └──────────────┘         └──────────────┘
+    
+    Phase 1: Establish hybrid     Phase 2: Migrate workloads    Phase 3: Decommission AD
+    
+    • Multi-year journey for most organizations
+    • Requires app modernization
+    • Must eliminate all AD dependencies
+</pre>
+            </div>
+
+            <h2 id="assessment">Assessment & Planning</h2>
+            
+            <h3>Discovery Checklist</h3>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Area</th>
+                            <th>Assessment Items</th>
+                            <th>Migration Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Users & Groups</strong></td>
+                            <td>Total users, group nesting depth, distribution lists</td>
+                            <td>Sync configuration, license requirements</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Applications</strong></td>
+                            <td>Kerberos apps, NTLM apps, LDAP binds, GPO-dependent apps</td>
+                            <td>App modernization, App Proxy needs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Devices</strong></td>
+                            <td>Domain-joined devices, server count, OS versions</td>
+                            <td>Device re-join strategy, GPO to Intune</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Network</strong></td>
+                            <td>DC locations, VPN dependencies, branch offices</td>
+                            <td>Connectivity requirements, latency</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security</strong></td>
+                            <td>Service accounts, privileged groups, GPOs</td>
+                            <td>Managed identities, PIM, Intune policies</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - AD Assessment Script</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># AD Migration Assessment Script
+
+# User counts
+$userCount = (Get-ADUser -Filter *).Count
+$enabledUsers = (Get-ADUser -Filter {Enabled -eq $true}).Count
+$guestAccounts = (Get-ADUser -Filter {Description -like "*guest*"}).Count
+
+# Group analysis
+$allGroups = Get-ADGroup -Filter *
+$securityGroups = ($allGroups | Where-Object { $_.GroupCategory -eq 'Security' }).Count
+$distributionGroups = ($allGroups | Where-Object { $_.GroupCategory -eq 'Distribution' }).Count
+
+# Nested groups (potential sync issues)
+$nestedGroups = foreach ($group in $allGroups) {
+    $members = Get-ADGroupMember -Identity $group -ErrorAction SilentlyContinue
+    $nestedCount = ($members | Where-Object { $_.objectClass -eq 'group' }).Count
+    if ($nestedCount -gt 0) {
+        [PSCustomObject]@{
+            GroupName = $group.Name
+            NestedGroups = $nestedCount
+        }
+    }
+}
+
+# Service accounts
+$serviceAccounts = Get-ADUser -Filter {ServicePrincipalName -like "*"} -Properties ServicePrincipalName
+
+# Computers by OS
+$computers = Get-ADComputer -Filter * -Properties OperatingSystem | 
+    Group-Object OperatingSystem | 
+    Select-Object Name, Count
+
+# GPO count
+$gpoCount = (Get-GPO -All).Count
+
+# Output summary
+Write-Host "=== AD Migration Assessment ===" -ForegroundColor Cyan
+Write-Host "Total Users: $userCount (Enabled: $enabledUsers)"
+Write-Host "Security Groups: $securityGroups"
+Write-Host "Distribution Groups: $distributionGroups"
+Write-Host "Groups with Nesting: $($nestedGroups.Count)"
+Write-Host "Service Accounts (SPN): $($serviceAccounts.Count)"
+Write-Host "GPO Count: $gpoCount"
+Write-Host ""
+Write-Host "Computers by OS:"
+$computers | Format-Table -AutoSize</code></pre>
+            </div>
+
+            <h2 id="prerequisites">Prerequisites</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Licensing Requirements</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Entra ID P1:</strong> Hybrid identity, Conditional Access, Self-Service Password Reset with writeback</li>
+                                <li><strong>Entra ID P2:</strong> Identity Protection, PIM (recommended for migration)</li>
+                                <li><strong>Intune:</strong> Device management, configuration profiles (GPO replacement)</li>
+                                <li><strong>Microsoft 365:</strong> E3/E5 for productivity workloads</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Technical Prerequisites</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>AD forest functional level 2003 or higher</li>
+                                <li>UPN suffix matches verified custom domain</li>
+                                <li>No duplicate proxyAddresses or UPNs</li>
+                                <li>Outbound HTTPS (443) connectivity for sync server</li>
+                                <li>Server for Entra Connect (Windows Server 2016+)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="staged">Staged Migration Approach</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    STAGED MIGRATION PHASES
+    ════════════════════════
+
+    PHASE 1: FOUNDATION (Weeks 1-4)
+    ────────────────────────────────
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  • Deploy Entra Connect with Password Hash Sync                  │
+    │  • Enable Seamless SSO                                          │
+    │  • Configure password writeback                                  │
+    │  • Deploy pilot Conditional Access policies                      │
+    │  • Enable Security Defaults or baseline CA policies              │
+    └─────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    PHASE 2: AUTHENTICATION (Weeks 5-12)
+    ─────────────────────────────────────
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  • Roll out MFA to all users                                     │
+    │  • Deploy passwordless authentication (FIDO2, WHfB)             │
+    │  • Migrate from ADFS to cloud authentication (if applicable)    │
+    │  • Enable Self-Service Password Reset                           │
+    └─────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    PHASE 3: APPLICATIONS (Weeks 13-26)
+    ────────────────────────────────────
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  • Inventory all applications using AD authentication           │
+    │  • Migrate SaaS apps to Entra ID SSO                            │
+    │  • Deploy Application Proxy for on-premises apps                │
+    │  • Migrate Kerberos apps to cloud auth where possible           │
+    │  • Enable user provisioning (SCIM) for key apps                 │
+    └─────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    PHASE 4: DEVICES (Weeks 27-40)
+    ───────────────────────────────
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  • Deploy Hybrid Entra ID Join for existing devices              │
+    │  • Configure Intune enrollment                                  │
+    │  • Migrate GPO settings to Intune configuration profiles        │
+    │  • Begin Entra ID Join for new devices                          │
+    │  • Pilot cloud-only device management                           │
+    └─────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    PHASE 5: GOVERNANCE (Weeks 41-52)
+    ─────────────────────────────────
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  • Implement PIM for privileged roles                            │
+    │  • Configure Access Reviews                                      │
+    │  • Deploy Entitlement Management                                │
+    │  • Enable Identity Protection policies                          │
+    │  • Plan AD decommission (if applicable)                         │
+    └─────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="device">Device Migration</h2>
+            
+            <h3>Device Join State Transition</h3>
+            
+            <div class="ascii-diagram">
+<pre>
+    DEVICE MIGRATION PATHS
+    ═══════════════════════
+
+    CURRENT STATE              MIGRATION PATH                    TARGET STATE
+    ─────────────              ──────────────                    ────────────
+
+    ┌───────────────┐                                      ┌───────────────┐
+    │ Domain-Joined │ ───▶ Configure Hybrid Join ────────▶ │Hybrid Joined  │
+    │   (AD only)   │      (Entra Connect device sync)     │ (AD + Entra)  │
+    └───────────────┘                                      └───────┬───────┘
+                                                                   │
+                                                                   │ Re-image or
+                                                                   │ Windows Autopilot
+                                                                   ▼
+                                                           ┌───────────────┐
+                                                           │  Entra ID     │
+                                                           │   Joined      │
+                                                           │ (Cloud-only)  │
+                                                           └───────────────┘
+
+    GPO TO INTUNE MIGRATION:
+    ════════════════════════
+    ┌─────────────────────┬──────────────────────────────────────────────┐
+    │  GPO Category       │  Intune Equivalent                           │
+    ├─────────────────────┼──────────────────────────────────────────────┤
+    │  Security Settings  │  Endpoint Security policies                  │
+    │  Software Deploy    │  Win32 apps, Microsoft Store apps           │
+    │  Scripts            │  PowerShell scripts, Remediation scripts    │
+    │  Registry Settings  │  Configuration profiles (Custom OMA-URI)    │
+    │  User Configuration │  Settings Catalog, Administrative Templates │
+    │  Certificates       │  SCEP/PKCS certificate profiles             │
+    │  Mapped Drives      │  OneDrive Known Folder Move, Scripts        │
+    │  Printers           │  Universal Print                            │
+    └─────────────────────┴──────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="app-migration">Application Migration</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>App Type</th>
+                            <th>Current Auth</th>
+                            <th>Migration Target</th>
+                            <th>Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SaaS (Gallery)</strong></td>
+                            <td>Various</td>
+                            <td>Entra ID SSO (SAML/OIDC)</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Custom Web (Modern)</strong></td>
+                            <td>ADFS/WS-Fed</td>
+                            <td>Entra ID SAML/OIDC</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>On-Prem Web (IIS)</strong></td>
+                            <td>Windows Auth/Kerberos</td>
+                            <td>Application Proxy + KCD</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Legacy (Thick Client)</strong></td>
+                            <td>NTLM/Kerberos</td>
+                            <td>May require AD (long-term)</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Service Accounts</strong></td>
+                            <td>AD service accounts</td>
+                            <td>Managed Identities, Workload ID</td>
+                            <td>Medium-High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="cutover">Cutover Planning</h2>
+            
+            <div class="info-box warning">
+                <div class="info-box-title">⚠️ Before AD Decommission</div>
+                <ul>
+                    <li>All devices Entra ID Joined (not Hybrid Joined)</li>
+                    <li>All applications migrated to cloud authentication</li>
+                    <li>No Kerberos/NTLM dependencies remaining</li>
+                    <li>All GPOs replaced with Intune policies</li>
+                    <li>File servers migrated to SharePoint/OneDrive or Azure Files</li>
+                    <li>Print servers migrated to Universal Print</li>
+                    <li>All service accounts converted to managed identities</li>
+                </ul>
+            </div>
+
+            <nav class="page-nav">
+                <a href="hybrid-identity.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Hybrid Identity</span>
+                </a>
+                <a href="okta-fundamentals.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Okta Fundamentals →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

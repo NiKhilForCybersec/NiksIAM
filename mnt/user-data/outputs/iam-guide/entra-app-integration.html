@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Integration | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html" class="active">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="entra-id-fundamentals.html">Microsoft Entra ID</a>
+                <span class="separator">/</span>
+                <span class="current">App Integration</span>
+            </nav>
+
+            <h1>Application Integration</h1>
+            
+            <p>Entra ID supports integration with thousands of applications using SAML, OIDC, and other protocols. This chapter covers enterprise applications, app registrations, SSO configuration, and user provisioning.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#concepts">Key Concepts</a></li>
+                    <li><a href="#enterprise-apps">Enterprise Applications</a></li>
+                    <li><a href="#app-registrations">App Registrations</a></li>
+                    <li><a href="#sso-config">SSO Configuration</a></li>
+                    <li><a href="#provisioning">User Provisioning (SCIM)</a></li>
+                    <li><a href="#app-proxy">Application Proxy</a></li>
+                </ul>
+            </div>
+
+            <h2 id="concepts">Key Concepts</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    APPLICATION OBJECTS IN ENTRA ID
+    ═════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    APP REGISTRATION                                  │
+    │                    (Application Object)                              │
+    │                                                                      │
+    │   • Global definition of your application                           │
+    │   • Lives in your "home" tenant                                     │
+    │   • Defines: App ID, credentials, redirect URIs, permissions        │
+    │   • One app registration can have multiple service principals       │
+    │                                                                      │
+    │   Think of it as: The "template" or "blueprint"                     │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ Creates
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    SERVICE PRINCIPAL                                 │
+    │                    (Enterprise Application)                          │
+    │                                                                      │
+    │   • Local instance of an application in a specific tenant           │
+    │   • Created when: App is consented to, added from gallery           │
+    │   • Defines: User assignments, SSO settings, Conditional Access     │
+    │   • What users actually interact with                               │
+    │                                                                      │
+    │   Think of it as: The "instance" users access                       │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    RELATIONSHIP EXAMPLE:
+    ═════════════════════
+
+    Your Tenant                        Customer Tenant A
+    ┌────────────────────┐            ┌────────────────────┐
+    │ App Registration   │            │ Service Principal  │
+    │ "Contoso HR App"   │───────────▶│ "Contoso HR App"   │
+    │ (App ID: xxx)      │            │                    │
+    └────────────────────┘            └────────────────────┘
+              │                                
+              │                        Customer Tenant B
+              │                       ┌────────────────────┐
+              │                       │ Service Principal  │
+              └──────────────────────▶│ "Contoso HR App"   │
+                                      │                    │
+                                      └────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="enterprise-apps">Enterprise Applications</h2>
+            
+            <p>Enterprise applications are service principals representing applications users can access. They can be gallery apps, custom apps, or Microsoft apps.</p>
+
+            <h3>Adding Gallery Applications</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Add Gallery App</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Search for gallery application
+$template = Get-MgApplicationTemplate -Filter "displayName eq 'Salesforce'"
+
+# Create enterprise app from gallery template
+$params = @{
+    DisplayName = "Salesforce - Production"
+}
+$app = New-MgApplicationTemplateInstantiate -ApplicationTemplateId $template.Id -BodyParameter $params
+
+# The above creates both:
+# - App Registration (Application object)
+# - Enterprise App (Service Principal)
+
+Write-Host "Application ID: $($app.Application.AppId)"
+Write-Host "Service Principal ID: $($app.ServicePrincipal.Id)"</code></pre>
+            </div>
+
+            <h3>User and Group Assignment</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Assign Users to App</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Get service principal
+$sp = Get-MgServicePrincipal -Filter "displayName eq 'Salesforce - Production'"
+
+# Assign user to application
+$params = @{
+    PrincipalId = "user-object-id"
+    ResourceId = $sp.Id
+    AppRoleId = "00000000-0000-0000-0000-000000000000"  # Default role
+}
+New-MgUserAppRoleAssignment -UserId "user-object-id" -BodyParameter $params
+
+# Assign group to application
+$params = @{
+    PrincipalId = "group-object-id"
+    ResourceId = $sp.Id
+    AppRoleId = "00000000-0000-0000-0000-000000000000"
+}
+New-MgGroupAppRoleAssignment -GroupId "group-object-id" -BodyParameter $params
+
+# Require assignment (users must be assigned to access)
+Update-MgServicePrincipal -ServicePrincipalId $sp.Id -AppRoleAssignmentRequired:$true</code></pre>
+            </div>
+
+            <h2 id="app-registrations">App Registrations</h2>
+            
+            <p>App registrations define your custom applications and their authentication configuration.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    APP REGISTRATION COMPONENTS
+    ════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                      APP REGISTRATION                                │
+    │                                                                      │
+    │   ┌─────────────────────────────────────────────────────────────┐   │
+    │   │  IDENTITY                                                    │   │
+    │   │  • Application (client) ID - unique identifier              │   │
+    │   │  • Directory (tenant) ID                                    │   │
+    │   │  • Object ID                                                │   │
+    │   └─────────────────────────────────────────────────────────────┘   │
+    │                                                                      │
+    │   ┌─────────────────────────────────────────────────────────────┐   │
+    │   │  AUTHENTICATION                                              │   │
+    │   │  • Platform configurations (Web, SPA, Mobile, Desktop)      │   │
+    │   │  • Redirect URIs                                            │   │
+    │   │  • Front-channel/back-channel logout URLs                   │   │
+    │   │  • Implicit grant settings                                  │   │
+    │   │  • Supported account types (single/multi-tenant)            │   │
+    │   └─────────────────────────────────────────────────────────────┘   │
+    │                                                                      │
+    │   ┌─────────────────────────────────────────────────────────────┐   │
+    │   │  CREDENTIALS                                                 │   │
+    │   │  • Client secrets (passwords)                               │   │
+    │   │  • Certificates (recommended for production)                │   │
+    │   │  • Federated credentials (workload identity)                │   │
+    │   └─────────────────────────────────────────────────────────────┘   │
+    │                                                                      │
+    │   ┌─────────────────────────────────────────────────────────────┐   │
+    │   │  API PERMISSIONS                                             │   │
+    │   │  • Delegated permissions (act as signed-in user)            │   │
+    │   │  • Application permissions (act as itself)                  │   │
+    │   │  • Admin consent required                                   │   │
+    │   └─────────────────────────────────────────────────────────────┘   │
+    │                                                                      │
+    │   ┌─────────────────────────────────────────────────────────────┐   │
+    │   │  EXPOSE AN API                                               │   │
+    │   │  • Application ID URI                                       │   │
+    │   │  • Scopes (permissions your API exposes)                    │   │
+    │   │  • Authorized client applications                           │   │
+    │   └─────────────────────────────────────────────────────────────┘   │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Terraform - App Registration</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Create app registration for a web application
+resource "azuread_application" "web_app" {
+  display_name = "Contoso Web Application"
+  
+  # Who can sign in
+  sign_in_audience = "AzureADMyOrg"  # Single tenant
+  # Options: AzureADMyOrg, AzureADMultipleOrgs, AzureADandPersonalMicrosoftAccount
+  
+  # Web platform configuration
+  web {
+    homepage_url  = "https://app.contoso.com"
+    redirect_uris = [
+      "https://app.contoso.com/auth/callback",
+      "https://app.contoso.com/signin-oidc"
+    ]
+    logout_url = "https://app.contoso.com/signout-callback-oidc"
+    
+    implicit_grant {
+      access_token_issuance_enabled = false
+      id_token_issuance_enabled     = false
+    }
+  }
+  
+  # API permissions
+  required_resource_access {
+    resource_app_id = "00000003-0000-0000-c000-000000000000"  # Microsoft Graph
+    
+    resource_access {
+      id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"  # User.Read
+      type = "Scope"  # Delegated
+    }
+    resource_access {
+      id   = "df021288-bdef-4463-88db-98f22de89214"  # User.Read.All
+      type = "Role"   # Application
+    }
+  }
+  
+  # Optional claims in tokens
+  optional_claims {
+    id_token {
+      name = "email"
+    }
+    id_token {
+      name = "upn"
+    }
+  }
+}
+
+# Create service principal
+resource "azuread_service_principal" "web_app" {
+  client_id                    = azuread_application.web_app.client_id
+  app_role_assignment_required = true
+}
+
+# Create client secret
+resource "azuread_application_password" "web_app" {
+  application_id = azuread_application.web_app.id
+  display_name   = "App Secret"
+  end_date       = "2025-12-31T00:00:00Z"
+}</code></pre>
+            </div>
+
+            <h2 id="sso-config">SSO Configuration</h2>
+            
+            <h3>SAML SSO Setup</h3>
+            
+            <div class="ascii-diagram">
+<pre>
+    SAML SSO CONFIGURATION
+    ═══════════════════════
+
+    ENTRA ID (IdP)                           APPLICATION (SP)
+    ┌────────────────────┐                   ┌────────────────────┐
+    │                    │                   │                    │
+    │  SAML Settings:    │                   │  Required from     │
+    │                    │                   │  Entra ID:         │
+    │  • Entity ID       │──────────────────▶│  • IdP Entity ID   │
+    │  • Login URL       │                   │  • Login URL       │
+    │  • Logout URL      │                   │  • Certificate     │
+    │  • Certificate     │                   │                    │
+    │                    │                   │                    │
+    │  Required from SP: │◀──────────────────│  SP Settings:      │
+    │  • Entity ID       │                   │  • Entity ID       │
+    │  • ACS URL         │                   │  • ACS URL         │
+    │  • Attributes      │                   │  • Attribute map   │
+    │                    │                   │                    │
+    └────────────────────┘                   └────────────────────┘
+
+    COMMON SAML ATTRIBUTES:
+    ───────────────────────
+    • NameID: user.userprincipalname (or user.mail)
+    • email: user.mail
+    • firstName: user.givenname
+    • lastName: user.surname
+    • displayName: user.displayname
+    • groups: user.assignedroles (or group claims)
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Configure SAML SSO</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Get service principal
+$sp = Get-MgServicePrincipal -Filter "displayName eq 'My SAML App'"
+
+# Set SAML SSO mode
+Update-MgServicePrincipal -ServicePrincipalId $sp.Id -PreferredSingleSignOnMode "saml"
+
+# Configure SAML settings
+$params = @{
+    SingleSignOnSettings = @{
+        SingleSignOnMode = "saml"
+        RelayState = ""
+    }
+}
+
+# Get SAML metadata URL
+$metadataUrl = "https://login.microsoftonline.com/$tenantId/federationmetadata/2007-06/federationmetadata.xml?appid=$($sp.AppId)"
+
+Write-Host "Metadata URL: $metadataUrl"
+Write-Host "Entity ID: https://sts.windows.net/$tenantId/"
+Write-Host "Login URL: https://login.microsoftonline.com/$tenantId/saml2"
+Write-Host "Logout URL: https://login.microsoftonline.com/$tenantId/saml2"</code></pre>
+            </div>
+
+            <h3>OIDC SSO Setup</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">OIDC Configuration Endpoints</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># OpenID Connect Discovery Document
+https://login.microsoftonline.com/{tenant-id}/v2.0/.well-known/openid-configuration
+
+# Authorization Endpoint
+https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/authorize
+
+# Token Endpoint
+https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/token
+
+# JWKS (Token Signing Keys)
+https://login.microsoftonline.com/{tenant-id}/discovery/v2.0/keys
+
+# Logout Endpoint
+https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/logout
+
+# Common tenant endpoints (multi-tenant apps)
+https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
+https://login.microsoftonline.com/organizations/v2.0/.well-known/openid-configuration</code></pre>
+            </div>
+
+            <h2 id="provisioning">User Provisioning (SCIM)</h2>
+            
+            <p>SCIM (System for Cross-domain Identity Management) enables automatic user provisioning and deprovisioning to applications.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    SCIM PROVISIONING FLOW
+    ═══════════════════════
+
+    ┌────────────────────┐                   ┌────────────────────┐
+    │     ENTRA ID       │                   │    APPLICATION     │
+    │  (SCIM Client)     │                   │   (SCIM Server)    │
+    └─────────┬──────────┘                   └─────────┬──────────┘
+              │                                        │
+              │  1. Initial Sync (Full)                │
+              │  ─────────────────────                 │
+              │  GET /Users (fetch all)                │
+              │────────────────────────────────────────▶│
+              │                                        │
+              │◀────────────────────────────────────────│
+              │  User list response                    │
+              │                                        │
+              │  POST /Users (create missing)          │
+              │────────────────────────────────────────▶│
+              │                                        │
+              │  2. Incremental Sync (every 40 min)    │
+              │  ────────────────────────────────────  │
+              │                                        │
+              │  POST /Users (new users)               │
+              │────────────────────────────────────────▶│
+              │                                        │
+              │  PATCH /Users/{id} (updates)           │
+              │────────────────────────────────────────▶│
+              │                                        │
+              │  DELETE /Users/{id} (soft delete)      │
+              │────────────────────────────────────────▶│
+              │                                        │
+
+    SCIM ENDPOINTS:
+    ────────────────
+    Base URL: https://app.example.com/scim/v2
+
+    • GET    /Users              - List users
+    • GET    /Users/{id}         - Get user
+    • POST   /Users              - Create user
+    • PATCH  /Users/{id}         - Update user
+    • DELETE /Users/{id}         - Delete user
+    • GET    /Groups             - List groups
+    • POST   /Groups             - Create group
+</pre>
+            </div>
+
+            <div class="info-box info">
+                <div class="info-box-title">💡 Provisioning Best Practices</div>
+                <ul>
+                    <li>Start with a pilot group before provisioning all users</li>
+                    <li>Map attributes carefully - review attribute mappings</li>
+                    <li>Test with "Provision on demand" before enabling</li>
+                    <li>Monitor provisioning logs for errors</li>
+                    <li>Set up alerts for provisioning failures</li>
+                </ul>
+            </div>
+
+            <h2 id="app-proxy">Application Proxy</h2>
+            
+            <p>Application Proxy provides secure remote access to on-premises web applications without VPN.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    APPLICATION PROXY ARCHITECTURE
+    ═══════════════════════════════
+
+    EXTERNAL                    MICROSOFT                    ON-PREMISES
+    (Internet)                  CLOUD                        NETWORK
+                                                             
+    ┌──────────┐    HTTPS    ┌──────────────┐              ┌──────────────┐
+    │  Remote  │────────────▶│   Entra ID   │              │   Internal   │
+    │  User    │             │  App Proxy   │              │     Web      │
+    │          │◀────────────│   Service    │              │     App      │
+    └──────────┘             └──────────────┘              └──────────────┘
+                                    │                             ▲
+                                    │ Outbound                    │
+                                    │ HTTPS only                  │
+                                    │ (443)                       │
+                                    ▼                             │
+                             ┌──────────────┐                     │
+                             │  Connector   │─────────────────────┘
+                             │   Server     │
+                             │ (On-premises)│
+                             └──────────────┘
+
+    KEY BENEFITS:
+    ─────────────
+    • No inbound firewall rules required
+    • No VPN needed
+    • Pre-authentication with Entra ID
+    • Conditional Access policies apply
+    • SSO to on-premises apps (Kerberos/header-based)
+    
+    REQUIREMENTS:
+    ─────────────
+    • Entra ID P1 or P2 license
+    • Windows Server for connector
+    • Connector must have outbound internet access
+</pre>
+            </div>
+
+            <nav class="page-nav">
+                <a href="entra-id-governance.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Identity Governance</span>
+                </a>
+                <a href="hybrid-identity.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Hybrid Identity →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

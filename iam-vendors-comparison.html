@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAM Vendor Comparison | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo"><div class="header-logo-icon">IAM</div><span>Ultimate Guide</span></div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section"><div class="sidebar-title">Getting Started</div><ul class="sidebar-nav"><li><a href="index.html">Home</a></li><li><a href="iam-fundamentals.html">IAM Fundamentals</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">On-Premises</div><ul class="sidebar-nav"><li><a href="active-directory.html">Active Directory</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Microsoft Entra ID</div><ul class="sidebar-nav"><li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li><li><a href="entra-id-authentication.html">Authentication Methods</a></li><li><a href="entra-conditional-access.html">Conditional Access</a></li><li><a href="entra-identity-protection.html">Identity Protection</a></li><li><a href="entra-id-governance.html">Identity Governance</a></li><li><a href="entra-app-integration.html">App Integration</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Hybrid Identity</div><ul class="sidebar-nav"><li><a href="hybrid-identity.html">Hybrid Configuration</a></li><li><a href="ad-to-entra-migration.html">Migration Guide</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Okta</div><ul class="sidebar-nav"><li><a href="okta-fundamentals.html">Okta Basics</a></li><li><a href="okta-sso-mfa.html">SSO & MFA</a></li><li><a href="okta-lifecycle.html">Lifecycle Management</a></li><li><a href="okta-governance.html">Governance</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Advanced Topics</div><ul class="sidebar-nav"><li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li><li><a href="pam.html">Privileged Access (PAM)</a></li><li><a href="iam-vendors-comparison.html" class="active">Vendor Comparison</a></li><li><a href="iam-security.html">Security Best Practices</a></li><li><a href="iam-troubleshooting.html">Troubleshooting</a></li></ul></div>
+        </aside>
+        <main class="main-content">
+            <nav class="breadcrumbs"><a href="index.html">Home</a><span class="separator">/</span><span class="current">IAM Vendor Comparison</span></nav>
+            <h1>IAM Vendor Comparison</h1>
+            <p>Compare leading Identity and Access Management platforms across features, pricing, and use cases to make informed decisions for your organization.</p>
+            
+            <div class="toc"><div class="toc-title">On This Page</div><ul class="toc-list"><li><a href="#idaas">IDaaS Comparison</a></li><li><a href="#pam">PAM Comparison</a></li><li><a href="#iga">IGA Comparison</a></li><li><a href="#selection">Selection Criteria</a></li></ul></div>
+
+            <h2 id="idaas">Identity-as-a-Service (IDaaS) Comparison</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Microsoft Entra ID</th>
+                            <th>Okta</th>
+                            <th>Ping Identity</th>
+                            <th>OneLogin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SSO Apps</strong></td>
+                            <td>3,500+ gallery</td>
+                            <td>7,000+ OIN</td>
+                            <td>1,500+ catalog</td>
+                            <td>6,000+ catalog</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MFA Options</strong></td>
+                            <td>Authenticator, FIDO2, SMS, Voice</td>
+                            <td>Okta Verify, FIDO2, SMS, Voice</td>
+                            <td>PingID, FIDO2, SMS</td>
+                            <td>OneLogin Protect, FIDO2, SMS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Provisioning</strong></td>
+                            <td>SCIM, custom connectors</td>
+                            <td>SCIM, extensive OIN</td>
+                            <td>SCIM, Identity Bridge</td>
+                            <td>SCIM, connectors</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Adaptive Auth</strong></td>
+                            <td>Identity Protection (P2)</td>
+                            <td>ThreatInsight, Behavior</td>
+                            <td>PingOne Protect</td>
+                            <td>SmartFactor Auth</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Microsoft ecosystem</td>
+                            <td>Multi-cloud, best-of-breed</td>
+                            <td>Enterprise hybrid</td>
+                            <td>SMB, ease of use</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pricing Model</strong></td>
+                            <td>Per user/month (P1/P2)</td>
+                            <td>Per user/month (modular)</td>
+                            <td>Per user/month</td>
+                            <td>Per user/month</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="pam">Privileged Access Management Comparison</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>CyberArk</th>
+                            <th>BeyondTrust</th>
+                            <th>Delinea</th>
+                            <th>HashiCorp Vault</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Credential Vault</strong></td>
+                            <td>Enterprise Vault</td>
+                            <td>Password Safe</td>
+                            <td>Secret Server</td>
+                            <td>Secrets Engine</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session Management</strong></td>
+                            <td>PSM, recording</td>
+                            <td>Session recording</td>
+                            <td>Session recording</td>
+                            <td>Limited (SSH)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Endpoint Privilege</strong></td>
+                            <td>EPM</td>
+                            <td>Privilege Management</td>
+                            <td>Privilege Manager</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cloud Secrets</strong></td>
+                            <td>Conjur</td>
+                            <td>DevOps Secrets Safe</td>
+                            <td>DevOps Secrets Vault</td>
+                            <td>Native strength</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Large enterprise</td>
+                            <td>Windows-centric</td>
+                            <td>Mid-market</td>
+                            <td>DevOps, cloud-native</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="iga">Identity Governance Comparison</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>SailPoint</th>
+                            <th>Saviynt</th>
+                            <th>Entra ID Governance</th>
+                            <th>Okta IGA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Access Certification</strong></td>
+                            <td>Advanced campaigns</td>
+                            <td>Risk-based reviews</td>
+                            <td>Access Reviews</td>
+                            <td>Access Certification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Access Requests</strong></td>
+                            <td>Role-based</td>
+                            <td>AI-driven</td>
+                            <td>Entitlement Mgmt</td>
+                            <td>Access Requests</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SOD Controls</strong></td>
+                            <td>Comprehensive</td>
+                            <td>Comprehensive</td>
+                            <td>Limited</td>
+                            <td>Limited</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Role Mining</strong></td>
+                            <td>AI/ML-driven</td>
+                            <td>AI/ML-driven</td>
+                            <td>Basic</td>
+                            <td>Basic</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Complex enterprise</td>
+                            <td>Cloud apps, SAP</td>
+                            <td>Microsoft shops</td>
+                            <td>Okta customers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="selection">Selection Criteria</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">When to Choose Microsoft Entra ID</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Heavy Microsoft 365 / Azure investment</li>
+                                <li>Windows device-centric environment</li>
+                                <li>Want single vendor for identity + productivity</li>
+                                <li>Existing Enterprise Agreement</li>
+                                <li>Hybrid AD environment with cloud migration plans</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">When to Choose Okta</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Multi-cloud or cloud-agnostic strategy</li>
+                                <li>Need broadest SaaS app catalog</li>
+                                <li>Want best-of-breed identity platform</li>
+                                <li>Developer-focused organization</li>
+                                <li>Complex provisioning requirements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Key Evaluation Questions</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ol>
+                                <li>What is your primary cloud ecosystem (Azure, AWS, GCP)?</li>
+                                <li>How many SaaS applications need SSO?</li>
+                                <li>What are your compliance requirements (SOX, HIPAA, etc.)?</li>
+                                <li>Do you need workforce, customer, or both identity?</li>
+                                <li>What is your on-premises AD dependency?</li>
+                                <li>What is your budget model (per user, enterprise)?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="page-nav">
+                <a href="pam.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Privileged Access (PAM)</span></a>
+                <a href="iam-security.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Security Best Practices →</span></a>
+            </nav>
+            <footer class="footer"><p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p></footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

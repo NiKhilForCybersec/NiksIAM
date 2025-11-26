@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okta Fundamentals | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html" class="active">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="okta-fundamentals.html">Okta</a>
+                <span class="separator">/</span>
+                <span class="current">Fundamentals</span>
+            </nav>
+
+            <h1>Okta Fundamentals</h1>
+            
+            <p>Okta is a leading cloud-native Identity-as-a-Service (IDaaS) platform providing SSO, MFA, lifecycle management, and API access management. This guide covers Okta's architecture, core concepts, and administrative fundamentals.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#architecture">Okta Architecture</a></li>
+                    <li><a href="#products">Product Suite</a></li>
+                    <li><a href="#universal-directory">Universal Directory</a></li>
+                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="#admin-console">Admin Console</a></li>
+                    <li><a href="#api">API & Automation</a></li>
+                </ul>
+            </div>
+
+            <h2 id="architecture">Okta Architecture</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    OKTA PLATFORM ARCHITECTURE
+    ═══════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                         OKTA CLOUD                                   │
+    │                                                                      │
+    │  ┌───────────────────────────────────────────────────────────────┐  │
+    │  │                    OKTA ORG (Tenant)                           │  │
+    │  │                  yourcompany.okta.com                          │  │
+    │  │                                                                │  │
+    │  │   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐        │  │
+    │  │   │  Universal  │   │  Application │   │    Policy   │        │  │
+    │  │   │  Directory  │   │  Integration │   │    Engine   │        │  │
+    │  │   │             │   │   Network    │   │             │        │  │
+    │  │   │ • Users     │   │   (OIN)      │   │ • Auth      │        │  │
+    │  │   │ • Groups    │   │              │   │ • Sign-on   │        │  │
+    │  │   │ • Profiles  │   │ • 7000+ apps │   │ • Password  │        │  │
+    │  │   └─────────────┘   └─────────────┘   └─────────────┘        │  │
+    │  │                                                                │  │
+    │  │   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐        │  │
+    │  │   │     MFA     │   │  Lifecycle  │   │    API      │        │  │
+    │  │   │   Factors   │   │  Management │   │   Access    │        │  │
+    │  │   │             │   │             │   │  Management │        │  │
+    │  │   │ • Push      │   │ • Provisioning│  │             │        │  │
+    │  │   │ • TOTP      │   │ • Workflows  │   │ • OAuth     │        │  │
+    │  │   │ • WebAuthn  │   │ • Automation │   │ • Scopes    │        │  │
+    │  │   └─────────────┘   └─────────────┘   └─────────────┘        │  │
+    │  │                                                                │  │
+    │  └───────────────────────────────────────────────────────────────┘  │
+    │                                    │                                 │
+    └────────────────────────────────────┼─────────────────────────────────┘
+                                         │
+           ┌─────────────────────────────┼─────────────────────────────┐
+           │                             │                             │
+           ▼                             ▼                             ▼
+    ┌─────────────┐            ┌─────────────────┐            ┌─────────────┐
+    │    Users    │            │    Identity     │            │    Apps     │
+    │  (Browser)  │            │    Sources      │            │   (SAML/    │
+    │             │            │                 │            │    OIDC)    │
+    │             │            │ • AD/LDAP       │            │             │
+    │             │            │ • HR Systems    │            │ • SaaS      │
+    │             │            │ • Social        │            │ • On-Prem   │
+    └─────────────┘            └─────────────────┘            └─────────────┘
+</pre>
+            </div>
+
+            <h2 id="products">Okta Product Suite</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Description</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Workforce Identity Cloud (WIC)</strong></td>
+                            <td>Employee & partner identity</td>
+                            <td>SSO, MFA, Lifecycle, Universal Directory</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Customer Identity Cloud (CIC)</strong></td>
+                            <td>Customer-facing identity (Auth0)</td>
+                            <td>CIAM, social login, passwordless, customization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Identity Governance</strong></td>
+                            <td>Access governance & compliance</td>
+                            <td>Access certification, SOD, reporting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Privileged Access</strong></td>
+                            <td>PAM capabilities</td>
+                            <td>Server access, session recording, JIT access</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="universal-directory">Universal Directory</h2>
+            
+            <p>Universal Directory is Okta's cloud-based user store that aggregates identities from multiple sources and serves as the system of record for user profiles.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    UNIVERSAL DIRECTORY STRUCTURE
+    ══════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                      IDENTITY SOURCES                                │
+    │                                                                      │
+    │   ┌───────────┐   ┌───────────┐   ┌───────────┐   ┌───────────┐    │
+    │   │    AD     │   │   LDAP    │   │ Workday   │   │  Social   │    │
+    │   │  Agent    │   │  Agent    │   │   (HR)    │   │   IdPs    │    │
+    │   └─────┬─────┘   └─────┬─────┘   └─────┬─────┘   └─────┬─────┘    │
+    │         │               │               │               │          │
+    │         └───────────────┴───────┬───────┴───────────────┘          │
+    │                                 │                                   │
+    │                                 ▼                                   │
+    │   ┌─────────────────────────────────────────────────────────────┐  │
+    │   │                  UNIVERSAL DIRECTORY                         │  │
+    │   │                                                              │  │
+    │   │   USER PROFILE:                                             │  │
+    │   │   ┌─────────────────────────────────────────────────────┐   │  │
+    │   │   │  Base Attributes     │  Custom Attributes           │   │  │
+    │   │   │  ─────────────────   │  ─────────────────────       │   │  │
+    │   │   │  • login             │  • employeeNumber            │   │  │
+    │   │   │  • email             │  • department                │   │  │
+    │   │   │  • firstName         │  • costCenter                │   │  │
+    │   │   │  • lastName          │  • managerID                 │   │  │
+    │   │   │  • displayName       │  • extensionAttribute1-15    │   │  │
+    │   │   │  • mobilePhone       │  • custom_field_xyz          │   │  │
+    │   │   └─────────────────────────────────────────────────────┘   │  │
+    │   │                                                              │  │
+    │   │   PROFILE MAPPING:                                          │  │
+    │   │   Source (AD) ──mapping rules──▶ Okta Profile               │  │
+    │   │   Okta Profile ──mapping rules──▶ App Profile               │  │
+    │   │                                                              │  │
+    │   └─────────────────────────────────────────────────────────────┘  │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    MASTERING CONCEPT:
+    ══════════════════
+    • Each attribute has a "master" source
+    • Master determines where attribute value comes from
+    • Can be: Okta, AD, LDAP, App, Profile Master
+    • Non-mastered attributes can be edited in Okta
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">API - User Management</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Create user via Okta API
+curl -X POST "https://${OKTA_DOMAIN}/api/v1/users?activate=true" \
+  -H "Authorization: SSWS ${API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "profile": {
+      "firstName": "Alice",
+      "lastName": "Smith",
+      "email": "alice.smith@example.com",
+      "login": "alice.smith@example.com",
+      "mobilePhone": "+1-555-123-4567",
+      "department": "Engineering",
+      "employeeNumber": "EMP001"
+    },
+    "credentials": {
+      "password": { "value": "TempP@ssw0rd!" }
+    }
+  }'
+
+# Get user by login
+curl -X GET "https://${OKTA_DOMAIN}/api/v1/users/alice.smith@example.com" \
+  -H "Authorization: SSWS ${API_TOKEN}"
+
+# Update user profile
+curl -X POST "https://${OKTA_DOMAIN}/api/v1/users/${USER_ID}" \
+  -H "Authorization: SSWS ${API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "profile": {
+      "department": "Sales"
+    }
+  }'
+
+# Deactivate user
+curl -X POST "https://${OKTA_DOMAIN}/api/v1/users/${USER_ID}/lifecycle/deactivate" \
+  -H "Authorization: SSWS ${API_TOKEN}"</code></pre>
+            </div>
+
+            <h2 id="groups">Okta Groups</h2>
+            
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">Okta Groups</button>
+                    <button class="tab-header">Pushed Groups</button>
+                    <button class="tab-header">Group Rules</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h3>Okta-Managed Groups</h3>
+                    <p>Groups created and managed directly in Okta Universal Directory.</p>
+                    <ul>
+                        <li>Manual membership management</li>
+                        <li>Can be used for app assignments, policies, and provisioning</li>
+                        <li>Supports nested groups (limited)</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Pushed Groups (AD/LDAP)</h3>
+                    <p>Groups synced from Active Directory or LDAP directories.</p>
+                    <ul>
+                        <li>Membership managed in source directory</li>
+                        <li>Read-only in Okta</li>
+                        <li>Can be used like Okta groups for assignments</li>
+                        <li>Requires AD/LDAP agent</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Group Rules (Dynamic Groups)</h3>
+                    <p>Automatically manage group membership based on user attributes.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Okta Expression Language - Group Rules</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># All users in Engineering department
+user.department == "Engineering"
+
+# Users in US or Canada
+user.countryCode == "US" OR user.countryCode == "CA"
+
+# Users with specific manager
+user.managerId == "00u1234567890"
+
+# Users matching email domain
+String.stringContains(user.email, "@contractors.example.com")
+
+# Full-time employees only
+user.employeeType == "FTE" AND user.status == "ACTIVE"
+
+# Complex condition
+(user.department == "Sales" OR user.department == "Marketing") 
+  AND user.countryCode == "US" 
+  AND user.userType != "Contractor"</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="admin-console">Admin Console Navigation</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    OKTA ADMIN CONSOLE STRUCTURE
+    ═════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  Okta Admin Console (yourcompany-admin.okta.com)                     │
+    ├─────────────────────────────────────────────────────────────────────┤
+    │                                                                      │
+    │  ├── Dashboard                                                      │
+    │  │   └── Overview, System Status, Tasks                            │
+    │  │                                                                  │
+    │  ├── Directory                                                      │
+    │  │   ├── People (Users)                                            │
+    │  │   ├── Groups                                                    │
+    │  │   ├── Profile Editor                                            │
+    │  │   └── Directory Integrations (AD, LDAP, HR)                     │
+    │  │                                                                  │
+    │  ├── Applications                                                   │
+    │  │   ├── Applications (All apps)                                   │
+    │  │   └── Identity Providers                                        │
+    │  │                                                                  │
+    │  ├── Security                                                       │
+    │  │   ├── Authentication                                            │
+    │  │   │   ├── Sign-on Policies                                     │
+    │  │   │   └── Password Policies                                     │
+    │  │   ├── Authenticators                                            │
+    │  │   ├── Multifactor                                               │
+    │  │   ├── Networks (IP Zones)                                       │
+    │  │   ├── Behaviors                                                 │
+    │  │   ├── Device Integrations                                       │
+    │  │   ├── Threats                                                   │
+    │  │   └── API                                                       │
+    │  │                                                                  │
+    │  ├── Workflow                                                       │
+    │  │   ├── Automations                                               │
+    │  │   └── Workflows (Okta Workflows)                                │
+    │  │                                                                  │
+    │  ├── Reports                                                        │
+    │  │   ├── System Log                                                │
+    │  │   └── Reports                                                   │
+    │  │                                                                  │
+    │  └── Settings                                                       │
+    │      ├── Account                                                   │
+    │      ├── Customization                                             │
+    │      ├── Features                                                  │
+    │      └── Downloads (Agents)                                        │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="api">Okta APIs & Automation</h2>
+            
+            <h3>API Authentication Methods</h3>
+            <ul>
+                <li><strong>SSWS Token:</strong> API token created in Admin Console (simple, long-lived)</li>
+                <li><strong>OAuth 2.0:</strong> Service app with client credentials or private key JWT</li>
+                <li><strong>Session Token:</strong> For user-context operations</li>
+            </ul>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Python - Okta SDK Example</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>from okta.client import Client as OktaClient
+import asyncio
+
+# Initialize client
+config = {
+    'orgUrl': 'https://yourcompany.okta.com',
+    'token': 'YOUR_API_TOKEN'
+}
+okta_client = OktaClient(config)
+
+async def main():
+    # List all users
+    users, resp, err = await okta_client.list_users()
+    for user in users:
+        print(f"{user.profile.login} - {user.status}")
+    
+    # Create a group
+    group_profile = {
+        'name': 'Engineering Team',
+        'description': 'All engineering staff'
+    }
+    group, resp, err = await okta_client.create_group({'profile': group_profile})
+    print(f"Created group: {group.id}")
+    
+    # Add user to group
+    await okta_client.add_user_to_group(group.id, user_id)
+    
+    # Assign app to group
+    app_group_assignment = {
+        'id': group.id,
+        'priority': 0
+    }
+    await okta_client.create_application_group_assignment(app_id, group.id, app_group_assignment)
+
+asyncio.run(main())</code></pre>
+            </div>
+
+            <div class="info-box info">
+                <div class="info-box-title">💡 Okta Rate Limits</div>
+                <p>Okta enforces rate limits per API endpoint. Common limits:</p>
+                <ul>
+                    <li><strong>/users:</strong> 600 requests/minute</li>
+                    <li><strong>/groups:</strong> 600 requests/minute</li>
+                    <li><strong>/apps:</strong> 600 requests/minute</li>
+                    <li><strong>Concurrent requests:</strong> Varies by endpoint</li>
+                </ul>
+                <p>Always implement exponential backoff and check response headers for rate limit info.</p>
+            </div>
+
+            <nav class="page-nav">
+                <a href="ad-to-entra-migration.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← AD Migration Guide</span>
+                </a>
+                <a href="okta-sso-mfa.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Okta SSO & MFA →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

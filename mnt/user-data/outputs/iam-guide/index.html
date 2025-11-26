@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAM Ultimate Guide | Identity & Access Management Documentation</title>
+    <meta name="description" content="Comprehensive enterprise-grade Identity and Access Management documentation covering Active Directory, Microsoft Entra ID, Okta, SSO protocols, and security best practices.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Identity & Access Management</h1>
+                <p class="hero-subtitle">
+                    The Ultimate Enterprise Guide to IAM — from fundamentals to advanced deployments. 
+                    Master Active Directory, Microsoft Entra ID, Okta, SSO protocols, and security best practices.
+                </p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">20</div>
+                        <div class="hero-stat-label">Chapters</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">5+</div>
+                        <div class="hero-stat-label">Platforms</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">100+</div>
+                        <div class="hero-stat-label">Code Examples</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Start -->
+            <h2 id="quick-start">Quick Start</h2>
+            <p>New to IAM? Start with the fundamentals to build a solid foundation, then dive into specific platforms and technologies based on your needs.</p>
+            
+            <div class="card-grid">
+                <a href="iam-fundamentals.html" class="card">
+                    <div class="card-icon">🔐</div>
+                    <h3>IAM Fundamentals</h3>
+                    <p>Core concepts: Authentication, Authorization, AAA framework, RBAC, ABAC, federation, and directory services.</p>
+                    <span class="card-link">Start Learning</span>
+                </a>
+                
+                <a href="active-directory.html" class="card">
+                    <div class="card-icon">🏢</div>
+                    <h3>Active Directory</h3>
+                    <p>On-premises AD architecture, Group Policy, security hardening, FSMO roles, and attack mitigations.</p>
+                    <span class="card-link">Explore AD</span>
+                </a>
+                
+                <a href="entra-id-fundamentals.html" class="card">
+                    <div class="card-icon">☁️</div>
+                    <h3>Microsoft Entra ID</h3>
+                    <p>Cloud identity platform: tenants, authentication methods, Conditional Access, and governance.</p>
+                    <span class="card-link">Learn Entra ID</span>
+                </a>
+                
+                <a href="okta-fundamentals.html" class="card">
+                    <div class="card-icon">🔑</div>
+                    <h3>Okta Platform</h3>
+                    <p>Universal Directory, SSO, MFA, lifecycle management, and workflow automation.</p>
+                    <span class="card-link">Discover Okta</span>
+                </a>
+            </div>
+
+            <div class="section-divider"><span>Documentation</span></div>
+
+            <!-- Core Topics -->
+            <h2 id="core-topics">Core Topics</h2>
+            
+            <div class="card-grid">
+                <a href="entra-id-authentication.html" class="card">
+                    <div class="card-icon">🔓</div>
+                    <h3>Authentication Methods</h3>
+                    <p>Passwordless, MFA, FIDO2, Windows Hello, SSPR, and smart lockout configurations.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="entra-conditional-access.html" class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Conditional Access</h3>
+                    <p>Policy design, named locations, grant/session controls, and Zero Trust implementation.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="entra-identity-protection.html" class="card">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Identity Protection</h3>
+                    <p>Risk detection, user and sign-in risk policies, remediation, and investigation workflows.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="entra-id-governance.html" class="card">
+                    <div class="card-icon">⚖️</div>
+                    <h3>Identity Governance</h3>
+                    <p>PIM, access reviews, entitlement management, and lifecycle workflows.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="hybrid-identity.html" class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3>Hybrid Identity</h3>
+                    <p>Entra Connect, PHS, PTA, federation, seamless SSO, and hybrid join configurations.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="ad-to-entra-migration.html" class="card">
+                    <div class="card-icon">📦</div>
+                    <h3>AD to Entra Migration</h3>
+                    <p>Assessment, planning, staged migration, app modernization, and decommissioning.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+            </div>
+
+            <div class="section-divider"><span>Advanced</span></div>
+
+            <!-- Advanced Topics -->
+            <h2 id="advanced-topics">Advanced Topics</h2>
+            
+            <div class="card-grid">
+                <a href="sso-protocols.html" class="card">
+                    <div class="card-icon">🔗</div>
+                    <h3>SSO Protocols Deep Dive</h3>
+                    <p>SAML 2.0, OAuth 2.0, OIDC, Kerberos, JWT structure, and protocol comparisons.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="entra-app-integration.html" class="card">
+                    <div class="card-icon">🔌</div>
+                    <h3>Application Integration</h3>
+                    <p>Enterprise apps, SAML/OIDC config, API permissions, and App Proxy setup.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="pam.html" class="card">
+                    <div class="card-icon">👑</div>
+                    <h3>Privileged Access (PAM)</h3>
+                    <p>Credential vaulting, session management, JIT access, and PAM solutions comparison.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="iam-vendors-comparison.html" class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>IAM Vendor Comparison</h3>
+                    <p>Feature matrix: Entra ID, Okta, Ping, ForgeRock, CyberArk, and cloud providers.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="iam-security.html" class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Security Best Practices</h3>
+                    <p>NIST guidelines, Zero Trust, threat detection, SIEM integration, and compliance.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+                
+                <a href="iam-troubleshooting.html" class="card">
+                    <div class="card-icon">🔧</div>
+                    <h3>Troubleshooting</h3>
+                    <p>Sign-in analysis, SSO debugging, sync errors, error codes, and diagnostic tools.</p>
+                    <span class="card-link">View Guide</span>
+                </a>
+            </div>
+
+            <div class="section-divider"><span>Reference</span></div>
+
+            <!-- Quick Reference -->
+            <h2 id="terminology">IAM Terminology Quick Reference</h2>
+            
+            <div class="term-grid">
+                <div class="term-item">
+                    <div class="term-name">Authentication (AuthN)</div>
+                    <div class="term-desc">Verifying who someone is - proving identity</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">Authorization (AuthZ)</div>
+                    <div class="term-desc">Determining what someone can access</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">SSO</div>
+                    <div class="term-desc">Single Sign-On - one login for multiple apps</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">MFA</div>
+                    <div class="term-desc">Multi-Factor Authentication - multiple proofs of identity</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">RBAC</div>
+                    <div class="term-desc">Role-Based Access Control - permissions by job role</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">ABAC</div>
+                    <div class="term-desc">Attribute-Based Access Control - dynamic permissions</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">Federation</div>
+                    <div class="term-desc">Trust between identity providers across domains</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">IdP</div>
+                    <div class="term-desc">Identity Provider - authenticates users</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">SP</div>
+                    <div class="term-desc">Service Provider - the application being accessed</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">SAML</div>
+                    <div class="term-desc">XML-based SSO protocol for enterprise apps</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">OAuth 2.0</div>
+                    <div class="term-desc">Authorization framework for API access</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">OIDC</div>
+                    <div class="term-desc">OpenID Connect - identity layer on OAuth 2.0</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">PIM</div>
+                    <div class="term-desc">Privileged Identity Management - JIT admin access</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">PAM</div>
+                    <div class="term-desc">Privileged Access Management - securing admin accounts</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">Zero Trust</div>
+                    <div class="term-desc">Never trust, always verify - continuous validation</div>
+                </div>
+                <div class="term-item">
+                    <div class="term-name">JIT</div>
+                    <div class="term-desc">Just-In-Time access - temporary elevated permissions</div>
+                </div>
+            </div>
+
+            <!-- Architecture Overview -->
+            <h2 id="architecture">IAM Architecture Overview</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           ENTERPRISE IAM ARCHITECTURE                                │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     │
+│    │   USERS     │     │   DEVICES   │     │   APPS      │     │   APIs      │     │
+│    │  ─────────  │     │  ─────────  │     │  ─────────  │     │  ─────────  │     │
+│    │ • Employees │     │ • Managed   │     │ • SaaS      │     │ • Internal  │     │
+│    │ • Partners  │     │ • BYOD      │     │ • On-Prem   │     │ • External  │     │
+│    │ • Customers │     │ • IoT       │     │ • Legacy    │     │ • Partner   │     │
+│    └──────┬──────┘     └──────┬──────┘     └──────┬──────┘     └──────┬──────┘     │
+│           │                   │                   │                   │            │
+│           └───────────────────┴───────────────────┴───────────────────┘            │
+│                                       │                                             │
+│                                       ▼                                             │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │                        IDENTITY LAYER (IdP)                                  │   │
+│  ├─────────────────────────────────────────────────────────────────────────────┤   │
+│  │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐ │   │
+│  │  │ AUTHENTICATION│  │ AUTHORIZATION │  │   MFA/RISK    │  │  GOVERNANCE   │ │   │
+│  │  │ ───────────── │  │ ───────────── │  │ ───────────── │  │ ───────────── │ │   │
+│  │  │ • Password    │  │ • RBAC        │  │ • Step-up     │  │ • Access      │ │   │
+│  │  │ • Passwordless│  │ • ABAC        │  │ • Conditional │  │   Reviews     │ │   │
+│  │  │ • SSO         │  │ • Claims      │  │ • Risk-based  │  │ • Lifecycle   │ │   │
+│  │  │ • Federation  │  │ • Scopes      │  │ • Device      │  │ • Entitlement │ │   │
+│  │  └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘ │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                       │                                             │
+│                   ┌───────────────────┼───────────────────┐                        │
+│                   ▼                   ▼                   ▼                        │
+│  ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐        │
+│  │   DIRECTORY         │  │   SSO PROTOCOLS     │  │   AUDIT & LOGGING   │        │
+│  │ ─────────────────── │  │ ─────────────────── │  │ ─────────────────── │        │
+│  │ • Active Directory  │  │ • SAML 2.0          │  │ • Sign-in Logs      │        │
+│  │ • Entra ID          │  │ • OAuth 2.0         │  │ • Audit Logs        │        │
+│  │ • LDAP              │  │ • OpenID Connect    │  │ • SIEM Integration  │        │
+│  │ • Universal Dir     │  │ • Kerberos          │  │ • Alert Rules       │        │
+│  └─────────────────────┘  └─────────────────────┘  └─────────────────────┘        │
+│                                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="page-nav">
+                <a href="iam-fundamentals.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">IAM Fundamentals →</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+                <p>Built for security professionals, by security professionals.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAM Troubleshooting | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo"><div class="header-logo-icon">IAM</div><span>Ultimate Guide</span></div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section"><div class="sidebar-title">Getting Started</div><ul class="sidebar-nav"><li><a href="index.html">Home</a></li><li><a href="iam-fundamentals.html">IAM Fundamentals</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">On-Premises</div><ul class="sidebar-nav"><li><a href="active-directory.html">Active Directory</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Microsoft Entra ID</div><ul class="sidebar-nav"><li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li><li><a href="entra-id-authentication.html">Authentication Methods</a></li><li><a href="entra-conditional-access.html">Conditional Access</a></li><li><a href="entra-identity-protection.html">Identity Protection</a></li><li><a href="entra-id-governance.html">Identity Governance</a></li><li><a href="entra-app-integration.html">App Integration</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Hybrid Identity</div><ul class="sidebar-nav"><li><a href="hybrid-identity.html">Hybrid Configuration</a></li><li><a href="ad-to-entra-migration.html">Migration Guide</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Okta</div><ul class="sidebar-nav"><li><a href="okta-fundamentals.html">Okta Basics</a></li><li><a href="okta-sso-mfa.html">SSO & MFA</a></li><li><a href="okta-lifecycle.html">Lifecycle Management</a></li><li><a href="okta-governance.html">Governance</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Advanced Topics</div><ul class="sidebar-nav"><li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li><li><a href="pam.html">Privileged Access (PAM)</a></li><li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li><li><a href="iam-security.html">Security Best Practices</a></li><li><a href="iam-troubleshooting.html" class="active">Troubleshooting</a></li></ul></div>
+        </aside>
+        <main class="main-content">
+            <nav class="breadcrumbs"><a href="index.html">Home</a><span class="separator">/</span><span class="current">Troubleshooting</span></nav>
+            
+            <h1>IAM Troubleshooting Guide</h1>
+            <p>Common issues and resolution steps for authentication failures, SSO problems, provisioning errors, and hybrid identity synchronization issues.</p>
+
+            <div class="toc"><div class="toc-title">On This Page</div><ul class="toc-list"><li><a href="#auth-issues">Authentication Issues</a></li><li><a href="#sso-issues">SSO Troubleshooting</a></li><li><a href="#mfa-issues">MFA Problems</a></li><li><a href="#sync-issues">Sync Issues</a></li><li><a href="#provisioning">Provisioning Errors</a></li><li><a href="#tools">Diagnostic Tools</a></li></ul></div>
+
+            <h2 id="auth-issues">Authentication Issues</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">AADSTS50076: MFA Required but not completed</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Cause:</strong> Conditional Access policy requires MFA but user hasn't completed it.</p>
+                            <p><strong>Resolution:</strong></p>
+                            <ul>
+                                <li>Ensure user has registered MFA methods</li>
+                                <li>Check if user is excluded from MFA policies incorrectly</li>
+                                <li>Verify the app supports MFA claims</li>
+                                <li>For legacy apps, consider App Passwords or modern auth migration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">AADSTS50105: User not assigned to application</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Cause:</strong> Enterprise app has "Assignment required" enabled but user isn't assigned.</p>
+                            <p><strong>Resolution:</strong></p>
+                            <ul>
+                                <li>Assign user directly or via group to the enterprise app</li>
+                                <li>Or disable "Assignment required" in app properties (not recommended for sensitive apps)</li>
+                            </ul>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-language">PowerShell - Check Assignment</span><button class="code-copy-btn">⧉ Copy</button></div>
+<pre><code># Check if user is assigned to app
+Get-MgServicePrincipalAppRoleAssignedTo -ServicePrincipalId $spId | 
+    Where-Object { $_.PrincipalId -eq $userId }</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">AADSTS53003: Access blocked by Conditional Access</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Cause:</strong> A Conditional Access policy is blocking access.</p>
+                            <p><strong>Resolution:</strong></p>
+                            <ul>
+                                <li>Check Sign-in logs for "Conditional Access" tab details</li>
+                                <li>Identify which policy is blocking (policy name shown in logs)</li>
+                                <li>Use "What If" tool to simulate and identify blocking policy</li>
+                                <li>Verify user meets policy requirements (device compliance, location, etc.)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">AADSTS50126: Invalid username or password</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Cause:</strong> Credentials are incorrect or account is locked.</p>
+                            <p><strong>Resolution:</strong></p>
+                            <ul>
+                                <li>Verify username is correct (check UPN vs sAMAccountName)</li>
+                                <li>Check if account is locked in AD or Entra ID</li>
+                                <li>For synced users, verify password hash sync is working</li>
+                                <li>Reset password if necessary</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="sso-issues">SSO Troubleshooting</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    SSO TROUBLESHOOTING DECISION TREE
+    ═══════════════════════════════════
+
+    User can't access SSO app
+              │
+              ▼
+    ┌─────────────────────┐
+    │ Can user sign in to │
+    │   Entra ID/Okta?    │
+    └──────────┬──────────┘
+               │
+        ┌──────┴──────┐
+        │             │
+       NO            YES
+        │             │
+        ▼             ▼
+    ┌─────────┐  ┌─────────────────────┐
+    │Auth issue│  │Is user assigned to  │
+    │(see above)│  │the application?     │
+    └─────────┘  └──────────┬──────────┘
+                            │
+                     ┌──────┴──────┐
+                     │             │
+                    NO            YES
+                     │             │
+                     ▼             ▼
+               ┌─────────┐  ┌─────────────────────┐
+               │ Assign  │  │ Check SAML/OIDC     │
+               │ user    │  │ configuration       │
+               └─────────┘  └──────────┬──────────┘
+                                       │
+                            ┌──────────┴──────────┐
+                            │                     │
+                         SAML                   OIDC
+                            │                     │
+                            ▼                     ▼
+                    ┌───────────────┐    ┌───────────────┐
+                    │• Check Entity │    │• Check Client │
+                    │  ID match     │    │  ID/Secret    │
+                    │• Check ACS URL│    │• Check Redirect│
+                    │• Check Cert   │    │  URI          │
+                    │• Check Claims │    │• Check Scopes │
+                    └───────────────┘    └───────────────┘
+</pre>
+            </div>
+
+            <h3>SAML Debugging</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Browser - Capture SAML Response</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>Steps to capture SAML assertion:
+
+1. Open browser Developer Tools (F12)
+2. Go to Network tab
+3. Enable "Preserve log" 
+4. Attempt SSO sign-in
+5. Look for POST to the ACS URL
+6. Find SAMLResponse in Form Data
+7. Decode Base64 to view XML assertion
+
+Online tools: samltool.com, base64decode.org
+
+Common SAML issues:
+• Entity ID mismatch between IdP and SP
+• ACS URL incorrect or HTTP vs HTTPS
+• Certificate expired or wrong cert configured
+• Clock skew (NotBefore/NotOnOrAfter)
+• NameID format mismatch</code></pre>
+            </div>
+
+            <h2 id="mfa-issues">MFA Problems</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Possible Causes</th>
+                            <th>Resolution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Push notification not received</strong></td>
+                            <td>App not updated, battery optimization, network</td>
+                            <td>Update app, disable battery optimization, check internet</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTP code rejected</strong></td>
+                            <td>Time sync issue, wrong account selected</td>
+                            <td>Sync device time, verify correct account</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FIDO2 key not recognized</strong></td>
+                            <td>Browser compatibility, key not registered</td>
+                            <td>Use supported browser (Edge, Chrome), re-register key</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MFA prompt every time</strong></td>
+                            <td>No persistent session, browser settings</td>
+                            <td>Check CA policies for sign-in frequency, enable cookies</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Can't register MFA</strong></td>
+                            <td>Registration blocked by policy</td>
+                            <td>Check authentication methods policy, user scope</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="sync-issues">Entra Connect Sync Issues</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Entra Connect Diagnostics</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Check sync status
+Get-ADSyncScheduler
+
+# Force full sync
+Start-ADSyncSyncCycle -PolicyType Initial
+
+# Force delta sync
+Start-ADSyncSyncCycle -PolicyType Delta
+
+# Check for sync errors
+Get-ADSyncConnectorRunStatus
+
+# View export errors
+$connector = Get-ADSyncConnector -Name "yourtenant.onmicrosoft.com - AAD"
+Get-ADSyncCSObject -ConnectorName $connector.Name | 
+    Where-Object { $_.ErrorDescription }
+
+# Check password hash sync status
+Get-ADSyncAADPasswordSyncConfiguration -SourceConnector "yourdomain.com"
+
+# Common sync issues:
+# - UPN suffix not verified in Entra ID
+# - Duplicate proxyAddresses
+# - Invalid characters in attributes
+# - Object filtered by OU or attribute filter</code></pre>
+            </div>
+
+            <h2 id="provisioning">Provisioning Errors</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">User not provisioned to application</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Checklist:</strong></p>
+                            <ul>
+                                <li>Is user assigned to the app (directly or via group)?</li>
+                                <li>Is provisioning enabled and in "On" status?</li>
+                                <li>Check provisioning logs for errors</li>
+                                <li>Verify attribute mappings are correct</li>
+                                <li>Check scoping filters aren't excluding user</li>
+                                <li>For SCIM apps, verify API credentials are valid</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Provisioning quarantined</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Cause:</strong> Too many errors (>60% failure rate).</p>
+                            <p><strong>Resolution:</strong></p>
+                            <ul>
+                                <li>Check provisioning logs for error details</li>
+                                <li>Common causes: invalid API credentials, rate limiting, schema changes</li>
+                                <li>Fix underlying issue, then restart provisioning</li>
+                                <li>May need to clear quarantine and restart sync</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="tools">Diagnostic Tools</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Platform</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Sign-in Logs</strong></td>
+                            <td>Entra ID</td>
+                            <td>Authentication failures, CA evaluation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Audit Logs</strong></td>
+                            <td>Entra ID</td>
+                            <td>Configuration changes, user management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Provisioning Logs</strong></td>
+                            <td>Entra ID</td>
+                            <td>SCIM provisioning issues</td>
+                        </tr>
+                        <tr>
+                            <td><strong>What If Tool</strong></td>
+                            <td>Entra ID</td>
+                            <td>Conditional Access policy simulation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>System Log</strong></td>
+                            <td>Okta</td>
+                            <td>All authentication and admin events</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SAML Tracer</strong></td>
+                            <td>Browser Extension</td>
+                            <td>Capture and decode SAML messages</td>
+                        </tr>
+                        <tr>
+                            <td><strong>jwt.io</strong></td>
+                            <td>Web</td>
+                            <td>Decode and validate JWT tokens</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">KQL - Troubleshooting Queries</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>// Find all sign-in failures for a user
+SigninLogs
+| where UserPrincipalName == "user@domain.com"
+| where ResultType != "0"
+| project TimeGenerated, AppDisplayName, ResultType, ResultDescription,
+    ConditionalAccessStatus, IPAddress, DeviceDetail
+| order by TimeGenerated desc
+
+// Conditional Access policy failures
+SigninLogs
+| where ConditionalAccessStatus == "failure"
+| extend CADetails = parse_json(ConditionalAccessPolicies)
+| mv-expand CADetails
+| where CADetails.result == "failure"
+| project TimeGenerated, UserPrincipalName, AppDisplayName,
+    PolicyName = CADetails.displayName,
+    FailureReason = CADetails.failureReason
+
+// Provisioning failures
+AADProvisioningLogs
+| where ResultType == "Failure"
+| project TimeGenerated, ServicePrincipal, TargetSystem,
+    Action, ResultDescription, ModifiedProperties</code></pre>
+            </div>
+
+            <nav class="page-nav">
+                <a href="iam-security.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← Security Best Practices</span></a>
+                <a href="index.html" class="page-nav-link next"><span class="page-nav-label">Back to</span><span class="page-nav-title">Home →</span></a>
+            </nav>
+            <footer class="footer"><p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p></footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Identity | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html" class="active">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="hybrid-identity.html">Hybrid Identity</a>
+                <span class="separator">/</span>
+                <span class="current">Configuration</span>
+            </nav>
+
+            <h1>Hybrid Identity</h1>
+            
+            <p>Hybrid identity connects on-premises Active Directory with Microsoft Entra ID, enabling users to access both cloud and on-premises resources with a single identity.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#overview">Hybrid Identity Overview</a></li>
+                    <li><a href="#sync-options">Synchronization Options</a></li>
+                    <li><a href="#auth-methods">Authentication Methods</a></li>
+                    <li><a href="#entra-connect">Entra Connect</a></li>
+                    <li><a href="#cloud-sync">Entra Cloud Sync</a></li>
+                    <li><a href="#password-writeback">Password Writeback</a></li>
+                </ul>
+            </div>
+
+            <h2 id="overview">Hybrid Identity Overview</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    HYBRID IDENTITY ARCHITECTURE
+    ═════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                         CLOUD                                        │
+    │                                                                      │
+    │   ┌───────────────────────────────────────────────────────────────┐ │
+    │   │                    MICROSOFT ENTRA ID                          │ │
+    │   │                                                                │ │
+    │   │   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │ │
+    │   │   │ Synced   │  │  Cloud   │  │  Cloud   │  │Conditional│     │ │
+    │   │   │ Users    │  │  Apps    │  │  Groups  │  │  Access   │     │ │
+    │   │   └──────────┘  └──────────┘  └──────────┘  └──────────┘     │ │
+    │   │                                                                │ │
+    │   └───────────────────────────────────────────────────────────────┘ │
+    │                              ▲                                       │
+    │                              │                                       │
+    └──────────────────────────────┼───────────────────────────────────────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+              ┌─────┴─────┐  ┌─────┴─────┐  ┌─────┴─────┐
+              │  Entra    │  │  Entra    │  │  Direct   │
+              │  Connect  │  │Cloud Sync │  │Federation │
+              │  (Sync)   │  │  (Sync)   │  │  (ADFS)   │
+              └─────┬─────┘  └─────┬─────┘  └─────┬─────┘
+                    │              │              │
+    ────────────────┼──────────────┼──────────────┼────────────────────────
+                    │              │              │
+    ┌───────────────┼──────────────┼──────────────┼───────────────────────┐
+    │               │         ON-PREMISES         │                        │
+    │               │                             │                        │
+    │   ┌───────────▼─────────────────────────────▼───────────┐           │
+    │   │                 ACTIVE DIRECTORY                     │           │
+    │   │                                                      │           │
+    │   │   ┌──────────┐  ┌──────────┐  ┌──────────┐         │           │
+    │   │   │  Users   │  │  Groups  │  │ Devices  │         │           │
+    │   │   └──────────┘  └──────────┘  └──────────┘         │           │
+    │   │                                                      │           │
+    │   └──────────────────────────────────────────────────────┘           │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="sync-options">Synchronization Options</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Entra Connect</th>
+                            <th>Entra Cloud Sync</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Architecture</strong></td>
+                            <td>Heavyweight on-premises server</td>
+                            <td>Lightweight agents</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-forest</strong></td>
+                            <td>Yes (complex config)</td>
+                            <td>Yes (simpler)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pass-through Auth</strong></td>
+                            <td>Yes</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Device writeback</strong></td>
+                            <td>Yes</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Group writeback</strong></td>
+                            <td>Yes</td>
+                            <td>Limited</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exchange hybrid</strong></td>
+                            <td>Yes</td>
+                            <td>Limited</td>
+                        </tr>
+                        <tr>
+                            <td><strong>High availability</strong></td>
+                            <td>Staging server</td>
+                            <td>Multiple agents</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Configuration</strong></td>
+                            <td>On-premises wizard</td>
+                            <td>Cloud portal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recommended for</strong></td>
+                            <td>Complex environments</td>
+                            <td>Simple/new deployments</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="auth-methods">Hybrid Authentication Methods</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    AUTHENTICATION METHOD COMPARISON
+    ═════════════════════════════════
+
+    1. PASSWORD HASH SYNCHRONIZATION (PHS)
+    ───────────────────────────────────────
+    ┌────────┐         ┌──────────────┐         ┌──────────┐
+    │  User  │────────▶│   Entra ID   │         │    AD    │
+    │        │  Auth   │              │  Hash   │          │
+    │        │◀────────│  Validates   │◀────────│  (sync)  │
+    └────────┘         │  hash        │         └──────────┘
+                       └──────────────┘
+    
+    ✓ Simplest to deploy       ✓ Cloud resilience
+    ✓ No on-prem dependency    ✓ Leaked credential detection
+    
+    ─────────────────────────────────────────────────────────────────────
+
+    2. PASS-THROUGH AUTHENTICATION (PTA)
+    ─────────────────────────────────────
+    ┌────────┐         ┌──────────────┐         ┌──────────┐
+    │  User  │────────▶│   Entra ID   │────────▶│    AD    │
+    │        │  Auth   │              │ Validate│          │
+    │        │◀────────│   (proxy)    │◀────────│(on-prem) │
+    └────────┘         └──────────────┘         └──────────┘
+                              │
+                              ▼
+                       ┌──────────────┐
+                       │  PTA Agent   │
+                       │ (on-premises)│
+                       └──────────────┘
+    
+    ✓ Password never leaves on-prem    ✓ Honors AD policies
+    ✗ Requires on-prem agents          ✗ Depends on connectivity
+    
+    ─────────────────────────────────────────────────────────────────────
+
+    3. FEDERATION (ADFS)
+    ─────────────────────
+    ┌────────┐         ┌──────────────┐         ┌──────────┐
+    │  User  │────────▶│   Entra ID   │────────▶│   ADFS   │
+    │        │         │   (trusts    │  SAML   │          │
+    │        │◀────────│    ADFS)     │◀────────│(on-prem) │
+    └────────┘         └──────────────┘         └──────────┘
+                                                      │
+                                                      ▼
+                                                ┌──────────┐
+                                                │    AD    │
+                                                └──────────┘
+    
+    ✓ Full control over auth       ✓ Smart card/cert auth
+    ✓ Third-party MFA              ✗ Complex infrastructure
+    ✗ Single point of failure      ✗ Higher maintenance
+</pre>
+            </div>
+
+            <div class="info-box success">
+                <div class="info-box-title">✓ Microsoft Recommendation</div>
+                <p>Microsoft recommends <strong>Password Hash Synchronization (PHS)</strong> as the primary authentication method for most organizations due to its simplicity, resilience, and security features like leaked credential detection.</p>
+            </div>
+
+            <h2 id="entra-connect">Microsoft Entra Connect</h2>
+            
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Windows Server 2016 or later (not a Domain Controller)</li>
+                <li>SQL Server Express (included) or SQL Server</li>
+                <li>.NET Framework 4.7.2 or later</li>
+                <li>Entra ID Global Administrator account</li>
+                <li>Enterprise Administrator in AD</li>
+                <li>Outbound connectivity to Microsoft endpoints</li>
+            </ul>
+
+            <h3>Installation</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Entra Connect Prerequisites</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Verify server is NOT a Domain Controller
+$dcInfo = Get-WmiObject -Class Win32_ComputerSystem
+if ($dcInfo.DomainRole -ge 4) {
+    Write-Error "Cannot install on Domain Controller"
+}
+
+# Check .NET version
+$netVersion = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release
+if ($netVersion -lt 528040) {
+    Write-Warning "Install .NET Framework 4.8"
+}
+
+# Verify TLS 1.2 is enabled
+$tlsSettings = Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client" -ErrorAction SilentlyContinue
+if (-not $tlsSettings.Enabled) {
+    Write-Warning "Enable TLS 1.2"
+}
+
+# Test connectivity to required endpoints
+$endpoints = @(
+    "login.microsoftonline.com",
+    "secure.aadcdn.microsoftonline-p.com",
+    "*.msappproxy.net"
+)
+
+foreach ($endpoint in $endpoints) {
+    Test-NetConnection -ComputerName $endpoint -Port 443
+}</code></pre>
+            </div>
+
+            <h3>Sync Rules and Filtering</h3>
+            
+            <div class="ascii-diagram">
+<pre>
+    ENTRA CONNECT SYNC RULES
+    ═════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                     SYNCHRONIZATION PIPELINE                         │
+    │                                                                      │
+    │   ┌───────────┐    ┌───────────┐    ┌───────────┐    ┌───────────┐ │
+    │   │    AD     │───▶│ Connector │───▶│ Metaverse │───▶│   Entra   │ │
+    │   │  Space    │    │   Space   │    │           │    │    ID     │ │
+    │   └───────────┘    └───────────┘    └───────────┘    └───────────┘ │
+    │                          │                │                         │
+    │                          ▼                ▼                         │
+    │                    ┌───────────┐    ┌───────────┐                  │
+    │                    │  Inbound  │    │ Outbound  │                  │
+    │                    │   Rules   │    │   Rules   │                  │
+    │                    └───────────┘    └───────────┘                  │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    FILTERING OPTIONS:
+    ──────────────────
+    1. Domain-based filtering   - Sync specific domains only
+    2. OU-based filtering       - Sync specific OUs only
+    3. Attribute-based filtering - Sync based on attribute values
+    4. Group-based filtering    - Sync members of specific groups
+
+    COMMON EXCLUSIONS:
+    ──────────────────
+    • Service accounts
+    • Admin accounts (sync separately or not at all)
+    • Disabled accounts
+    • Test/dev accounts
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Manage Entra Connect</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Import Entra Connect module
+Import-Module ADSync
+
+# Check sync status
+Get-ADSyncScheduler
+
+# Start manual sync (delta)
+Start-ADSyncSyncCycle -PolicyType Delta
+
+# Start manual sync (full)
+Start-ADSyncSyncCycle -PolicyType Initial
+
+# View sync errors
+Get-ADSyncConnectorRunStatus
+
+# Get connector space statistics
+Get-ADSyncConnectorStatistics -ConnectorName "contoso.com"
+
+# View custom sync rules
+Get-ADSyncRule | Where-Object {$_.Name -like "Custom*"}
+
+# Export sync configuration
+Get-ADSyncServerConfiguration -Path "C:\SyncConfig"</code></pre>
+            </div>
+
+            <h2 id="cloud-sync">Entra Cloud Sync</h2>
+            
+            <p>Entra Cloud Sync uses lightweight provisioning agents, with configuration managed entirely from the cloud.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    ENTRA CLOUD SYNC ARCHITECTURE
+    ══════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                        MICROSOFT CLOUD                               │
+    │                                                                      │
+    │   ┌───────────────────────────────────────────────────────────────┐ │
+    │   │              CLOUD SYNC SERVICE                                │ │
+    │   │                                                                │ │
+    │   │   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐      │ │
+    │   │   │   Config    │    │    Sync     │    │  Monitoring │      │ │
+    │   │   │   Portal    │    │   Engine    │    │    Logs     │      │ │
+    │   │   └─────────────┘    └─────────────┘    └─────────────┘      │ │
+    │   │                                                                │ │
+    │   └────────────────────────────┬──────────────────────────────────┘ │
+    │                                │                                     │
+    └────────────────────────────────┼─────────────────────────────────────┘
+                                     │
+                                     │ Outbound HTTPS
+                                     │ (Auto-update)
+                                     ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                        ON-PREMISES                                   │
+    │                                                                      │
+    │   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐            │
+    │   │   Agent 1   │    │   Agent 2   │    │   Agent 3   │            │
+    │   │  (Primary)  │    │  (Standby)  │    │  (Standby)  │            │
+    │   └──────┬──────┘    └──────┬──────┘    └──────┬──────┘            │
+    │          │                  │                  │                    │
+    │          └──────────────────┼──────────────────┘                    │
+    │                             │                                       │
+    │                    ┌────────▼────────┐                              │
+    │                    │      AD DC      │                              │
+    │                    │                 │                              │
+    │                    └─────────────────┘                              │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    BENEFITS:
+    ─────────
+    • No sync server to manage
+    • Configuration in cloud portal
+    • Automatic agent updates
+    • Built-in HA with multiple agents
+    • Simpler multi-forest support
+</pre>
+            </div>
+
+            <h2 id="password-writeback">Password Writeback</h2>
+            
+            <p>Password writeback enables SSPR and password changes in Entra ID to sync back to on-premises AD.</p>
+
+            <h3>Requirements</h3>
+            <ul>
+                <li>Entra ID P1 or P2 license</li>
+                <li>Entra Connect with password writeback enabled</li>
+                <li>AD functional level: Windows Server 2008 R2 or later</li>
+                <li>Service account with password reset permissions</li>
+            </ul>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Enable Password Writeback</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Verify password writeback is enabled
+Get-ADSyncAADPasswordResetConfiguration
+
+# Check connector account permissions
+$connector = Get-ADSyncConnector -Name "contoso.com"
+$account = $connector.ConnectivityParameters.Parameter | 
+    Where-Object {$_.Name -eq "forest-login-user"} | 
+    Select-Object -ExpandProperty Value
+
+# Grant required permissions to connector account
+# Run on Domain Controller
+$ou = "OU=Users,DC=contoso,DC=com"
+$acl = Get-Acl "AD:\$ou"
+
+# Reset Password permission
+$ace = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
+    [System.Security.Principal.NTAccount]"CONTOSO\AADConnect",
+    "ExtendedRight",
+    "Allow",
+    [Guid]"00299570-246d-11d0-a768-00aa006e0529"  # Reset Password
+)
+$acl.AddAccessRule($ace)
+Set-Acl "AD:\$ou" $acl</code></pre>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">⚠️ Password Writeback Security</div>
+                <ul>
+                    <li>The Entra Connect service account can reset ANY user's password in synced OUs</li>
+                    <li>Consider excluding privileged accounts from sync</li>
+                    <li>Monitor password reset events in AD audit logs</li>
+                    <li>Enable account lockout writeback for security</li>
+                </ul>
+            </div>
+
+            <nav class="page-nav">
+                <a href="entra-app-integration.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← App Integration</span>
+                </a>
+                <a href="ad-to-entra-migration.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Migration Guide →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

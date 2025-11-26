@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okta SSO & MFA | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html" class="active">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="okta-fundamentals.html">Okta</a>
+                <span class="separator">/</span>
+                <span class="current">SSO & MFA</span>
+            </nav>
+
+            <h1>Okta SSO & MFA</h1>
+            
+            <p>Okta provides robust Single Sign-On capabilities with support for SAML, OIDC, and WS-Federation. Combined with flexible MFA options and adaptive authentication, Okta delivers secure yet user-friendly access.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#sso-overview">SSO Overview</a></li>
+                    <li><a href="#app-integration">Application Integration</a></li>
+                    <li><a href="#mfa-factors">MFA Factors</a></li>
+                    <li><a href="#sign-on-policies">Sign-On Policies</a></li>
+                    <li><a href="#adaptive">Adaptive MFA</a></li>
+                    <li><a href="#fastpass">Okta FastPass</a></li>
+                </ul>
+            </div>
+
+            <h2 id="sso-overview">SSO Overview</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    OKTA SSO ARCHITECTURE
+    ══════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                      OKTA AS IDENTITY PROVIDER                       │
+    │                                                                      │
+    │   ┌───────────────────────────────────────────────────────────────┐ │
+    │   │                    Authentication Hub                          │ │
+    │   │                                                                │ │
+    │   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐           │ │
+    │   │  │   Okta      │  │  External   │  │   Social    │           │ │
+    │   │  │  Username/  │  │    IdPs     │  │   Login     │           │ │
+    │   │  │  Password   │  │ (SAML/OIDC) │  │(Google,etc) │           │ │
+    │   │  └─────────────┘  └─────────────┘  └─────────────┘           │ │
+    │   │         │                │                │                   │ │
+    │   │         └────────────────┼────────────────┘                   │ │
+    │   │                          │                                    │ │
+    │   │                          ▼                                    │ │
+    │   │              ┌─────────────────────┐                          │ │
+    │   │              │   MFA Challenge     │                          │ │
+    │   │              │   (if required)     │                          │ │
+    │   │              └─────────────────────┘                          │ │
+    │   │                          │                                    │ │
+    │   │                          ▼                                    │ │
+    │   │              ┌─────────────────────┐                          │ │
+    │   │              │  Session Created    │                          │ │
+    │   │              │  (Okta Session)     │                          │ │
+    │   │              └─────────────────────┘                          │ │
+    │   │                                                                │ │
+    │   └───────────────────────────────────────────────────────────────┘ │
+    │                                    │                                 │
+    └────────────────────────────────────┼─────────────────────────────────┘
+                                         │
+         ┌───────────────────────────────┼───────────────────────────────┐
+         │                               │                               │
+         ▼                               ▼                               ▼
+    ┌─────────────┐            ┌─────────────────┐            ┌─────────────┐
+    │  SAML App   │            │   OIDC/OAuth    │            │  SWA App    │
+    │             │            │      App        │            │ (Password)  │
+    │ Salesforce  │            │  Slack, AWS     │            │  Legacy     │
+    │ ServiceNow  │            │  Custom Apps    │            │  Apps       │
+    └─────────────┘            └─────────────────┘            └─────────────┘
+</pre>
+            </div>
+
+            <h2 id="app-integration">Application Integration</h2>
+            
+            <h3>Okta Integration Network (OIN)</h3>
+            <p>The OIN contains 7,000+ pre-built integrations with SSO and provisioning support.</p>
+
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">SAML Apps</button>
+                    <button class="tab-header">OIDC Apps</button>
+                    <button class="tab-header">SWA Apps</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h4>SAML Application Setup</h4>
+                    <p>SAML apps use assertion-based authentication where Okta issues signed SAML assertions.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">SAML Configuration</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code>SAML Settings for Service Provider:
+
+Identity Provider Single Sign-On URL:
+https://yourcompany.okta.com/app/appname/exk123456/sso/saml
+
+Identity Provider Issuer:
+http://www.okta.com/exk123456
+
+X.509 Certificate:
+(Download from Okta App > Sign On > SAML Signing Certificates)
+
+Name ID Format: 
+urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
+
+Attribute Statements:
+┌──────────────────┬────────────────────────────────────┐
+│  Name            │  Value                             │
+├──────────────────┼────────────────────────────────────┤
+│  email           │  user.email                        │
+│  firstName       │  user.firstName                    │
+│  lastName        │  user.lastName                     │
+│  department      │  user.department                   │
+│  groups          │  (Group filter expression)         │
+└──────────────────┴────────────────────────────────────┘</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>OIDC Application Setup</h4>
+                    <p>OIDC apps use OAuth 2.0 with ID tokens for authentication.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">OIDC Configuration</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code>OIDC App Settings:
+
+Client ID: 0oa1234567890abcdef
+Client Secret: (generated)
+
+Grant Types:
+☑ Authorization Code
+☑ Refresh Token
+☐ Implicit (deprecated)
+☐ Resource Owner Password
+
+Sign-in Redirect URIs:
+https://myapp.example.com/callback
+https://myapp.example.com/oauth/callback
+
+Sign-out Redirect URIs:
+https://myapp.example.com/logout
+
+Initiate Login URI:
+https://myapp.example.com/login
+
+Okta Endpoints:
+Authorization: https://yourcompany.okta.com/oauth2/default/v1/authorize
+Token:         https://yourcompany.okta.com/oauth2/default/v1/token
+UserInfo:      https://yourcompany.okta.com/oauth2/default/v1/userinfo
+JWKS:          https://yourcompany.okta.com/oauth2/default/v1/keys</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Secure Web Authentication (SWA)</h4>
+                    <p>SWA provides SSO for apps that don't support SAML/OIDC using browser plugin password injection.</p>
+                    
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ SWA Limitations</div>
+                        <ul>
+                            <li>Requires Okta Browser Plugin</li>
+                            <li>Passwords stored in Okta (encrypted)</li>
+                            <li>No true federation - password replay</li>
+                            <li>Use only for legacy apps without modern auth</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="mfa-factors">MFA Factors</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Type</th>
+                            <th>Security Level</th>
+                            <th>User Experience</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Okta Verify (Push)</strong></td>
+                            <td>Possession</td>
+                            <td>High</td>
+                            <td>Excellent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Okta Verify (TOTP)</strong></td>
+                            <td>Possession</td>
+                            <td>High</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WebAuthn/FIDO2</strong></td>
+                            <td>Possession + Inherence</td>
+                            <td>Highest</td>
+                            <td>Excellent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>YubiKey (OTP)</strong></td>
+                            <td>Possession</td>
+                            <td>High</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Google Authenticator</strong></td>
+                            <td>Possession</td>
+                            <td>Medium-High</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SMS</strong></td>
+                            <td>Possession</td>
+                            <td>Low</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Voice Call</strong></td>
+                            <td>Possession</td>
+                            <td>Low</td>
+                            <td>Fair</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>Possession</td>
+                            <td>Low</td>
+                            <td>Fair</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security Question</strong></td>
+                            <td>Knowledge</td>
+                            <td>Very Low</td>
+                            <td>Poor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="sign-on-policies">Sign-On Policies</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    OKTA SIGN-ON POLICY STRUCTURE
+    ══════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    GLOBAL SESSION POLICY                             │
+    │                 (Applies to all Okta access)                         │
+    │                                                                      │
+    │  Rules (evaluated in priority order):                               │
+    │                                                                      │
+    │  RULE 1: Block High-Risk Countries                                  │
+    │  ├── IF: Location = [Blocked Countries]                             │
+    │  └── THEN: Deny access                                              │
+    │                                                                      │
+    │  RULE 2: Executives - Phishing Resistant                            │
+    │  ├── IF: Group = Executives                                         │
+    │  └── THEN: Require WebAuthn/FIDO2                                   │
+    │                                                                      │
+    │  RULE 3: Trusted Network - Password Only                            │
+    │  ├── IF: Network Zone = Corporate                                   │
+    │  └── THEN: Password only, no MFA                                    │
+    │                                                                      │
+    │  RULE 4: Default - MFA Required                                     │
+    │  ├── IF: Any user (catch-all)                                       │
+    │  └── THEN: Password + Any MFA factor                                │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                 APPLICATION SIGN-ON POLICY                           │
+    │              (Per-app additional requirements)                       │
+    │                                                                      │
+    │  App: Salesforce                                                    │
+    │                                                                      │
+    │  RULE 1: Contractors - Always MFA                                   │
+    │  ├── IF: Group = Contractors                                        │
+    │  └── THEN: Re-authenticate with MFA every 1 hour                    │
+    │                                                                      │
+    │  RULE 2: Default                                                    │
+    │  ├── IF: Any assigned user                                          │
+    │  └── THEN: Use global session (no additional auth)                  │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="adaptive">Adaptive MFA & ThreatInsight</h2>
+            
+            <p>Okta's adaptive security features adjust authentication requirements based on risk signals.</p>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Behavior Detection</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>Okta analyzes user behavior patterns and flags anomalies:</p>
+                            <ul>
+                                <li><strong>New Device:</strong> User signing in from unrecognized device</li>
+                                <li><strong>New IP:</strong> Sign-in from new IP address</li>
+                                <li><strong>New City/State/Country:</strong> Geographic anomaly</li>
+                                <li><strong>Velocity Anomaly:</strong> Impossible travel detection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">ThreatInsight</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>Pre-authentication threat detection:</p>
+                            <ul>
+                                <li>Blocks known malicious IPs before authentication</li>
+                                <li>Identifies credential stuffing attacks</li>
+                                <li>Leverages Okta's global threat intelligence</li>
+                                <li>Actions: Log only, Challenge MFA, or Block</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="fastpass">Okta FastPass</h2>
+            
+            <p>Okta FastPass provides passwordless authentication using device-bound credentials.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    OKTA FASTPASS FLOW
+    ═══════════════════
+
+    ┌─────────────────┐        ┌─────────────────┐        ┌─────────────────┐
+    │    Managed      │        │    Okta         │        │   Protected     │
+    │    Device       │        │    Cloud        │        │   Application   │
+    │  (Okta Verify)  │        │                 │        │                 │
+    └────────┬────────┘        └────────┬────────┘        └────────┬────────┘
+             │                          │                          │
+             │  1. User opens app       │                          │
+             │─────────────────────────────────────────────────────▶
+             │                          │                          │
+             │                          │  2. Redirect to Okta    │
+             │◀─────────────────────────────────────────────────────
+             │                          │                          │
+             │  3. Okta detects managed device                     │
+             │◀─────────────────────────│                          │
+             │                          │                          │
+             │  4. Push notification to Okta Verify                │
+             │◀─────────────────────────│                          │
+             │                          │                          │
+             │  5. Biometric unlock (Face ID/Touch ID/PIN)        │
+             │───────┐                  │                          │
+             │       │ Local            │                          │
+             │◀──────┘ verification     │                          │
+             │                          │                          │
+             │  6. Device-bound credential signs challenge         │
+             │─────────────────────────▶│                          │
+             │                          │                          │
+             │                          │  7. Token issued         │
+             │                          │─────────────────────────▶│
+             │                          │                          │
+             │  8. Access granted (NO PASSWORD USED)               │
+             │◀─────────────────────────────────────────────────────
+
+    REQUIREMENTS:
+    • Okta Verify app installed
+    • Device enrolled as managed device
+    • Biometric or PIN configured
+    • FastPass enabled in authentication policy
+</pre>
+            </div>
+
+            <nav class="page-nav">
+                <a href="okta-fundamentals.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Okta Fundamentals</span>
+                </a>
+                <a href="okta-lifecycle.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Lifecycle Management →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

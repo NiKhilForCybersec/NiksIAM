@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okta Governance | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html" class="active">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="okta-fundamentals.html">Okta</a>
+                <span class="separator">/</span>
+                <span class="current">Governance</span>
+            </nav>
+
+            <h1>Okta Identity Governance</h1>
+            
+            <p>Okta Identity Governance provides access certification, visibility into entitlements, and compliance reporting to ensure users have appropriate access.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#overview">Governance Overview</a></li>
+                    <li><a href="#access-certification">Access Certification</a></li>
+                    <li><a href="#access-requests">Access Requests</a></li>
+                    <li><a href="#reporting">Compliance Reporting</a></li>
+                </ul>
+            </div>
+
+            <h2 id="overview">Governance Overview</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    OKTA IDENTITY GOVERNANCE
+    ═════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    GOVERNANCE CAPABILITIES                           │
+    │                                                                      │
+    │   ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐  │
+    │   │     ACCESS      │   │     ACCESS      │   │   COMPLIANCE    │  │
+    │   │  CERTIFICATION  │   │    REQUESTS     │   │   REPORTING     │  │
+    │   │                 │   │                 │   │                 │  │
+    │   │ • Periodic      │   │ • Self-service  │   │ • Audit logs    │  │
+    │   │   reviews       │   │   request       │   │ • Access maps   │  │
+    │   │ • Manager       │   │ • Approval      │   │ • Entitlement   │  │
+    │   │   attestation   │   │   workflows     │   │   reports       │  │
+    │   │ • Risk-based    │   │ • Time-bound    │   │ • SOX, SOC2     │  │
+    │   │   campaigns     │   │   access        │   │   compliance    │  │
+    │   └─────────────────┘   └─────────────────┘   └─────────────────┘  │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="access-certification">Access Certification</h2>
+            
+            <p>Access certification campaigns ensure users have appropriate access through periodic reviews.</p>
+
+            <h3>Campaign Types</h3>
+            <ul>
+                <li><strong>User Access Review:</strong> Manager reviews all access for their direct reports</li>
+                <li><strong>Resource Access Review:</strong> App owner reviews all users with access</li>
+                <li><strong>Entitlement Review:</strong> Review specific high-risk entitlements</li>
+            </ul>
+
+            <div class="ascii-diagram">
+<pre>
+    ACCESS CERTIFICATION WORKFLOW
+    ══════════════════════════════
+
+    ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+    │   Campaign   │────▶│   Reviewer   │────▶│   Review     │
+    │   Created    │     │  Assigned    │     │  Decision    │
+    └──────────────┘     └──────────────┘     └──────┬───────┘
+                                                      │
+                         ┌────────────────────────────┼────────────────┐
+                         │                            │                │
+                         ▼                            ▼                ▼
+                    ┌─────────┐               ┌─────────────┐    ┌─────────┐
+                    │ APPROVE │               │   REVOKE    │    │  FLAG   │
+                    │         │               │             │    │ (Escalate)
+                    │ Access  │               │ Trigger     │    │         │
+                    │ Retained│               │ Deprovision │    │ Further │
+                    │         │               │             │    │ Review  │
+                    └─────────┘               └─────────────┘    └─────────┘
+</pre>
+            </div>
+
+            <h2 id="access-requests">Access Requests</h2>
+            
+            <p>Self-service access request workflows enable users to request access with appropriate approvals.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Access Request Configuration</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>Access Request Policy Example:
+
+Resource: Salesforce - Admin Profile
+─────────────────────────────────────
+
+Request Settings:
+  ☑ Users can request this resource
+  ☑ Require business justification
+  
+Approval Workflow:
+  Stage 1: Manager Approval (required)
+  Stage 2: App Owner Approval (required)
+  
+Time Constraints:
+  ☑ Time-bound access
+  Default Duration: 90 days
+  Maximum Duration: 365 days
+  
+Auto-Revocation:
+  ☑ Auto-revoke when access expires
+  ☑ Send reminder 7 days before expiration</code></pre>
+            </div>
+
+            <h2 id="reporting">Compliance Reporting</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report Type</th>
+                            <th>Description</th>
+                            <th>Compliance Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>User Access Report</strong></td>
+                            <td>All applications and groups for a user</td>
+                            <td>Auditor requests, termination verification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Application Access Report</strong></td>
+                            <td>All users with access to an application</td>
+                            <td>SOX, periodic access review</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Certification History</strong></td>
+                            <td>Past certification decisions</td>
+                            <td>Audit evidence</td>
+                        </tr>
+                        <tr>
+                            <td><strong>System Log</strong></td>
+                            <td>All authentication and admin events</td>
+                            <td>Security audit, incident investigation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="page-nav">
+                <a href="okta-lifecycle.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Lifecycle Management</span>
+                </a>
+                <a href="sso-protocols.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">SSO Protocols Deep Dive →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

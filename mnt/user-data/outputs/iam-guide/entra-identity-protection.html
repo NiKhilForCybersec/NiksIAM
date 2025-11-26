@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Protection | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html" class="active">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="entra-id-fundamentals.html">Microsoft Entra ID</a>
+                <span class="separator">/</span>
+                <span class="current">Identity Protection</span>
+            </nav>
+
+            <h1>Identity Protection</h1>
+            
+            <p>Microsoft Entra ID Protection uses machine learning to detect and remediate identity-based risks. It provides automated risk detection, investigation, and remediation capabilities.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#risk-types">Risk Types</a></li>
+                    <li><a href="#risk-policies">Risk Policies</a></li>
+                    <li><a href="#investigation">Investigation Workflows</a></li>
+                    <li><a href="#remediation">Remediation</a></li>
+                </ul>
+            </div>
+
+            <h2 id="overview">Identity Protection Overview</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    IDENTITY PROTECTION ARCHITECTURE
+    ═════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                      SIGNAL COLLECTION                               │
+    │                                                                      │
+    │   Sign-in Events    User Behavior     External Threat Intelligence  │
+    │        │                  │                        │                │
+    └────────┼──────────────────┼────────────────────────┼────────────────┘
+             │                  │                        │
+             └──────────────────┼────────────────────────┘
+                                │
+                                ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    RISK DETECTION ENGINE                             │
+    │                    (Machine Learning)                                │
+    │                                                                      │
+    │   ┌───────────────────┐         ┌───────────────────┐              │
+    │   │   USER RISK       │         │  SIGN-IN RISK     │              │
+    │   │   ─────────────   │         │  ─────────────    │              │
+    │   │   • Leaked creds  │         │  • Anonymous IP   │              │
+    │   │   • Anomalous     │         │  • Atypical travel│              │
+    │   │     activity      │         │  • Malware-linked │              │
+    │   │   • User reported │         │  • Unfamiliar     │              │
+    │   │                   │         │    sign-in props  │              │
+    │   └───────────────────┘         └───────────────────┘              │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    RISK LEVELS                                       │
+    │                                                                      │
+    │     ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐       │
+    │     │  HIGH   │    │ MEDIUM  │    │   LOW   │    │  NONE   │       │
+    │     │ (Block/ │    │ (MFA +  │    │  (MFA)  │    │ (Allow) │       │
+    │     │ Remediate)   │ Monitor)│    │         │    │         │       │
+    │     └─────────┘    └─────────┘    └─────────┘    └─────────┘       │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="risk-types">Risk Detection Types</h2>
+            
+            <h3>User Risk Detections</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Detection</th>
+                            <th>Description</th>
+                            <th>Detection Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Leaked credentials</strong></td>
+                            <td>User credentials found in dark web or data breaches</td>
+                            <td>Offline</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Anomalous user activity</strong></td>
+                            <td>Behavior patterns inconsistent with user's history</td>
+                            <td>Offline</td>
+                        </tr>
+                        <tr>
+                            <td><strong>User reported suspicious activity</strong></td>
+                            <td>User reports via "This wasn't me" in MFA prompt</td>
+                            <td>Real-time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Possible attempt to access PRT</strong></td>
+                            <td>Primary Refresh Token access attempt detected</td>
+                            <td>Offline</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Sign-in Risk Detections</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Detection</th>
+                            <th>Description</th>
+                            <th>Detection Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Anonymous IP address</strong></td>
+                            <td>Sign-in from anonymous proxy (Tor, VPN)</td>
+                            <td>Real-time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Atypical travel</strong></td>
+                            <td>Sign-in from location atypical for user</td>
+                            <td>Offline</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Impossible travel</strong></td>
+                            <td>Sign-ins from distant locations in impossible time</td>
+                            <td>Offline</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Malware-linked IP</strong></td>
+                            <td>Sign-in from IP known to host malware</td>
+                            <td>Offline</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unfamiliar sign-in properties</strong></td>
+                            <td>Properties not seen recently for user</td>
+                            <td>Real-time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Password spray</strong></td>
+                            <td>Multiple accounts targeted with same password</td>
+                            <td>Offline</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Token issuer anomaly</strong></td>
+                            <td>Abnormal SAML token issuer detected</td>
+                            <td>Offline</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="risk-policies">Risk-Based Policies</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Terraform - Risk Policies via Conditional Access</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># User Risk Policy - Require password change for high-risk users
+resource "azuread_conditional_access_policy" "user_risk_high" {
+  display_name = "CA-Risk: Require password change for high-risk users"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = var.break_glass_users
+    }
+    applications {
+      include_applications = ["All"]
+    }
+    user_risk_levels = ["high"]
+  }
+
+  grant_controls {
+    operator          = "AND"
+    built_in_controls = ["mfa", "passwordChange"]
+  }
+}
+
+# Sign-in Risk Policy - Require MFA for medium/high risk sign-ins
+resource "azuread_conditional_access_policy" "signin_risk" {
+  display_name = "CA-Risk: Require MFA for risky sign-ins"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = var.break_glass_users
+    }
+    applications {
+      include_applications = ["All"]
+    }
+    sign_in_risk_levels = ["high", "medium"]
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["mfa"]
+  }
+}</code></pre>
+            </div>
+
+            <h2 id="investigation">Investigation Workflows</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    RISK INVESTIGATION WORKFLOW
+    ════════════════════════════
+
+    ┌─────────────┐
+    │ Risk Alert  │
+    │ Triggered   │
+    └──────┬──────┘
+           │
+           ▼
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  1. REVIEW RISK DETAILS                                          │
+    │     • Risk type and level                                        │
+    │     • Detection time                                             │
+    │     • User and sign-in details                                   │
+    │     • Location and device information                            │
+    └─────────────────────────────────────────────────────────────────┘
+           │
+           ▼
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  2. CORRELATE WITH OTHER SIGNALS                                 │
+    │     • Sign-in logs for suspicious patterns                       │
+    │     • Audit logs for unusual actions                            │
+    │     • Microsoft Defender for Identity alerts                     │
+    │     • Other users affected by same detection                     │
+    └─────────────────────────────────────────────────────────────────┘
+           │
+           ▼
+    ┌─────────────────────────────────────────────────────────────────┐
+    │  3. DETERMINE LEGITIMACY                                         │
+    │                                                                  │
+    │     Legitimate?  ──YES──▶  Dismiss risk / Add to safe list      │
+    │         │                                                        │
+    │        NO                                                        │
+    │         │                                                        │
+    │         ▼                                                        │
+    │     Compromised? ──YES──▶  Remediate (reset password, revoke    │
+    │         │                  sessions, investigate further)        │
+    │        UNSURE                                                    │
+    │         │                                                        │
+    │         ▼                                                        │
+    │     Contact user for verification                                │
+    └─────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h2 id="remediation">Remediation Actions</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Risk Remediation</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Get risky users
+Get-MgRiskyUser -Filter "riskLevel eq 'high'" | 
+    Select-Object UserPrincipalName, RiskLevel, RiskLastUpdatedDateTime
+
+# Dismiss user risk (confirmed safe)
+Invoke-MgDismissRiskyUser -UserIds @("user-object-id")
+
+# Confirm user compromised (triggers remediation)
+Invoke-MgConfirmRiskyUserCompromised -UserIds @("user-object-id")
+
+# Revoke all refresh tokens for user
+Revoke-MgUserSignInSession -UserId "user@domain.com"
+
+# Force password reset at next sign-in
+Update-MgUser -UserId "user@domain.com" -PasswordProfile @{
+    ForceChangePasswordNextSignIn = $true
+}</code></pre>
+            </div>
+
+            <nav class="page-nav">
+                <a href="entra-conditional-access.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Conditional Access</span>
+                </a>
+                <a href="entra-id-governance.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Identity Governance →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

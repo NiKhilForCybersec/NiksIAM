@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Entra ID Fundamentals | IAM Ultimate Guide</title>
+    <meta name="description" content="Microsoft Entra ID fundamentals covering tenants, identity types, licensing, device identities, groups, and administrative units.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html" class="active">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="entra-id-fundamentals.html">Microsoft Entra ID</a>
+                <span class="separator">/</span>
+                <span class="current">Fundamentals</span>
+            </nav>
+
+            <h1>Microsoft Entra ID Fundamentals</h1>
+            
+            <p>Microsoft Entra ID (formerly Azure Active Directory) is Microsoft's cloud-based identity and access management service. It provides authentication and authorization for Microsoft 365, Azure, and thousands of SaaS applications.</p>
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#comparison">Entra ID vs Active Directory</a></li>
+                    <li><a href="#architecture">Entra ID Architecture</a></li>
+                    <li><a href="#identity-types">Identity Types</a></li>
+                    <li><a href="#licensing">Licensing Tiers</a></li>
+                    <li><a href="#device-identities">Device Identities</a></li>
+                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="#admin-units">Administrative Units</a></li>
+                    <li><a href="#custom-domains">Custom Domains</a></li>
+                    <li><a href="#portal">Portal Navigation</a></li>
+                </ul>
+            </div>
+
+            <!-- Comparison -->
+            <h2 id="comparison">Entra ID vs Active Directory</h2>
+            
+            <p>Understanding the differences between on-premises Active Directory and cloud-based Entra ID is crucial for architects and administrators.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Active Directory</th>
+                            <th>Microsoft Entra ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Deployment</strong></td>
+                            <td>On-premises (Domain Controllers)</td>
+                            <td>Cloud-native (Microsoft managed)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Structure</strong></td>
+                            <td>Forests, Domains, OUs</td>
+                            <td>Flat structure (Tenants)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Protocols</strong></td>
+                            <td>Kerberos, NTLM, LDAP</td>
+                            <td>SAML, OAuth 2.0, OpenID Connect</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Query Language</strong></td>
+                            <td>LDAP</td>
+                            <td>Microsoft Graph API, OData</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Device Management</strong></td>
+                            <td>Group Policy (GPO)</td>
+                            <td>Intune / MDM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authentication</strong></td>
+                            <td>Kerberos tickets</td>
+                            <td>OAuth tokens, SAML assertions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Trust Model</strong></td>
+                            <td>Forest/Domain trusts</td>
+                            <td>B2B collaboration, federation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Administration</strong></td>
+                            <td>AD Users & Computers, PowerShell</td>
+                            <td>Entra Portal, Graph API, PowerShell</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Architecture -->
+            <h2 id="architecture">Entra ID Architecture</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    MICROSOFT ENTRA ID ARCHITECTURE
+    ═════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────────┐
+    │                         MICROSOFT CLOUD                                  │
+    │                                                                          │
+    │  ┌───────────────────────────────────────────────────────────────────┐  │
+    │  │                     ENTRA ID TENANT                                │  │
+    │  │                   (contoso.onmicrosoft.com)                        │  │
+    │  │                                                                    │  │
+    │  │   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐            │  │
+    │  │   │   USERS     │   │   GROUPS    │   │    APPS     │            │  │
+    │  │   │ ─────────── │   │ ─────────── │   │ ─────────── │            │  │
+    │  │   │ • Cloud     │   │ • Security  │   │ • Enterprise│            │  │
+    │  │   │ • Synced    │   │ • M365      │   │ • App Regs  │            │  │
+    │  │   │ • Guest     │   │ • Dynamic   │   │ • Gallery   │            │  │
+    │  │   └─────────────┘   └─────────────┘   └─────────────┘            │  │
+    │  │                                                                    │  │
+    │  │   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐            │  │
+    │  │   │  DEVICES    │   │   ROLES     │   │  POLICIES   │            │  │
+    │  │   │ ─────────── │   │ ─────────── │   │ ─────────── │            │  │
+    │  │   │ • Registered│   │ • Built-in  │   │ • Cond.Acc. │            │  │
+    │  │   │ • Joined    │   │ • Custom    │   │ • MFA       │            │  │
+    │  │   │ • Hybrid    │   │ • PIM       │   │ • Password  │            │  │
+    │  │   └─────────────┘   └─────────────┘   └─────────────┘            │  │
+    │  └───────────────────────────────────────────────────────────────────┘  │
+    │                                    │                                     │
+    │                                    │ Federation / SSO                    │
+    │                                    ▼                                     │
+    │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
+    │  │ Microsoft    │  │    Azure     │  │  SaaS Apps   │  │  Custom Apps │ │
+    │  │    365       │  │  Resources   │  │  (Gallery)   │  │  (Your Apps) │ │
+    │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘ │
+    └─────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │ Entra Connect / Cloud Sync
+                                         ▼
+    ┌─────────────────────────────────────────────────────────────────────────┐
+    │                      ON-PREMISES (Optional)                              │
+    │  ┌──────────────────────────────────────────────────────────────────┐   │
+    │  │                    Active Directory                               │   │
+    │  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐             │   │
+    │  │  │  Users  │  │ Groups  │  │Computers│  │  GPOs   │             │   │
+    │  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘             │   │
+    │  └──────────────────────────────────────────────────────────────────┘   │
+    └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Tenant, Directory, and Subscription Relationship</h3>
+            
+            <div class="ascii-diagram">
+<pre>
+    TENANT / DIRECTORY / SUBSCRIPTION HIERARCHY
+    ════════════════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                         ENTRA ID TENANT                              │
+    │                    (Identity boundary / Directory)                   │
+    │                                                                      │
+    │   Tenant ID: 12345678-abcd-1234-efgh-123456789012                   │
+    │   Primary Domain: contoso.onmicrosoft.com                           │
+    │   Custom Domains: contoso.com, sales.contoso.com                    │
+    │                                                                      │
+    │   Contains:                                                          │
+    │   • All identities (users, groups, service principals)              │
+    │   • All enterprise applications                                      │
+    │   • All policies and configurations                                  │
+    │                                                                      │
+    └────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     │ Trust relationship
+                                     │
+         ┌───────────────────────────┼───────────────────────────┐
+         │                           │                           │
+         ▼                           ▼                           ▼
+    ┌──────────────┐          ┌──────────────┐          ┌──────────────┐
+    │ SUBSCRIPTION │          │ SUBSCRIPTION │          │ SUBSCRIPTION │
+    │  Production  │          │     Dev      │          │     Test     │
+    │              │          │              │          │              │
+    │ Sub ID: xxx  │          │ Sub ID: yyy  │          │ Sub ID: zzz  │
+    │              │          │              │          │              │
+    │ ┌──────────┐ │          │ ┌──────────┐ │          │ ┌──────────┐ │
+    │ │ Resource │ │          │ │ Resource │ │          │ │ Resource │ │
+    │ │ Groups   │ │          │ │ Groups   │ │          │ │ Groups   │ │
+    │ └──────────┘ │          │ └──────────┘ │          │ └──────────┘ │
+    └──────────────┘          └──────────────┘          └──────────────┘
+
+    KEY POINTS:
+    • One tenant can have multiple subscriptions
+    • One subscription belongs to exactly one tenant
+    • Subscription can be moved between tenants (with limitations)
+    • Billing is per subscription
+    • RBAC is per subscription/resource
+</pre>
+            </div>
+
+            <!-- Identity Types -->
+            <h2 id="identity-types">Identity Types</h2>
+            
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">Cloud Users</button>
+                    <button class="tab-header">Synced Users</button>
+                    <button class="tab-header">Guest Users (B2B)</button>
+                    <button class="tab-header">External (B2C)</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h3>Cloud-Only Users</h3>
+                    <p>Users created and managed entirely in Entra ID with no on-premises footprint.</p>
+                    
+                    <ul>
+                        <li>Source of authority is Entra ID</li>
+                        <li>Password managed in the cloud</li>
+                        <li>No dependency on on-premises infrastructure</li>
+                        <li>Best for cloud-first organizations</li>
+                    </ul>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - Create Cloud User</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Connect to Microsoft Graph
+Connect-MgGraph -Scopes "User.ReadWrite.All"
+
+# Create new cloud user
+$passwordProfile = @{
+    Password = "TempP@ssw0rd!"
+    ForceChangePasswordNextSignIn = $true
+}
+
+New-MgUser -DisplayName "Alice Smith" `
+    -UserPrincipalName "alice@contoso.com" `
+    -MailNickname "alice" `
+    -PasswordProfile $passwordProfile `
+    -AccountEnabled
+
+# Using Azure CLI
+az ad user create \
+    --display-name "Alice Smith" \
+    --user-principal-name "alice@contoso.com" \
+    --password "TempP@ssw0rd!" \
+    --force-change-password-next-sign-in true</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Synchronized Users</h3>
+                    <p>Users synced from on-premises Active Directory via Entra Connect or Cloud Sync.</p>
+                    
+                    <ul>
+                        <li>Source of authority is on-premises AD</li>
+                        <li>Changes made on-premises sync to cloud</li>
+                        <li>Password can be synced (PHS) or federated</li>
+                        <li>Hybrid identity scenarios</li>
+                    </ul>
+                    
+                    <div class="info-box info">
+                        <div class="info-box-title">💡 Identifying Synced Users</div>
+                        <p>Synced users have <code>onPremisesSyncEnabled = true</code> and cannot be modified directly in Entra ID (except for cloud-only attributes like licenses).</p>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Guest Users (B2B)</h3>
+                    <p>External users invited to collaborate in your tenant. They authenticate with their home tenant or identity provider.</p>
+                    
+                    <ul>
+                        <li>UserType = "Guest"</li>
+                        <li>Authenticate with their own credentials</li>
+                        <li>Limited default permissions</li>
+                        <li>Can be assigned to groups, apps, and roles</li>
+                        <li>Supports email one-time passcode for any email</li>
+                    </ul>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - Invite Guest User</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Invite guest user via Microsoft Graph
+New-MgInvitation -InvitedUserEmailAddress "partner@external.com" `
+    -InviteRedirectUrl "https://myapps.microsoft.com" `
+    -SendInvitationMessage:$true `
+    -InvitedUserDisplayName "Partner User"
+
+# Bulk invite from CSV
+Import-Csv "guests.csv" | ForEach-Object {
+    New-MgInvitation -InvitedUserEmailAddress $_.Email `
+        -InviteRedirectUrl "https://myapps.microsoft.com" `
+        -SendInvitationMessage:$true
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>External Identities (B2C)</h3>
+                    <p>Customer-facing identity solution for consumer applications. Separate Entra ID B2C tenant required.</p>
+                    
+                    <ul>
+                        <li>Designed for customer/consumer apps</li>
+                        <li>Supports social identity providers (Google, Facebook, etc.)</li>
+                        <li>Custom sign-up/sign-in experiences</li>
+                        <li>Scales to millions of users</li>
+                        <li>Separate from workforce identity</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Licensing -->
+            <h2 id="licensing">Licensing Tiers</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Free</th>
+                            <th>P1</th>
+                            <th>P2</th>
+                            <th>Governance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>User/Group Management</strong></td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SSO (unlimited apps)</strong></td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MFA</strong></td>
+                            <td>Security Defaults</td>
+                            <td>✓ (Conditional)</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conditional Access</strong></td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Self-Service Password Reset</strong></td>
+                            <td>Cloud only</td>
+                            <td>✓ + Writeback</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dynamic Groups</strong></td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Application Proxy</strong></td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Identity Protection</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Privileged Identity Mgmt (PIM)</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Access Reviews</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Entitlement Management</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lifecycle Workflows</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box info">
+                <div class="info-box-title">💡 Licensing Tips</div>
+                <ul>
+                    <li>P1 is included with Microsoft 365 E3, EMS E3</li>
+                    <li>P2 is included with Microsoft 365 E5, EMS E5</li>
+                    <li>Guest users require licenses for P1/P2 features at a 5:1 ratio</li>
+                    <li>Some features require licenses only for users who use them</li>
+                </ul>
+            </div>
+
+            <!-- Device Identities -->
+            <h2 id="device-identities">Device Identities</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    DEVICE IDENTITY OPTIONS
+    ════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    ENTRA ID REGISTERED                               │
+    │   ─────────────────────────────────────────────────────────────────  │
+    │   • Personal devices (BYOD)                                         │
+    │   • User signs in with personal account + adds work account         │
+    │   • Device NOT joined to any directory                              │
+    │   • Minimal device management                                       │
+    │   • SSO to cloud apps                                               │
+    │   • Supported: Windows 10+, iOS, Android, macOS                     │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    ENTRA ID JOINED                                   │
+    │   ─────────────────────────────────────────────────────────────────  │
+    │   • Corporate devices (cloud-only orgs)                             │
+    │   • Device joined ONLY to Entra ID                                  │
+    │   • Sign in with Entra ID account                                   │
+    │   • Full MDM management via Intune                                  │
+    │   • SSO to cloud and on-prem apps (with config)                     │
+    │   • Windows Hello for Business                                      │
+    │   • Supported: Windows 10+ only                                     │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    HYBRID ENTRA ID JOINED                            │
+    │   ─────────────────────────────────────────────────────────────────  │
+    │   • Corporate devices (hybrid orgs)                                 │
+    │   • Device joined to BOTH on-prem AD AND Entra ID                   │
+    │   • Existing domain-joined devices                                  │
+    │   • GPO + Intune management                                         │
+    │   • SSO to both cloud and on-prem resources                         │
+    │   • Requires Entra Connect device sync                              │
+    │   • Supported: Windows 10+, Windows Server 2016+                    │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    DECISION FLOW:
+    ──────────────
+
+    Is it a personal device?
+        │
+        ├── YES → Entra ID Registered
+        │
+        └── NO → Do you have on-premises AD?
+                    │
+                    ├── NO → Entra ID Joined
+                    │
+                    └── YES → Is it a new device?
+                                │
+                                ├── YES (cloud-first) → Entra ID Joined
+                                │
+                                └── NO (existing) → Hybrid Entra ID Joined
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Device Management</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Get all devices
+Get-MgDevice -All | Select-Object DisplayName, DeviceId, TrustType, 
+    ApproximateLastSignInDateTime
+
+# Filter by join type
+Get-MgDevice -Filter "trustType eq 'AzureAd'" # Entra ID Joined
+Get-MgDevice -Filter "trustType eq 'ServerAd'" # Hybrid Joined
+Get-MgDevice -Filter "trustType eq 'Workplace'" # Registered
+
+# Find stale devices (90 days)
+$threshold = (Get-Date).AddDays(-90).ToString("yyyy-MM-ddTHH:mm:ssZ")
+Get-MgDevice -Filter "approximateLastSignInDateTime le $threshold"
+
+# Check device status on Windows
+dsregcmd /status
+
+# Key outputs to check:
+# AzureAdJoined: YES/NO
+# DomainJoined: YES/NO  
+# WorkplaceJoined: YES/NO</code></pre>
+            </div>
+
+            <!-- Groups -->
+            <h2 id="groups">Groups in Entra ID</h2>
+            
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">Security Groups</button>
+                    <button class="tab-header">M365 Groups</button>
+                    <button class="tab-header">Dynamic Groups</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h3>Security Groups</h3>
+                    <p>Used for managing access to resources. Can be assigned to applications, Conditional Access policies, and Azure resources.</p>
+                    
+                    <ul>
+                        <li>Assigned or dynamic membership</li>
+                        <li>Can be synced from on-premises AD</li>
+                        <li>Can be role-assignable (for Entra ID roles)</li>
+                        <li>No collaboration features (no mailbox, Teams, etc.)</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Microsoft 365 Groups</h3>
+                    <p>Collaboration groups that provision shared resources including mailbox, SharePoint site, Teams, and Planner.</p>
+                    
+                    <ul>
+                        <li>Created when you create a Team, SharePoint site, etc.</li>
+                        <li>Has owners and members</li>
+                        <li>Can be public or private</li>
+                        <li>Expiration policies available</li>
+                        <li>Cannot be role-assignable</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Dynamic Groups (P1 Required)</h3>
+                    <p>Membership automatically managed based on user/device attribute rules.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Dynamic Membership Rules</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># All users in Sales department
+(user.department -eq "Sales")
+
+# All users with Manager title
+(user.jobTitle -contains "Manager")
+
+# All users in US or Canada
+(user.country -eq "United States") or (user.country -eq "Canada")
+
+# All full-time employees (custom attribute)
+(user.extensionAttribute1 -eq "FTE")
+
+# All Windows 10+ devices
+(device.deviceOSType -eq "Windows") and (device.deviceOSVersion -startsWith "10")
+
+# All Intune compliant devices
+(device.deviceManagementAppId -eq "0000000a-0000-0000-c000-000000000000") 
+    and (device.isCompliant -eq true)
+
+# Exclude guest users
+(user.userType -eq "Member")
+
+# Complex rule with multiple conditions
+(user.department -eq "Engineering") and (user.jobTitle -contains "Senior") 
+    and (user.accountEnabled -eq true)</code></pre>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <div class="info-box-title">⚠️ Dynamic Group Limitations</div>
+                        <ul>
+                            <li>Membership updates can take minutes to hours</li>
+                            <li>Maximum 15 dynamic membership rules per tenant (for assigned users)</li>
+                            <li>Cannot mix dynamic and assigned membership</li>
+                            <li>Role-assignable groups cannot be dynamic</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Administrative Units -->
+            <h2 id="admin-units">Administrative Units</h2>
+            
+            <p>Administrative Units (AUs) provide a way to restrict administrative scope within Entra ID. They enable delegated administration for specific subsets of users, groups, or devices.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    ADMINISTRATIVE UNITS
+    ═════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                        ENTRA ID TENANT                               │
+    │                                                                      │
+    │   Global Admin ──── Full access to entire tenant                    │
+    │                                                                      │
+    │   ┌───────────────────────┐     ┌───────────────────────┐          │
+    │   │   AU: North America   │     │   AU: Europe          │          │
+    │   │                       │     │                       │          │
+    │   │   ┌─────┐ ┌─────┐    │     │   ┌─────┐ ┌─────┐    │          │
+    │   │   │Users│ │Groups│    │     │   │Users│ │Groups│    │          │
+    │   │   │(NA) │ │(NA)  │    │     │   │(EU) │ │(EU)  │    │          │
+    │   │   └─────┘ └─────┘    │     │   └─────┘ └─────┘    │          │
+    │   │                       │     │                       │          │
+    │   │   Scoped Admins:      │     │   Scoped Admins:      │          │
+    │   │   • User Admin (NA)   │     │   • User Admin (EU)   │          │
+    │   │   • Helpdesk (NA)     │     │   • Helpdesk (EU)     │          │
+    │   └───────────────────────┘     └───────────────────────┘          │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    USE CASES:
+    ──────────
+    • Geographic delegation (NA, EMEA, APAC admins)
+    • Departmental delegation (HR admins manage HR users)
+    • Subsidiary management (separate admin per business unit)
+    • Restricted management (sensitive groups in protected AU)
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Administrative Units</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Create Administrative Unit
+New-MgDirectoryAdministrativeUnit -DisplayName "North America" `
+    -Description "Users and groups in North America region"
+
+# Add members to AU
+$auId = (Get-MgDirectoryAdministrativeUnit -Filter "displayName eq 'North America'").Id
+$userId = (Get-MgUser -Filter "userPrincipalName eq 'alice@contoso.com'").Id
+
+New-MgDirectoryAdministrativeUnitMember -AdministrativeUnitId $auId `
+    -DirectoryObjectId $userId
+
+# Assign scoped role
+$roleId = (Get-MgRoleManagementDirectoryRoleDefinition -Filter "displayName eq 'User Administrator'").Id
+
+New-MgRoleManagementDirectoryRoleAssignment `
+    -PrincipalId $adminUserId `
+    -RoleDefinitionId $roleId `
+    -DirectoryScopeId "/administrativeUnits/$auId"</code></pre>
+            </div>
+
+            <!-- Custom Domains -->
+            <h2 id="custom-domains">Custom Domains</h2>
+            
+            <p>By default, tenants have a *.onmicrosoft.com domain. Custom domains allow users to sign in with your organization's domain name.</p>
+
+            <h3>Adding a Custom Domain</h3>
+            <ol>
+                <li>Add domain name in Entra admin center</li>
+                <li>Create DNS verification record (TXT or MX)</li>
+                <li>Verify domain ownership</li>
+                <li>Configure DNS records for services (MX, CNAME, etc.)</li>
+                <li>Optionally set as primary domain</li>
+            </ol>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">DNS Records for Custom Domain</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Verification TXT Record
+Type: TXT
+Host: @
+Value: MS=ms12345678 (provided by Microsoft)
+TTL: 3600
+
+# Exchange Online (if using)
+Type: MX
+Host: @
+Value: contoso-com.mail.protection.outlook.com
+Priority: 0
+
+# Autodiscover
+Type: CNAME
+Host: autodiscover
+Value: autodiscover.outlook.com
+
+# SPF Record (email authentication)
+Type: TXT
+Host: @
+Value: v=spf1 include:spf.protection.outlook.com -all</code></pre>
+            </div>
+
+            <!-- Portal Navigation -->
+            <h2 id="portal">Entra Admin Center Navigation</h2>
+            
+            <p>The Microsoft Entra admin center (<a href="https://entra.microsoft.com" target="_blank">entra.microsoft.com</a>) is the primary portal for managing Entra ID.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    ENTRA ADMIN CENTER STRUCTURE
+    ═════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  Microsoft Entra admin center                                        │
+    ├─────────────────────────────────────────────────────────────────────┤
+    │                                                                      │
+    │  ├── Identity                                                       │
+    │  │   ├── Overview (Dashboard)                                       │
+    │  │   ├── Users                                                      │
+    │  │   │   ├── All users                                             │
+    │  │   │   ├── Deleted users                                         │
+    │  │   │   └── User settings                                         │
+    │  │   ├── Groups                                                     │
+    │  │   │   ├── All groups                                            │
+    │  │   │   ├── Expiration                                            │
+    │  │   │   └── Naming policy                                         │
+    │  │   ├── External Identities                                       │
+    │  │   │   ├── External collaboration settings                       │
+    │  │   │   └── Cross-tenant access                                   │
+    │  │   ├── Roles and administrators                                  │
+    │  │   └── Administrative units                                      │
+    │  │                                                                  │
+    │  ├── Protection                                                     │
+    │  │   ├── Conditional Access                                        │
+    │  │   ├── Identity Protection                                       │
+    │  │   ├── Authentication methods                                    │
+    │  │   ├── Password reset                                            │
+    │  │   └── Security Center                                           │
+    │  │                                                                  │
+    │  ├── Applications                                                   │
+    │  │   ├── Enterprise applications                                   │
+    │  │   ├── App registrations                                         │
+    │  │   └── Application proxy                                         │
+    │  │                                                                  │
+    │  ├── Identity Governance                                           │
+    │  │   ├── Entitlement management                                    │
+    │  │   ├── Access reviews                                            │
+    │  │   ├── Privileged Identity Management                            │
+    │  │   └── Lifecycle workflows                                       │
+    │  │                                                                  │
+    │  ├── Devices                                                        │
+    │  │   ├── All devices                                               │
+    │  │   ├── Device settings                                           │
+    │  │   └── Enterprise State Roaming                                  │
+    │  │                                                                  │
+    │  └── Monitoring                                                     │
+    │      ├── Sign-in logs                                              │
+    │      ├── Audit logs                                                │
+    │      ├── Provisioning logs                                         │
+    │      └── Workbooks                                                 │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="page-nav">
+                <a href="active-directory.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Active Directory</span>
+                </a>
+                <a href="entra-id-authentication.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Authentication Methods →</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+                <p>Built for security professionals, by security professionals.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

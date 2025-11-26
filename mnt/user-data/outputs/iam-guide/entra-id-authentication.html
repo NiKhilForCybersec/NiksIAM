@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Methods | IAM Ultimate Guide</title>
+    <meta name="description" content="Entra ID authentication methods including passwordless, MFA, FIDO2, Windows Hello, SSPR, and authentication policies.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html" class="active">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="entra-id-fundamentals.html">Microsoft Entra ID</a>
+                <span class="separator">/</span>
+                <span class="current">Authentication Methods</span>
+            </nav>
+
+            <h1>Entra ID Authentication Methods</h1>
+            
+            <p>Microsoft Entra ID supports a wide range of authentication methods from traditional passwords to modern passwordless options. This chapter covers all available methods, their configuration, and best practices.</p>
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#overview">Authentication Overview</a></li>
+                    <li><a href="#passwordless">Passwordless Authentication</a></li>
+                    <li><a href="#mfa">Multi-Factor Authentication</a></li>
+                    <li><a href="#sspr">Self-Service Password Reset</a></li>
+                    <li><a href="#password-protection">Password Protection</a></li>
+                    <li><a href="#auth-strengths">Authentication Strengths</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                </ul>
+            </div>
+
+            <!-- Overview -->
+            <h2 id="overview">Authentication Methods Overview</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    AUTHENTICATION METHODS HIERARCHY
+    ═════════════════════════════════
+
+    Security Level (Low to High):
+    ─────────────────────────────────────────────────────────────────────▶
+
+    ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+    │  PASSWORD   │  │  PASSWORD   │  │ PASSWORDLESS│  │ PASSWORDLESS│
+    │    ONLY     │  │   + MFA     │  │  (Phishable)│  │(Phish-Resist)│
+    │             │  │             │  │             │  │             │
+    │ • Password  │  │ • Password  │  │ • Phone     │  │ • FIDO2     │
+    │             │  │ • + SMS     │  │   sign-in   │  │ • WHfB      │
+    │             │  │ • + Voice   │  │ • Email OTP │  │ • Cert-based│
+    │             │  │ • + TOTP    │  │             │  │ • Passkeys  │
+    │             │  │ • + Push    │  │             │  │             │
+    └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘
+         ▲                ▲                ▲                ▲
+         │                │                │                │
+       Weak           Better           Good             Best
+    (Avoid if       (Minimum for     (Improved       (Target for
+     possible)       most users)     experience)      all users)
+
+
+    AUTHENTICATION METHODS BY SCENARIO:
+    ════════════════════════════════════
+
+    ┌──────────────────┬─────────────────────────────────────────────────┐
+    │ Primary Sign-in  │ Password, Passwordless (FIDO2, WHfB, Phone)     │
+    ├──────────────────┼─────────────────────────────────────────────────┤
+    │ MFA (2nd Factor) │ Authenticator Push, TOTP, SMS, Voice, FIDO2    │
+    ├──────────────────┼─────────────────────────────────────────────────┤
+    │ Password Reset   │ Email, SMS, Authenticator, Security Questions  │
+    ├──────────────────┼─────────────────────────────────────────────────┤
+    │ Account Recovery │ Authenticator, Email, Admin Reset              │
+    └──────────────────┴─────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Authentication Methods Comparison</h3>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Type</th>
+                            <th>Phish-Resistant</th>
+                            <th>User Experience</th>
+                            <th>Deployment Effort</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>FIDO2 Security Key</strong></td>
+                            <td>Passwordless</td>
+                            <td>✓ Yes</td>
+                            <td>Excellent</td>
+                            <td>Medium (hardware)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Windows Hello for Business</strong></td>
+                            <td>Passwordless</td>
+                            <td>✓ Yes</td>
+                            <td>Excellent</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Microsoft Authenticator (Passwordless)</strong></td>
+                            <td>Passwordless</td>
+                            <td>Partial*</td>
+                            <td>Excellent</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Certificate-Based Auth</strong></td>
+                            <td>Passwordless</td>
+                            <td>✓ Yes</td>
+                            <td>Good</td>
+                            <td>High (PKI)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authenticator Push</strong></td>
+                            <td>MFA</td>
+                            <td>No (MFA fatigue)</td>
+                            <td>Excellent</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTP (Authenticator/3rd party)</strong></td>
+                            <td>MFA</td>
+                            <td>No</td>
+                            <td>Good</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SMS/Voice</strong></td>
+                            <td>MFA</td>
+                            <td>No (SIM swap risk)</td>
+                            <td>Fair</td>
+                            <td>Low</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>*Microsoft Authenticator with number matching and additional context provides significant phishing protection but is not fully phish-resistant like FIDO2.</p>
+
+            <!-- Passwordless -->
+            <h2 id="passwordless">Passwordless Authentication</h2>
+            
+            <p>Passwordless authentication eliminates the primary attack vector in most breaches. Entra ID supports multiple passwordless methods.</p>
+
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">FIDO2 Keys</button>
+                    <button class="tab-header">Windows Hello</button>
+                    <button class="tab-header">Authenticator App</button>
+                    <button class="tab-header">Certificate-Based</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h3>FIDO2 Security Keys</h3>
+                    <p>Hardware security keys using the FIDO2/WebAuthn standard provide the strongest phishing-resistant authentication.</p>
+                    
+                    <h4>How FIDO2 Works</h4>
+                    <div class="ascii-diagram">
+<pre>
+    FIDO2 AUTHENTICATION FLOW
+    ══════════════════════════
+
+    ┌────────┐          ┌────────────┐          ┌──────────┐
+    │  User  │          │   Browser  │          │ Entra ID │
+    │        │          │  /Device   │          │          │
+    └───┬────┘          └─────┬──────┘          └────┬─────┘
+        │                     │                      │
+        │ 1. Navigate to      │                      │
+        │    sign-in page     │                      │
+        │────────────────────▶│                      │
+        │                     │ 2. Request challenge│
+        │                     │─────────────────────▶│
+        │                     │                      │
+        │                     │ 3. Challenge         │
+        │                     │◀─────────────────────│
+        │                     │                      │
+        │ 4. Touch security   │                      │
+        │    key              │                      │
+        │────────────────────▶│                      │
+        │                     │                      │
+        │    ┌────────────────┴────────────────┐    │
+        │    │ Security Key:                    │    │
+        │    │ • Verifies origin (domain)      │    │
+        │    │ • Signs challenge with          │    │
+        │    │   private key                   │    │
+        │    │ • Private key NEVER leaves key  │    │
+        │    └────────────────┬────────────────┘    │
+        │                     │                      │
+        │                     │ 5. Signed assertion │
+        │                     │─────────────────────▶│
+        │                     │                      │
+        │                     │    6. Verify with   │
+        │                     │       public key    │
+        │                     │                      │
+        │                     │ 7. Access granted   │
+        │◀────────────────────│◀─────────────────────│
+        │                     │                      │
+
+    WHY IT'S PHISHING-RESISTANT:
+    • Key is bound to specific domain (origin)
+    • Fake sites get different origin → key won't respond
+    • Private key never transmitted or exposed
+</pre>
+                    </div>
+                    
+                    <h4>Supported FIDO2 Keys</h4>
+                    <ul>
+                        <li><strong>YubiKey 5 Series:</strong> USB-A, USB-C, NFC options</li>
+                        <li><strong>Feitian:</strong> Various form factors</li>
+                        <li><strong>AuthenTrend:</strong> Biometric options</li>
+                        <li><strong>Thales:</strong> Enterprise-grade keys</li>
+                    </ul>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - Enable FIDO2</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Enable FIDO2 security keys for all users
+$params = @{
+    "@odata.type" = "#microsoft.graph.fido2AuthenticationMethodConfiguration"
+    State = "enabled"
+    IsAttestationEnforced = $true
+    IsSelfServiceRegistrationAllowed = $true
+}
+
+Update-MgPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
+    -AuthenticationMethodConfigurationId "Fido2" `
+    -BodyParameter $params
+
+# Restrict to specific AAGUID (key models)
+# Get AAGUIDs from manufacturer documentation</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Windows Hello for Business</h3>
+                    <p>Device-bound credential using biometrics (face/fingerprint) or PIN. Provides passwordless authentication for Windows devices.</p>
+                    
+                    <h4>Deployment Models</h4>
+                    <ul>
+                        <li><strong>Cloud-only:</strong> Entra ID Joined devices, no on-prem requirements</li>
+                        <li><strong>Hybrid Key Trust:</strong> Requires DC update, simpler than cert trust</li>
+                        <li><strong>Hybrid Certificate Trust:</strong> Requires PKI, supports RDP</li>
+                        <li><strong>On-premises Key Trust:</strong> AD-only environments</li>
+                    </ul>
+                    
+                    <div class="info-box success">
+                        <div class="info-box-title">✓ WHfB Security Features</div>
+                        <ul>
+                            <li>Credential is device-bound (TPM protected)</li>
+                            <li>Biometric data never leaves device</li>
+                            <li>PIN is device-specific, not a network credential</li>
+                            <li>Anti-hammering protections</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Intune Policy - WHfB</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code>// Intune Configuration Profile - Windows Hello for Business
+{
+    "windowsHelloForBusinessEnabled": true,
+    "pinMinimumLength": 6,
+    "pinMaximumLength": 127,
+    "pinUppercaseCharactersUsage": "allowed",
+    "pinLowercaseCharactersUsage": "allowed", 
+    "pinSpecialCharactersUsage": "allowed",
+    "securityDeviceRequired": true,  // Require TPM
+    "unlockWithBiometricsEnabled": true,
+    "enhancedAntiSpoofingForFacialFeaturesEnabled": true
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Microsoft Authenticator Passwordless</h3>
+                    <p>Phone sign-in allows users to sign in without a password using the Authenticator app.</p>
+                    
+                    <h4>Requirements</h4>
+                    <ul>
+                        <li>Microsoft Authenticator app (latest version)</li>
+                        <li>iOS 8.0+ or Android 6.0+</li>
+                        <li>Device registered with Entra ID</li>
+                        <li>Account added to Authenticator app</li>
+                    </ul>
+                    
+                    <h4>Number Matching (Required)</h4>
+                    <p>Number matching requires users to enter a number displayed on the sign-in screen into the Authenticator app, preventing accidental approvals and MFA fatigue attacks.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - Configure Authenticator</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Enable Microsoft Authenticator with passwordless
+$params = @{
+    "@odata.type" = "#microsoft.graph.microsoftAuthenticatorAuthenticationMethodConfiguration"
+    State = "enabled"
+    FeatureSettings = @{
+        DisplayAppInformationRequiredState = @{
+            State = "enabled"  # Show app name during approval
+        }
+        DisplayLocationInformationRequiredState = @{
+            State = "enabled"  # Show location during approval
+        }
+        NumberMatchingRequiredState = @{
+            State = "enabled"  # Require number matching
+        }
+    }
+    IncludeTargets = @(
+        @{
+            TargetType = "group"
+            Id = "all_users"
+            AuthenticationMode = "any"  # or "deviceBasedPush" for passwordless
+        }
+    )
+}
+
+Update-MgPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
+    -AuthenticationMethodConfigurationId "MicrosoftAuthenticator" `
+    -BodyParameter $params</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Certificate-Based Authentication (CBA)</h3>
+                    <p>Authenticate using X.509 certificates stored on smart cards or devices. Requires PKI infrastructure.</p>
+                    
+                    <h4>Configuration Steps</h4>
+                    <ol>
+                        <li>Upload trusted CA certificates to Entra ID</li>
+                        <li>Configure certificate binding (UPN or certificate mapping)</li>
+                        <li>Enable CBA authentication method</li>
+                        <li>Configure authentication strength policies</li>
+                        <li>Deploy certificates to users (smart cards or device certs)</li>
+                    </ol>
+                    
+                    <div class="info-box info">
+                        <div class="info-box-title">💡 CBA Use Cases</div>
+                        <ul>
+                            <li>Government/regulated industries (PIV/CAC cards)</li>
+                            <li>High-security environments</li>
+                            <li>Shared workstation scenarios</li>
+                            <li>Organizations with existing PKI investment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MFA -->
+            <h2 id="mfa">Multi-Factor Authentication (MFA)</h2>
+            
+            <p>MFA requires two or more verification factors. Entra ID supports various MFA methods with different security levels.</p>
+
+            <h3>MFA Method Comparison</h3>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Security</th>
+                            <th>User Experience</th>
+                            <th>Risks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Authenticator Push</strong></td>
+                            <td>High</td>
+                            <td>Best (one tap)</td>
+                            <td>MFA fatigue without number matching</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTP (6-digit code)</strong></td>
+                            <td>High</td>
+                            <td>Good</td>
+                            <td>Phishable (real-time proxy)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OATH Hardware Token</strong></td>
+                            <td>High</td>
+                            <td>Fair</td>
+                            <td>Token management overhead</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SMS</strong></td>
+                            <td>Low</td>
+                            <td>Good</td>
+                            <td>SIM swap, SS7 vulnerabilities</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Voice Call</strong></td>
+                            <td>Low</td>
+                            <td>Fair</td>
+                            <td>Call forwarding, social engineering</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Per-User MFA vs Conditional Access MFA</h3>
+            
+            <div class="ascii-diagram">
+<pre>
+    MFA ENFORCEMENT METHODS
+    ════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  PER-USER MFA (Legacy - Not Recommended)                            │
+    │  ───────────────────────────────────────────────────────────────    │
+    │  • Enabled per individual user                                      │
+    │  • All-or-nothing (MFA always required)                            │
+    │  • No context awareness (location, device, app)                     │
+    │  • Managed in legacy portal                                         │
+    │  • Being deprecated                                                 │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  CONDITIONAL ACCESS MFA (Recommended)                               │
+    │  ───────────────────────────────────────────────────────────────    │
+    │  • Policy-based enforcement                                         │
+    │  • Context-aware (location, device state, risk, app)               │
+    │  • Granular control                                                │
+    │  • Can be combined with other controls                              │
+    │  • Requires P1 license                                              │
+    │                                                                     │
+    │  Example Policies:                                                  │
+    │  • Require MFA for all users accessing any cloud app               │
+    │  • Require MFA only from untrusted locations                       │
+    │  • Require MFA only for sensitive applications                     │
+    │  • Skip MFA on compliant devices from trusted locations            │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  SECURITY DEFAULTS (Free Tier)                                      │
+    │  ───────────────────────────────────────────────────────────────    │
+    │  • Basic MFA for all users                                         │
+    │  • Block legacy authentication                                      │
+    │  • Require MFA for admins                                          │
+    │  • Cannot customize                                                 │
+    │  • Good starting point for small organizations                     │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - MFA Registration Policy</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Get current authentication methods policy
+Get-MgPolicyAuthenticationMethodPolicy
+
+# Configure MFA registration campaign
+$params = @{
+    RegistrationEnforcement = @{
+        AuthenticationMethodsRegistrationCampaign = @{
+            SnoozeDurationInDays = 1
+            State = "enabled"
+            ExcludeTargets = @()
+            IncludeTargets = @(
+                @{
+                    Id = "all_users"
+                    TargetType = "group"
+                    TargetedAuthenticationMethod = "microsoftAuthenticator"
+                }
+            )
+        }
+    }
+}
+
+Update-MgPolicyAuthenticationMethodPolicy -BodyParameter $params</code></pre>
+            </div>
+
+            <!-- SSPR -->
+            <h2 id="sspr">Self-Service Password Reset (SSPR)</h2>
+            
+            <p>SSPR allows users to reset their passwords without helpdesk involvement. It reduces support costs and improves user productivity.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    SSPR CONFIGURATION
+    ═══════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    SSPR SETTINGS                                     │
+    │                                                                      │
+    │  Enabled For:  ○ None   ○ Selected   ● All                         │
+    │                                                                      │
+    │  Authentication Methods Required: [2]                               │
+    │                                                                      │
+    │  Available Methods:                                                  │
+    │  ☑ Mobile app notification (Authenticator push)                    │
+    │  ☑ Mobile app code (TOTP)                                          │
+    │  ☑ Email                                                           │
+    │  ☑ Mobile phone (SMS)                                              │
+    │  ☐ Office phone                                                    │
+    │  ☐ Security questions                                              │
+    │                                                                      │
+    │  Security Questions:                                                │
+    │  • Required to register: [3]                                       │
+    │  • Required to reset: [3]                                          │
+    │  • Custom questions available: Yes                                 │
+    │                                                                      │
+    │  Registration:                                                       │
+    │  ☑ Require users to register when signing in                       │
+    │  Days before users are asked to reconfirm: [180]                   │
+    │                                                                      │
+    │  Notifications:                                                      │
+    │  ☑ Notify users on password resets                                 │
+    │  ☑ Notify all admins when other admins reset their password        │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    PASSWORD WRITEBACK (Hybrid):
+    ════════════════════════════
+    
+    ┌────────┐         ┌──────────────┐         ┌──────────┐
+    │  User  │────────▶│   Entra ID   │────────▶│  Entra   │
+    │        │  Reset  │              │ Writeback│ Connect  │
+    └────────┘         └──────────────┘         └────┬─────┘
+                                                     │
+                                                     ▼
+                                               ┌──────────┐
+                                               │   AD     │
+                                               │ On-Prem  │
+                                               └──────────┘
+    
+    Requires: Entra Connect with password writeback enabled
+              P1 license or higher
+</pre>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">⚠️ SSPR Security Considerations</div>
+                <ul>
+                    <li>Security questions alone are NOT recommended (easily researched)</li>
+                    <li>Require at least 2 authentication methods</li>
+                    <li>Consider blocking SSPR for privileged accounts</li>
+                    <li>Monitor SSPR events for abuse</li>
+                    <li>Enable password writeback for hybrid environments</li>
+                </ul>
+            </div>
+
+            <!-- Password Protection -->
+            <h2 id="password-protection">Password Protection</h2>
+            
+            <p>Entra ID Password Protection blocks weak passwords using Microsoft's global banned password list plus your custom list.</p>
+
+            <h3>How Password Protection Works</h3>
+            
+            <div class="ascii-diagram">
+<pre>
+    PASSWORD VALIDATION FLOW
+    ═════════════════════════
+
+    User enters new password
+              │
+              ▼
+    ┌─────────────────────┐
+    │  Normalize password │
+    │  (lowercase, char   │
+    │   substitution)     │
+    └──────────┬──────────┘
+               │
+               ▼
+    ┌─────────────────────┐     ┌─────────────────────────────────┐
+    │  Check against      │     │  Global Banned List:            │
+    │  global banned list │◀────│  • 1000+ common passwords       │
+    └──────────┬──────────┘     │  • Updated by Microsoft         │
+               │                │  • "password", "123456", etc.   │
+               │ Not found      └─────────────────────────────────┘
+               ▼
+    ┌─────────────────────┐     ┌─────────────────────────────────┐
+    │  Check against      │     │  Custom Banned List:            │
+    │  custom banned list │◀────│  • Up to 1000 terms             │
+    └──────────┬──────────┘     │  • Company name, products       │
+               │                │  • Industry terms               │
+               │ Not found      └─────────────────────────────────┘
+               ▼
+    ┌─────────────────────┐
+    │  Apply fuzzy        │
+    │  matching (variants)│
+    └──────────┬──────────┘
+               │
+               ▼
+    ┌─────────────────────┐
+    │  Check complexity   │
+    │  requirements       │
+    └──────────┬──────────┘
+               │
+               ▼
+        Password accepted
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Custom Banned Passwords</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># View current password policy settings
+Get-MgPolicyAuthenticationMethodPolicy
+
+# Configure custom banned password list
+$params = @{
+    EnableBannedPasswordCheck = $true
+    BannedPasswordCheckOnPremisesMode = "Enforce"  # or "Audit"
+    CustomBannedPasswords = @(
+        "contoso"
+        "contoso123"
+        "companyname"
+        "winter2024"
+        "summer2024"
+        "project"
+        "password"
+    )
+}
+
+# Note: Configure via Entra portal or Graph API
+# Protection → Authentication methods → Password protection</code></pre>
+            </div>
+
+            <!-- Authentication Strengths -->
+            <h2 id="auth-strengths">Authentication Strengths</h2>
+            
+            <p>Authentication Strengths allow you to define which authentication method combinations satisfy MFA requirements in Conditional Access policies.</p>
+
+            <h3>Built-in Authentication Strengths</h3>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Strength</th>
+                            <th>Allowed Methods</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MFA Strength</strong></td>
+                            <td>Any MFA method (push, TOTP, SMS, voice, etc.)</td>
+                            <td>General MFA requirement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Passwordless MFA</strong></td>
+                            <td>FIDO2, WHfB, Authenticator passwordless, Certificate</td>
+                            <td>Higher security, no password</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phishing-Resistant MFA</strong></td>
+                            <td>FIDO2, WHfB, Certificate only</td>
+                            <td>Highest security (admins, sensitive apps)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">JSON - Custom Authentication Strength</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>// Create custom authentication strength via Graph API
+POST https://graph.microsoft.com/v1.0/policies/authenticationStrengthPolicies
+
+{
+    "displayName": "Executives - Phishing Resistant",
+    "description": "Requires phishing-resistant authentication for executive accounts",
+    "allowedCombinations": [
+        "fido2",
+        "windowsHelloForBusiness",
+        "x509CertificateMultiFactor"
+    ],
+    "requirementsSatisfied": "mfa"
+}</code></pre>
+            </div>
+
+            <!-- Troubleshooting -->
+            <h2 id="troubleshooting">Troubleshooting Authentication</h2>
+            
+            <h3>Common Issues and Solutions</h3>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">User can't register for MFA</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Check:</strong></p>
+                            <ul>
+                                <li>Authentication methods policy includes user's group</li>
+                                <li>User has appropriate license</li>
+                                <li>Combined registration is enabled</li>
+                                <li>User is not blocked by Conditional Access</li>
+                            </ul>
+                            <p><strong>Diagnostic:</strong></p>
+                            <code>Get-MgUser -UserId "user@domain.com" -Property AuthenticationMethods</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">MFA prompt every time (no SSO)</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Check:</strong></p>
+                            <ul>
+                                <li>Conditional Access sign-in frequency settings</li>
+                                <li>Persistent browser session settings</li>
+                                <li>Application session timeout configuration</li>
+                                <li>Token lifetime policies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">FIDO2 key not working</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Check:</strong></p>
+                            <ul>
+                                <li>Key AAGUID is allowed in policy</li>
+                                <li>Browser supports WebAuthn (Edge, Chrome, Firefox)</li>
+                                <li>User has registered key in Security Info</li>
+                                <li>Key firmware is up to date</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Sign-in Log Analysis</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">KQL - Authentication Analysis</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>// Failed sign-ins by authentication method
+SigninLogs
+| where TimeGenerated > ago(7d)
+| where ResultType != 0
+| summarize FailureCount = count() by 
+    AuthenticationMethodsUsed, 
+    ResultDescription
+| order by FailureCount desc
+
+// MFA challenge outcomes
+SigninLogs
+| where TimeGenerated > ago(7d)
+| mv-expand AuthenticationDetails
+| extend AuthMethod = tostring(AuthenticationDetails.authenticationMethod)
+| extend AuthResult = tostring(AuthenticationDetails.succeeded)
+| summarize count() by AuthMethod, AuthResult
+
+// Users not registered for MFA
+// Check via Microsoft Graph:
+// GET /reports/authenticationMethods/userRegistrationDetails
+// Filter: isMfaRegistered eq false</code></pre>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="page-nav">
+                <a href="entra-id-fundamentals.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Entra ID Fundamentals</span>
+                </a>
+                <a href="entra-conditional-access.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Conditional Access →</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+                <p>Built for security professionals, by security professionals.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

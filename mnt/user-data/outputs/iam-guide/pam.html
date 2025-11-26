@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privileged Access Management | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo"><div class="header-logo-icon">IAM</div><span>Ultimate Guide</span></div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section"><div class="sidebar-title">Getting Started</div><ul class="sidebar-nav"><li><a href="index.html">Home</a></li><li><a href="iam-fundamentals.html">IAM Fundamentals</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">On-Premises</div><ul class="sidebar-nav"><li><a href="active-directory.html">Active Directory</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Microsoft Entra ID</div><ul class="sidebar-nav"><li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li><li><a href="entra-id-authentication.html">Authentication Methods</a></li><li><a href="entra-conditional-access.html">Conditional Access</a></li><li><a href="entra-identity-protection.html">Identity Protection</a></li><li><a href="entra-id-governance.html">Identity Governance</a></li><li><a href="entra-app-integration.html">App Integration</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Hybrid Identity</div><ul class="sidebar-nav"><li><a href="hybrid-identity.html">Hybrid Configuration</a></li><li><a href="ad-to-entra-migration.html">Migration Guide</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Okta</div><ul class="sidebar-nav"><li><a href="okta-fundamentals.html">Okta Basics</a></li><li><a href="okta-sso-mfa.html">SSO & MFA</a></li><li><a href="okta-lifecycle.html">Lifecycle Management</a></li><li><a href="okta-governance.html">Governance</a></li></ul></div>
+            <div class="sidebar-section"><div class="sidebar-title">Advanced Topics</div><ul class="sidebar-nav"><li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li><li><a href="pam.html" class="active">Privileged Access (PAM)</a></li><li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li><li><a href="iam-security.html">Security Best Practices</a></li><li><a href="iam-troubleshooting.html">Troubleshooting</a></li></ul></div>
+        </aside>
+        <main class="main-content">
+            <nav class="breadcrumbs"><a href="index.html">Home</a><span class="separator">/</span><span class="current">Privileged Access Management</span></nav>
+            <h1>Privileged Access Management (PAM)</h1>
+            <p>PAM solutions protect high-value accounts and systems through privileged credential vaulting, session management, and just-in-time access.</p>
+            <div class="toc"><div class="toc-title">On This Page</div><ul class="toc-list"><li><a href="#overview">PAM Overview</a></li><li><a href="#capabilities">Core Capabilities</a></li><li><a href="#vendors">PAM Vendors</a></li><li><a href="#implementation">Implementation</a></li></ul></div>
+            
+            <h2 id="overview">PAM Overview</h2>
+            <div class="ascii-diagram">
+<pre>
+    PAM ARCHITECTURE
+    ═════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                        PAM SOLUTION                                  │
+    │                                                                      │
+    │   ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐  │
+    │   │  CREDENTIAL     │   │    SESSION      │   │     ACCESS      │  │
+    │   │    VAULT        │   │   MANAGEMENT    │   │    CONTROL      │  │
+    │   │                 │   │                 │   │                 │  │
+    │   │ • Store creds   │   │ • Recording     │   │ • JIT access    │  │
+    │   │ • Auto-rotate   │   │ • Monitoring    │   │ • Approval      │  │
+    │   │ • Check-out     │   │ • Keystroke log │   │ • Time-bound    │  │
+    │   └─────────────────┘   └─────────────────┘   └─────────────────┘  │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+          ┌─────────────────────────┼─────────────────────────┐
+          ▼                         ▼                         ▼
+    ┌───────────────┐      ┌───────────────┐      ┌───────────────┐
+    │   Servers     │      │   Databases   │      │  Cloud/SaaS   │
+    │   (SSH/RDP)   │      │  (SQL, etc)   │      │   (AWS, etc)  │
+    └───────────────┘      └───────────────┘      └───────────────┘
+</pre>
+            </div>
+
+            <h2 id="capabilities">Core PAM Capabilities</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Capability</th><th>Description</th><th>Security Benefit</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Credential Vaulting</strong></td><td>Centralized encrypted storage for privileged credentials</td><td>Eliminates credential sprawl</td></tr>
+                        <tr><td><strong>Password Rotation</strong></td><td>Automatic rotation of privileged passwords</td><td>Limits credential exposure window</td></tr>
+                        <tr><td><strong>Session Recording</strong></td><td>Video and keystroke recording of privileged sessions</td><td>Forensics and compliance</td></tr>
+                        <tr><td><strong>Just-In-Time Access</strong></td><td>Grant privileged access only when needed</td><td>Reduces standing privileges</td></tr>
+                        <tr><td><strong>Privileged Elevation</strong></td><td>Elevate permissions without exposing passwords</td><td>Least privilege enforcement</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="vendors">PAM Vendor Comparison</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Vendor</th><th>Strengths</th><th>Best For</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>CyberArk</strong></td><td>Market leader, comprehensive features</td><td>Large enterprises</td></tr>
+                        <tr><td><strong>BeyondTrust</strong></td><td>Strong endpoint privilege management</td><td>Windows-centric environments</td></tr>
+                        <tr><td><strong>Delinea (Thycotic)</strong></td><td>User-friendly, cloud-native option</td><td>Mid-market, cloud-first</td></tr>
+                        <tr><td><strong>HashiCorp Vault</strong></td><td>Secrets management, DevOps integration</td><td>Cloud-native, developers</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="page-nav">
+                <a href="sso-protocols.html" class="page-nav-link prev"><span class="page-nav-label">Previous</span><span class="page-nav-title">← SSO Protocols</span></a>
+                <a href="iam-vendors-comparison.html" class="page-nav-link next"><span class="page-nav-label">Next</span><span class="page-nav-title">Vendor Comparison →</span></a>
+            </nav>
+            <footer class="footer"><p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p></footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

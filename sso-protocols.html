@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO Protocols Deep Dive | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html" class="active">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <span class="current">SSO Protocols Deep Dive</span>
+            </nav>
+
+            <h1>SSO Protocols Deep Dive</h1>
+            
+            <p>This chapter provides in-depth coverage of SAML 2.0, OAuth 2.0, and OpenID Connect protocols used for single sign-on and API authorization.</p>
+
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#saml">SAML 2.0</a></li>
+                    <li><a href="#oauth">OAuth 2.0</a></li>
+                    <li><a href="#oidc">OpenID Connect</a></li>
+                    <li><a href="#comparison">Protocol Comparison</a></li>
+                </ul>
+            </div>
+
+            <h2 id="saml">SAML 2.0</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    SAML 2.0 SP-INITIATED FLOW
+    ═══════════════════════════
+
+    ┌────────┐          ┌─────────────┐          ┌────────────┐
+    │  User  │          │   Service   │          │  Identity  │
+    │Browser │          │  Provider   │          │  Provider  │
+    └───┬────┘          └──────┬──────┘          └─────┬──────┘
+        │                      │                       │
+        │ 1. Access protected  │                       │
+        │    resource          │                       │
+        │─────────────────────▶│                       │
+        │                      │                       │
+        │ 2. Redirect with     │                       │
+        │    SAML AuthnRequest │                       │
+        │◀─────────────────────│                       │
+        │                      │                       │
+        │ 3. AuthnRequest (via browser redirect)      │
+        │─────────────────────────────────────────────▶│
+        │                      │                       │
+        │                      │    4. User            │
+        │                      │    authenticates      │
+        │◀─────────────────────────────────────────────│
+        │                      │                       │
+        │ 5. SAML Response with signed Assertion      │
+        │◀─────────────────────────────────────────────│
+        │                      │                       │
+        │ 6. POST Assertion    │                       │
+        │    to ACS URL        │                       │
+        │─────────────────────▶│                       │
+        │                      │                       │
+        │                      │ 7. Validate signature │
+        │                      │    Create session     │
+        │                      │                       │
+        │ 8. Access granted    │                       │
+        │◀─────────────────────│                       │
+        │                      │                       │
+
+    KEY COMPONENTS:
+    ═══════════════
+    • AuthnRequest: SP asks IdP to authenticate user
+    • SAML Response: IdP's answer containing assertion
+    • Assertion: Signed XML with user identity + attributes
+    • ACS URL: Assertion Consumer Service endpoint at SP
+</pre>
+            </div>
+
+            <h2 id="oauth">OAuth 2.0</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    OAUTH 2.0 AUTHORIZATION CODE FLOW (WITH PKCE)
+    ═══════════════════════════════════════════════
+
+    ┌────────┐       ┌─────────────┐       ┌────────────────┐
+    │  User  │       │   Client    │       │  Authorization │
+    │        │       │    App      │       │     Server     │
+    └───┬────┘       └──────┬──────┘       └───────┬────────┘
+        │                   │                      │
+        │ 1. Click login    │                      │
+        │──────────────────▶│                      │
+        │                   │                      │
+        │                   │ 2. Generate          │
+        │                   │    code_verifier     │
+        │                   │    + code_challenge  │
+        │                   │                      │
+        │ 3. Redirect to /authorize               │
+        │◀──────────────────│                      │
+        │                   │                      │
+        │ 4. Authorization request                │
+        │    (client_id, redirect_uri,            │
+        │     code_challenge, scope)              │
+        │─────────────────────────────────────────▶│
+        │                   │                      │
+        │                   │      5. User         │
+        │                   │      authenticates   │
+        │                   │      & consents      │
+        │◀─────────────────────────────────────────│
+        │                   │                      │
+        │ 6. Redirect with authorization_code     │
+        │──────────────────▶│                      │
+        │                   │                      │
+        │                   │ 7. Token request     │
+        │                   │    (code +           │
+        │                   │     code_verifier)   │
+        │                   │─────────────────────▶│
+        │                   │                      │
+        │                   │ 8. Access token      │
+        │                   │    (+ refresh_token) │
+        │                   │◀─────────────────────│
+        │                   │                      │
+        │ 9. Authenticated  │                      │
+        │◀──────────────────│                      │
+</pre>
+            </div>
+
+            <h2 id="oidc">OpenID Connect</h2>
+            
+            <p>OIDC adds identity layer on top of OAuth 2.0, providing user authentication.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">JWT ID Token Structure</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>// ID Token (JWT) Example
+{
+  // Header
+  "alg": "RS256",
+  "typ": "JWT",
+  "kid": "key-id-123"
+}
+.
+{
+  // Payload (Claims)
+  "iss": "https://idp.example.com",
+  "sub": "user-123",
+  "aud": "client-app-id",
+  "exp": 1699999999,
+  "iat": 1699996399,
+  "nonce": "random-nonce",
+  "email": "user@example.com",
+  "name": "John Doe"
+}
+.
+[signature]</code></pre>
+            </div>
+
+            <h2 id="comparison">Protocol Comparison</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>SAML 2.0</th>
+                            <th>OAuth 2.0</th>
+                            <th>OIDC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Purpose</strong></td>
+                            <td>Authentication + Authorization</td>
+                            <td>Authorization only</td>
+                            <td>Authentication + Authorization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Token Format</strong></td>
+                            <td>XML</td>
+                            <td>Opaque or JWT</td>
+                            <td>JWT (ID Token)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Enterprise web SSO</td>
+                            <td>API authorization</td>
+                            <td>Modern apps + APIs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile Support</strong></td>
+                            <td>Limited</td>
+                            <td>Excellent</td>
+                            <td>Excellent</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="page-nav">
+                <a href="okta-governance.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Okta Governance</span>
+                </a>
+                <a href="pam.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Privileged Access (PAM) →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

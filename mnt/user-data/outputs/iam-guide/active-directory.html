@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Directory | IAM Ultimate Guide</title>
+    <meta name="description" content="Comprehensive Active Directory documentation covering architecture, FSMO roles, Group Policy, security hardening, and attack mitigations.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html" class="active">Active Directory</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <span class="current">Active Directory</span>
+            </nav>
+
+            <h1>On-Premises Active Directory</h1>
+            
+            <p>Active Directory (AD) is Microsoft's directory service for Windows domain networks. It stores information about objects on the network and makes this information easy to find and use. This chapter covers AD architecture, configuration, security hardening, and common attack vectors.</p>
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#architecture">AD Architecture</a></li>
+                    <li><a href="#fsmo-roles">FSMO Roles</a></li>
+                    <li><a href="#ad-objects">AD Objects</a></li>
+                    <li><a href="#group-policy">Group Policy Deep Dive</a></li>
+                    <li><a href="#installation">Installation & Configuration</a></li>
+                    <li><a href="#security">AD Security Hardening</a></li>
+                    <li><a href="#maintenance">Maintenance & Recovery</a></li>
+                    <li><a href="#powershell">PowerShell Commands</a></li>
+                    <li><a href="#attacks">Common Attacks & Mitigations</a></li>
+                </ul>
+            </div>
+
+            <!-- AD Architecture -->
+            <h2 id="architecture">Active Directory Architecture</h2>
+            
+            <p>Understanding AD's hierarchical structure is essential for effective administration and security. AD organizes objects in a logical structure of forests, domains, and organizational units.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    ACTIVE DIRECTORY LOGICAL STRUCTURE
+    ═══════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────────┐
+    │                              FOREST                                      │
+    │                         (corp.com forest)                                │
+    │   ┌─────────────────────────────────────────────────────────────────┐   │
+    │   │                      Forest Root Domain                          │   │
+    │   │                         corp.com                                 │   │
+    │   │                    (Schema Master, Domain Naming)                │   │
+    │   └────────────────────────────┬────────────────────────────────────┘   │
+    │                                │                                         │
+    │           ┌────────────────────┼────────────────────┐                   │
+    │           │                    │                    │                   │
+    │           ▼                    ▼                    ▼                   │
+    │   ┌───────────────┐   ┌───────────────┐   ┌───────────────┐            │
+    │   │  Child Domain │   │  Child Domain │   │  Tree Domain  │            │
+    │   │  na.corp.com  │   │  eu.corp.com  │   │  acquired.com │            │
+    │   └───────┬───────┘   └───────────────┘   └───────────────┘            │
+    │           │                                                             │
+    │           ▼                                                             │
+    │   ┌───────────────┐                                                     │
+    │   │ Grandchild    │                                                     │
+    │   │ sales.na.corp │                                                     │
+    │   └───────────────┘                                                     │
+    │                                                                          │
+    │   TRUST RELATIONSHIPS:                                                   │
+    │   ─────────────────────                                                  │
+    │   Parent ◄──────────────▶ Child     (Two-way transitive)               │
+    │   Tree Root ◄───────────▶ Forest Root (Two-way transitive)              │
+    │   corp.com ◄─ ─ ─ ─ ─ ─ ▶ partner.com (External trust - configure)     │
+    └─────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────┐
+    │                          PHYSICAL STRUCTURE                              │
+    │                                                                          │
+    │   ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐   │
+    │   │     SITE A      │     │     SITE B      │     │     SITE C      │   │
+    │   │   (New York)    │     │   (London)      │     │   (Tokyo)       │   │
+    │   │                 │     │                 │     │                 │   │
+    │   │  ┌─────┐ ┌─────┐│     │  ┌─────┐       │     │  ┌─────┐       │   │
+    │   │  │ DC1 │ │ DC2 ││     │  │ DC3 │       │     │  │ DC4 │       │   │
+    │   │  └─────┘ └─────┘│     │  └─────┘       │     │  └─────┘       │   │
+    │   └────────┬────────┘     └────────┬───────┘     └────────┬───────┘   │
+    │            │                       │                       │           │
+    │            └───────────────────────┼───────────────────────┘           │
+    │                                    │                                    │
+    │                        ┌───────────┴───────────┐                       │
+    │                        │   Site Links (IP)     │                       │
+    │                        │   - Cost              │                       │
+    │                        │   - Replication freq  │                       │
+    │                        │   - Schedule          │                       │
+    │                        └───────────────────────┘                       │
+    └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Key Architecture Components</h3>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Domain Controllers</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>Domain Controllers (DCs) are servers that respond to authentication requests and store AD data.</p>
+                            <ul>
+                                <li><strong>NTDS.DIT:</strong> The AD database file stored on each DC</li>
+                                <li><strong>SYSVOL:</strong> Shared folder containing GPO files and scripts</li>
+                                <li><strong>Global Catalog:</strong> Partial replica of all objects in the forest for cross-domain queries</li>
+                                <li><strong>Read-Only DC (RODC):</strong> DC with read-only copy of AD for branch offices</li>
+                            </ul>
+                            <p><strong>Best Practice:</strong> Deploy at least 2 DCs per domain for redundancy.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Forests and Domains</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Forest:</strong> The top-level security boundary containing one or more domains.</p>
+                            <ul>
+                                <li>Single schema shared across all domains</li>
+                                <li>Global Catalog spans entire forest</li>
+                                <li>Transitive trusts between all domains</li>
+                                <li>Enterprise Admins have full forest access</li>
+                            </ul>
+                            <p><strong>Domain:</strong> Administrative boundary with its own security policies.</p>
+                            <ul>
+                                <li>Separate password and account policies</li>
+                                <li>Domain Admins have full domain access</li>
+                                <li>Replication boundary for domain partition</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Trust Relationships</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Trust Type</th>
+                                            <th>Direction</th>
+                                            <th>Transitive</th>
+                                            <th>Use Case</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Parent-Child</td>
+                                            <td>Two-way</td>
+                                            <td>Yes</td>
+                                            <td>Automatic between parent/child domains</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tree-Root</td>
+                                            <td>Two-way</td>
+                                            <td>Yes</td>
+                                            <td>Automatic between tree roots</td>
+                                        </tr>
+                                        <tr>
+                                            <td>External</td>
+                                            <td>One/Two-way</td>
+                                            <td>No</td>
+                                            <td>Trusts with domains in other forests</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Forest</td>
+                                            <td>One/Two-way</td>
+                                            <td>Yes</td>
+                                            <td>Trust between entire forests</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shortcut</td>
+                                            <td>One/Two-way</td>
+                                            <td>Yes</td>
+                                            <td>Optimize auth between distant domains</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Realm</td>
+                                            <td>One/Two-way</td>
+                                            <td>Yes/No</td>
+                                            <td>Trust with non-Windows Kerberos realm</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FSMO Roles -->
+            <h2 id="fsmo-roles">FSMO Roles (Flexible Single Master Operations)</h2>
+            
+            <p>FSMO roles are special domain controller roles that perform operations that can only be done by a single DC to prevent conflicts. There are 5 FSMO roles: 2 forest-wide and 3 domain-wide.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    FSMO ROLES DISTRIBUTION
+    ════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    FOREST-WIDE ROLES (1 per forest)                  │
+    │                                                                      │
+    │   ┌─────────────────────────────┐  ┌─────────────────────────────┐  │
+    │   │      SCHEMA MASTER          │  │     DOMAIN NAMING MASTER    │  │
+    │   │   ───────────────────────   │  │   ───────────────────────   │  │
+    │   │   • Controls schema updates │  │   • Adds/removes domains    │  │
+    │   │   • Only DC that can modify │  │   • Controls naming         │  │
+    │   │     schema                  │  │   • Validates uniqueness    │  │
+    │   │   • Rarely transferred      │  │                             │  │
+    │   └─────────────────────────────┘  └─────────────────────────────┘  │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    DOMAIN-WIDE ROLES (1 per domain)                  │
+    │                                                                      │
+    │   ┌───────────────────────┐ ┌──────────────────┐ ┌────────────────┐ │
+    │   │      RID MASTER       │ │   PDC EMULATOR   │ │ INFRASTRUCTURE │ │
+    │   │   ─────────────────   │ │   ────────────   │ │ ────────────── │ │
+    │   │   • Allocates RID     │ │   • Time source  │ │ • Updates cross│ │
+    │   │     pools to DCs      │ │   • Password     │ │   -domain refs │ │
+    │   │   • RID = unique part │ │     changes      │ │ • Not on GC if │ │
+    │   │     of SID            │ │   • Account      │ │   multi-domain │ │
+    │   │   • Each DC gets pool │ │     lockouts     │ │                │ │
+    │   │     of 500 RIDs       │ │   • GPO updates  │ │                │ │
+    │   │                       │ │   • Legacy auth  │ │                │ │
+    │   └───────────────────────┘ └──────────────────┘ └────────────────┘ │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>FSMO Management Commands</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># View current FSMO role holders
+Get-ADForest | Select-Object SchemaMaster, DomainNamingMaster
+Get-ADDomain | Select-Object PDCEmulator, RIDMaster, InfrastructureMaster
+
+# Alternative: Query all FSMO roles
+netdom query fsmo
+
+# Transfer FSMO role (graceful - both DCs online)
+Move-ADDirectoryServerOperationMasterRole -Identity "DC02" -OperationMasterRole PDCEmulator
+
+# Seize FSMO role (forceful - original holder offline)
+Move-ADDirectoryServerOperationMasterRole -Identity "DC02" -OperationMasterRole PDCEmulator -Force
+
+# Transfer all roles to a single DC
+Move-ADDirectoryServerOperationMasterRole -Identity "DC02" `
+    -OperationMasterRole SchemaMaster, DomainNamingMaster, PDCEmulator, RIDMaster, InfrastructureMaster</code></pre>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">⚠️ FSMO Seizure Warning</div>
+                <p>Never bring a DC back online after its FSMO role has been seized. The old role holder must be demoted or rebuilt before rejoining the domain.</p>
+            </div>
+
+            <!-- AD Objects -->
+            <h2 id="ad-objects">Active Directory Objects</h2>
+            
+            <p>AD stores information as objects with attributes. Understanding object types and their relationships is essential for administration.</p>
+
+            <h3>Users, Groups, and Computers</h3>
+
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">Users</button>
+                    <button class="tab-header">Groups</button>
+                    <button class="tab-header">Computers</button>
+                    <button class="tab-header">OUs & GPOs</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h4>User Account Types</h4>
+                    <ul>
+                        <li><strong>Domain Users:</strong> Regular user accounts for employees</li>
+                        <li><strong>Service Accounts:</strong> Accounts for running services (prefer gMSA)</li>
+                        <li><strong>Computer Accounts:</strong> Machine identities (auto-created when joining domain)</li>
+                    </ul>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - User Management</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Create new user
+New-ADUser -Name "Alice Smith" `
+    -SamAccountName "asmith" `
+    -UserPrincipalName "asmith@corp.com" `
+    -Path "OU=Users,OU=Corp,DC=corp,DC=com" `
+    -AccountPassword (ConvertTo-SecureString "P@ssw0rd!" -AsPlainText -Force) `
+    -Enabled $true `
+    -ChangePasswordAtLogon $true
+
+# Get user properties
+Get-ADUser -Identity "asmith" -Properties *
+
+# Find users with password never expires
+Get-ADUser -Filter {PasswordNeverExpires -eq $true} -Properties PasswordNeverExpires
+
+# Disable user account
+Disable-ADAccount -Identity "asmith"
+
+# Find inactive users (90 days)
+$threshold = (Get-Date).AddDays(-90)
+Get-ADUser -Filter {LastLogonDate -lt $threshold} -Properties LastLogonDate</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Group Types and Scopes</h4>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Scope</th>
+                                    <th>Members From</th>
+                                    <th>Permissions In</th>
+                                    <th>Best Use</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Domain Local</strong></td>
+                                    <td>Any domain</td>
+                                    <td>Same domain only</td>
+                                    <td>Resource permissions</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Global</strong></td>
+                                    <td>Same domain only</td>
+                                    <td>Any domain</td>
+                                    <td>Organize users by role</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Universal</strong></td>
+                                    <td>Any domain</td>
+                                    <td>Any domain</td>
+                                    <td>Forest-wide access</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <p><strong>AGDLP Strategy:</strong> Accounts → Global → Domain Local → Permissions</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - Group Management</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Create security group
+New-ADGroup -Name "Finance_Users" `
+    -GroupScope Global `
+    -GroupCategory Security `
+    -Path "OU=Groups,DC=corp,DC=com"
+
+# Add members to group
+Add-ADGroupMember -Identity "Finance_Users" -Members "asmith","bjones"
+
+# Get group members
+Get-ADGroupMember -Identity "Domain Admins" -Recursive
+
+# Find nested group memberships for a user
+Get-ADUser -Identity "asmith" -Properties MemberOf | 
+    Select-Object -ExpandProperty MemberOf</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Computer Objects</h4>
+                    <p>Computer accounts are created automatically when machines join the domain.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - Computer Management</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Find all computers
+Get-ADComputer -Filter * -Properties OperatingSystem, LastLogonDate
+
+# Find stale computer accounts (90 days)
+$threshold = (Get-Date).AddDays(-90)
+Get-ADComputer -Filter {LastLogonDate -lt $threshold} -Properties LastLogonDate
+
+# Pre-stage computer account
+New-ADComputer -Name "WS-FINANCE-01" `
+    -Path "OU=Workstations,DC=corp,DC=com" `
+    -Enabled $true
+
+# Reset computer account
+Reset-ComputerMachinePassword -Server DC01 -Credential (Get-Credential)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Organizational Units (OUs) and GPOs</h4>
+                    <p>OUs are containers for organizing objects and applying Group Policy.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">PowerShell - OU Management</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Create OU structure
+New-ADOrganizationalUnit -Name "Corp" -Path "DC=corp,DC=com"
+New-ADOrganizationalUnit -Name "Users" -Path "OU=Corp,DC=corp,DC=com"
+New-ADOrganizationalUnit -Name "Computers" -Path "OU=Corp,DC=corp,DC=com"
+New-ADOrganizationalUnit -Name "Servers" -Path "OU=Corp,DC=corp,DC=com"
+
+# Protect OU from accidental deletion
+Set-ADOrganizationalUnit -Identity "OU=Corp,DC=corp,DC=com" `
+    -ProtectedFromAccidentalDeletion $true
+
+# Get all OUs
+Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
+
+# Get GPOs linked to an OU
+Get-GPInheritance -Target "OU=Corp,DC=corp,DC=com"</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group Policy -->
+            <h2 id="group-policy">Group Policy Deep Dive</h2>
+            
+            <p>Group Policy enables centralized management of user and computer settings. Understanding GPO processing order and precedence is critical for effective administration.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    GROUP POLICY PROCESSING ORDER (LSDOU)
+    ═══════════════════════════════════════
+
+    Processing Order (Last applied wins):
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  1. LOCAL POLICY                                                     │
+    │     └── gpedit.msc on individual computer                           │
+    │         (Lowest precedence - easily overridden)                     │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  2. SITE POLICY                                                      │
+    │     └── Linked to AD Sites                                          │
+    │         (Applied based on computer's IP/subnet)                     │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  3. DOMAIN POLICY                                                    │
+    │     └── Linked to domain root                                       │
+    │         (Default Domain Policy for password settings)               │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  4. OU POLICIES (parent to child)                                   │
+    │     └── OU=Corp                                                     │
+    │         └── OU=Departments                                          │
+    │             └── OU=Finance   ◄── Highest precedence                 │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    MODIFIERS:
+    ──────────
+    • Block Inheritance: Stops policies from parent containers
+    • Enforced (No Override): Forces policy even when blocked
+    • Security Filtering: Applies based on user/group membership
+    • WMI Filtering: Applies based on WMI query results
+</pre>
+            </div>
+
+            <h3>Common Security GPO Settings</h3>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Password Policy Settings</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Location:</strong> Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Password Policy</p>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Setting</th>
+                                            <th>Recommended Value</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Minimum password length</td>
+                                            <td>14 characters</td>
+                                            <td>NIST recommends 8+ but longer is better</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Password complexity</td>
+                                            <td>Enabled</td>
+                                            <td>Requires 3 of 4 character types</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Maximum password age</td>
+                                            <td>0 (never) or 365</td>
+                                            <td>NIST no longer recommends rotation</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Password history</td>
+                                            <td>24 passwords</td>
+                                            <td>Prevents immediate reuse</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Account Lockout Policy</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Location:</strong> Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Account Lockout Policy</p>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Setting</th>
+                                            <th>Recommended Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Account lockout threshold</td>
+                                            <td>5-10 invalid attempts</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Account lockout duration</td>
+                                            <td>30 minutes</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Reset lockout counter after</td>
+                                            <td>30 minutes</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Audit Policy Settings</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Location:</strong> Computer Configuration → Policies → Windows Settings → Security Settings → Advanced Audit Policy Configuration</p>
+                            <p>Critical events to audit:</p>
+                            <ul>
+                                <li><strong>Account Logon:</strong> Credential Validation (Success/Failure)</li>
+                                <li><strong>Account Management:</strong> User/Group Account Management (Success/Failure)</li>
+                                <li><strong>Logon/Logoff:</strong> Logon, Special Logon, Account Lockout (Success/Failure)</li>
+                                <li><strong>Object Access:</strong> File System, Registry (as needed)</li>
+                                <li><strong>Policy Change:</strong> Audit Policy Change, Authentication Policy Change</li>
+                                <li><strong>Privilege Use:</strong> Sensitive Privilege Use (Success/Failure)</li>
+                                <li><strong>System:</strong> Security State Change, System Integrity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - GPO Management</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Create new GPO
+New-GPO -Name "Security-Baseline-Workstations"
+
+# Link GPO to OU
+New-GPLink -Name "Security-Baseline-Workstations" `
+    -Target "OU=Workstations,OU=Corp,DC=corp,DC=com"
+
+# Get all GPOs
+Get-GPO -All | Select-Object DisplayName, GpoStatus, CreationTime
+
+# Get GPO report
+Get-GPOReport -Name "Security-Baseline-Workstations" -ReportType HTML `
+    -Path "C:\Reports\GPO-Report.html"
+
+# Find all GPOs linked to an OU
+(Get-GPInheritance -Target "OU=Corp,DC=corp,DC=com").GpoLinks
+
+# Force Group Policy update on remote computer
+Invoke-GPUpdate -Computer "WS-01" -Force
+
+# Backup all GPOs
+Backup-GPO -All -Path "C:\GPO-Backups"</code></pre>
+            </div>
+
+            <!-- Installation -->
+            <h2 id="installation">Installation and Configuration</h2>
+            
+            <h3>Installing AD DS Role</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - New Forest Installation</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Install AD DS role
+Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
+
+# Promote to first DC in new forest
+Install-ADDSForest `
+    -DomainName "corp.com" `
+    -DomainNetBIOSName "CORP" `
+    -ForestMode "WinThreshold" `
+    -DomainMode "WinThreshold" `
+    -InstallDNS:$true `
+    -DatabasePath "D:\NTDS" `
+    -LogPath "D:\NTDS" `
+    -SYSVOLPath "D:\SYSVOL" `
+    -SafeModeAdministratorPassword (ConvertTo-SecureString "DSRMPassword!" -AsPlainText -Force) `
+    -Force:$true
+
+# Add additional DC to existing domain
+Install-ADDSDomainController `
+    -DomainName "corp.com" `
+    -InstallDNS:$true `
+    -Credential (Get-Credential) `
+    -DatabasePath "D:\NTDS" `
+    -LogPath "D:\NTDS" `
+    -SYSVOLPath "D:\SYSVOL" `
+    -SafeModeAdministratorPassword (ConvertTo-SecureString "DSRMPassword!" -AsPlainText -Force)</code></pre>
+            </div>
+
+            <!-- Security -->
+            <h2 id="security">AD Security Hardening</h2>
+            
+            <p>Securing Active Directory is critical as it's often the primary target for attackers. Implement defense-in-depth with these key controls.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    TIERED ADMINISTRATION MODEL
+    ════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  TIER 0 - Domain Controllers & Identity                             │
+    │  ─────────────────────────────────────────────────────────────────  │
+    │  Assets: DCs, AD DS, PKI, ADFS, Identity management                │
+    │  Accounts: Domain Admins, Enterprise Admins, Schema Admins         │
+    │  Access: Only from Tier 0 PAWs                                     │
+    │  Rule: NEVER log into lower tier systems                           │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ No credentials flow down
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  TIER 1 - Servers & Applications                                    │
+    │  ─────────────────────────────────────────────────────────────────  │
+    │  Assets: Member servers, applications, databases                    │
+    │  Accounts: Server admins, app admins                               │
+    │  Access: Only from Tier 1 PAWs or jump servers                     │
+    │  Rule: NEVER log into Tier 0 or workstations                       │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ No credentials flow down
+                                    ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  TIER 2 - Workstations & Users                                      │
+    │  ─────────────────────────────────────────────────────────────────  │
+    │  Assets: Workstations, laptops, end user devices                   │
+    │  Accounts: Helpdesk, workstation admins                            │
+    │  Access: Standard admin tools                                      │
+    │  Rule: NEVER use privileged credentials                            │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Critical Security Controls</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Protected Users Group</h3>
+                    <p>Members cannot use NTLM, DES, or RC4. Kerberos TGTs limited to 4 hours. No credential caching.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Credential Guard</h3>
+                    <p>Virtualization-based security isolates credentials from the OS. Blocks pass-the-hash and credential theft.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🔑</div>
+                    <h3>LAPS</h3>
+                    <p>Local Administrator Password Solution randomizes and rotates local admin passwords stored in AD.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <h3>PAW (Privileged Access Workstation)</h3>
+                    <p>Dedicated hardened workstations for administrative tasks. No email, web browsing, or general use.</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Security Configuration</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Add account to Protected Users group
+Add-ADGroupMember -Identity "Protected Users" -Members "admin-tier0"
+
+# Check Protected Users membership
+Get-ADGroupMember -Identity "Protected Users"
+
+# Enable Credential Guard via GPO
+# Path: Computer Configuration → Administrative Templates → System → Device Guard
+# Setting: Turn On Virtualization Based Security → Credential Guard Configuration
+
+# Install LAPS
+# 1. Extend AD schema (run on Schema Admin workstation)
+Update-AdmPwdADSchema
+
+# 2. Set permissions on OUs for LAPS
+Set-AdmPwdComputerSelfPermission -OrgUnit "OU=Workstations,DC=corp,DC=com"
+Set-AdmPwdReadPasswordPermission -OrgUnit "OU=Workstations,DC=corp,DC=com" `
+    -AllowedPrincipals "Helpdesk"
+
+# 3. Deploy via GPO (enable and configure expiration)
+
+# Find admin accounts with SPNs (Kerberoasting targets)
+Get-ADUser -Filter {ServicePrincipalName -ne "$null"} -Properties ServicePrincipalName |
+    Where-Object {$_.MemberOf -match "Admin"}</code></pre>
+            </div>
+
+            <!-- Maintenance -->
+            <h2 id="maintenance">Maintenance and Recovery</h2>
+            
+            <h3>AD Backup and Recovery</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Backup Operations</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Create AD backup using Windows Server Backup
+wbadmin start systemstatebackup -backuptarget:E:
+
+# Authoritative restore of deleted OU (boot DC into DSRM)
+ntdsutil
+> activate instance ntds
+> authoritative restore
+> restore subtree "OU=Finance,DC=corp,DC=com"
+
+# Enable AD Recycle Bin (one-time, irreversible)
+Enable-ADOptionalFeature -Identity "Recycle Bin Feature" `
+    -Scope ForestOrConfigurationSet `
+    -Target "corp.com" `
+    -Confirm:$false
+
+# Restore deleted object from Recycle Bin
+Get-ADObject -Filter {isDeleted -eq $true -and Name -like "*Alice*"} `
+    -IncludeDeletedObjects | Restore-ADObject
+
+# Check AD replication health
+repadmin /replsummary
+repadmin /showrepl
+dcdiag /v</code></pre>
+            </div>
+
+            <!-- PowerShell Commands -->
+            <h2 id="powershell">PowerShell Quick Reference</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Common AD Commands</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># ═══════════════════════════════════════════════════════════════
+# USER MANAGEMENT
+# ═══════════════════════════════════════════════════════════════
+Get-ADUser -Identity "username"                    # Get user
+Get-ADUser -Filter * -Properties *                 # Get all users with all properties
+Set-ADUser -Identity "user" -Title "Manager"       # Modify user
+Unlock-ADAccount -Identity "user"                  # Unlock account
+Set-ADAccountPassword -Identity "user"             # Reset password
+Enable-ADAccount / Disable-ADAccount               # Enable/Disable
+
+# ═══════════════════════════════════════════════════════════════
+# GROUP MANAGEMENT
+# ═══════════════════════════════════════════════════════════════
+Get-ADGroup -Identity "groupname"                  # Get group
+Get-ADGroupMember -Identity "group"                # Get members
+Add-ADGroupMember -Identity "group" -Members "user"
+Remove-ADGroupMember -Identity "group" -Members "user"
+
+# ═══════════════════════════════════════════════════════════════
+# COMPUTER MANAGEMENT
+# ═══════════════════════════════════════════════════════════════
+Get-ADComputer -Filter *                           # Get all computers
+Test-ComputerSecureChannel -Repair                 # Fix trust relationship
+
+# ═══════════════════════════════════════════════════════════════
+# REPLICATION & HEALTH
+# ═══════════════════════════════════════════════════════════════
+Get-ADReplicationPartnerMetadata -Target "DC01"    # Check replication
+Get-ADDomainController -Filter *                   # List all DCs
+
+# ═══════════════════════════════════════════════════════════════
+# SEARCHING
+# ═══════════════════════════════════════════════════════════════
+Get-ADUser -Filter {Department -eq "Finance"}      # Filter by attribute
+Get-ADUser -LDAPFilter "(title=*Manager*)"         # LDAP filter syntax
+Search-ADAccount -LockedOut                        # Find locked accounts
+Search-ADAccount -AccountDisabled                  # Find disabled accounts
+Search-ADAccount -PasswordExpired                  # Find expired passwords</code></pre>
+            </div>
+
+            <!-- Attacks -->
+            <h2 id="attacks">Common AD Attacks and Mitigations</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attack</th>
+                            <th>Description</th>
+                            <th>Mitigation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Pass-the-Hash</strong></td>
+                            <td>Attacker uses stolen NTLM hash to authenticate without knowing password</td>
+                            <td>Credential Guard, Protected Users, disable NTLM where possible</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kerberoasting</strong></td>
+                            <td>Request service tickets for accounts with SPNs, crack offline</td>
+                            <td>Use gMSA, strong passwords on service accounts, monitor 4769 events</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Golden Ticket</strong></td>
+                            <td>Forge TGT using stolen KRBTGT hash for any user</td>
+                            <td>Rotate KRBTGT password twice, detect anomalous TGTs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DCSync</strong></td>
+                            <td>Replicate password hashes from DC using replication protocols</td>
+                            <td>Limit Replicating Directory Changes permissions, monitor 4662 events</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NTLM Relay</strong></td>
+                            <td>Relay captured NTLM authentication to other services</td>
+                            <td>Enable SMB signing, EPA, disable NTLM, LDAP signing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AS-REP Roasting</strong></td>
+                            <td>Request TGT for accounts without pre-auth, crack offline</td>
+                            <td>Enable Kerberos pre-authentication for all accounts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box error">
+                <div class="info-box-title">🚨 Critical: KRBTGT Account</div>
+                <p>The KRBTGT account is the most sensitive account in AD. If compromised, attackers can create Golden Tickets. Rotate the password twice (with a minimum 10-hour gap) after any suspected compromise. The password change will invalidate all existing Kerberos tickets.</p>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="page-nav">
+                <a href="iam-fundamentals.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← IAM Fundamentals</span>
+                </a>
+                <a href="entra-id-fundamentals.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Entra ID Fundamentals →</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+                <p>Built for security professionals, by security professionals.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional Access | IAM Ultimate Guide</title>
+    <meta name="description" content="Comprehensive guide to Microsoft Entra Conditional Access policies including architecture, common templates, and infrastructure-as-code configurations.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html" class="active">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="entra-id-fundamentals.html">Microsoft Entra ID</a>
+                <span class="separator">/</span>
+                <span class="current">Conditional Access</span>
+            </nav>
+
+            <h1>Conditional Access Policies</h1>
+            
+            <p>Conditional Access is Microsoft's Zero Trust policy engine. It brings signals together to make access decisions, enforcing organizational policies at the point of access.</p>
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#architecture">Conditional Access Architecture</a></li>
+                    <li><a href="#components">Policy Components</a></li>
+                    <li><a href="#named-locations">Named Locations</a></li>
+                    <li><a href="#common-policies">Common Policy Templates</a></li>
+                    <li><a href="#report-only">Report-Only Mode</a></li>
+                    <li><a href="#what-if">What If Tool</a></li>
+                    <li><a href="#zero-trust">Zero Trust Integration</a></li>
+                    <li><a href="#terraform">Infrastructure as Code</a></li>
+                </ul>
+            </div>
+
+            <!-- Architecture -->
+            <h2 id="architecture">Conditional Access Architecture</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    CONDITIONAL ACCESS EVALUATION FLOW
+    ════════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                         SIGNALS (Input)                              │
+    │                                                                      │
+    │   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  │
+    │   │  User   │  │ Device  │  │Location │  │  App    │  │  Risk   │  │
+    │   │ /Group  │  │ State   │  │   IP    │  │  Being  │  │  Level  │  │
+    │   │ /Role   │  │         │  │         │  │ Accessed│  │         │  │
+    │   └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘  │
+    │        │            │            │            │            │        │
+    │        └────────────┴────────────┴────────────┴────────────┘        │
+    │                                  │                                   │
+    └──────────────────────────────────┼───────────────────────────────────┘
+                                       ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    POLICY EVALUATION ENGINE                          │
+    │                                                                      │
+    │   ┌─────────────────────────────────────────────────────────────┐   │
+    │   │  For each applicable policy:                                 │   │
+    │   │                                                              │   │
+    │   │  1. Check ASSIGNMENTS (Who + What + Conditions)             │   │
+    │   │     └── Does this policy apply to this sign-in?             │   │
+    │   │                                                              │   │
+    │   │  2. If policy applies, evaluate ACCESS CONTROLS             │   │
+    │   │     └── What must user do / what state must device be in?   │   │
+    │   │                                                              │   │
+    │   │  3. Aggregate all applicable policies                        │   │
+    │   │     └── Most restrictive combination wins                   │   │
+    │   └─────────────────────────────────────────────────────────────┘   │
+    │                                                                      │
+    └──────────────────────────────────┬───────────────────────────────────┘
+                                       │
+                                       ▼
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                         DECISION (Output)                            │
+    │                                                                      │
+    │     ┌──────────────┐    ┌──────────────┐    ┌──────────────┐       │
+    │     │    ALLOW     │    │    BLOCK     │    │   REQUIRE    │       │
+    │     │   (Grant)    │    │   (Deny)     │    │  CONTROLS    │       │
+    │     │              │    │              │    │              │       │
+    │     │ • No controls│    │ • Policy     │    │ • MFA        │       │
+    │     │   required   │    │   blocks     │    │ • Compliant  │       │
+    │     │              │    │   access     │    │   device     │       │
+    │     │              │    │              │    │ • Hybrid     │       │
+    │     │              │    │              │    │   joined     │       │
+    │     │              │    │              │    │ • App protect│       │
+    │     └──────────────┘    └──────────────┘    └──────────────┘       │
+    │                                                                      │
+    └─────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <!-- Components -->
+            <h2 id="components">Policy Components</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    CONDITIONAL ACCESS POLICY STRUCTURE
+    ═════════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                         POLICY                                       │
+    │  Name: "Require MFA for All Users"                                  │
+    │  State: Enabled / Disabled / Report-only                            │
+    └─────────────────────────────────────────────────────────────────────┘
+                                    │
+         ┌──────────────────────────┴──────────────────────────┐
+         │                                                      │
+         ▼                                                      ▼
+    ┌─────────────────────────────────┐    ┌─────────────────────────────────┐
+    │       ASSIGNMENTS               │    │       ACCESS CONTROLS           │
+    │       (IF this...)              │    │       (...THEN this)            │
+    └─────────────────────────────────┘    └─────────────────────────────────┘
+         │                                      │
+         ├── Users and Groups                   ├── GRANT Controls
+         │   • Include: All users               │   • Block access
+         │   • Exclude: Break-glass accounts    │   • Grant access
+         │   • Include: Specific groups         │     - Require MFA
+         │   • Include: Directory roles         │     - Require compliant device
+         │                                      │     - Require Hybrid Joined
+         ├── Cloud Apps or Actions              │     - Require approved app
+         │   • All cloud apps                   │     - Require app protection
+         │   • Select specific apps             │     - Require password change
+         │   • User actions (register info)     │     - Require ToU acceptance
+         │   • Authentication context           │     - Require auth strength
+         │                                      │   • Operator: AND / OR
+         └── Conditions                         │
+             • User risk (P2)                   └── SESSION Controls
+             • Sign-in risk (P2)                    • App enforced restrictions
+             • Device platforms                     • Conditional Access App Control
+             • Locations                            • Sign-in frequency
+             • Client apps                          • Persistent browser session
+             • Filter for devices                   • Customize continuous access
+             • Authentication flows                 • Disable resilience defaults
+</pre>
+            </div>
+
+            <h3>Assignment Details</h3>
+            
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">Users & Groups</button>
+                    <button class="tab-header">Cloud Apps</button>
+                    <button class="tab-header">Conditions</button>
+                    <button class="tab-header">Grant Controls</button>
+                    <button class="tab-header">Session Controls</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h4>Users and Groups</h4>
+                    <p>Define who the policy applies to.</p>
+                    
+                    <table class="table-wrapper">
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>All users</strong></td>
+                                <td>Every user in the directory (including guests)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Specific users/groups</strong></td>
+                                <td>Named users or security groups</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Directory roles</strong></td>
+                                <td>Built-in roles (Global Admin, User Admin, etc.)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Guest or external users</strong></td>
+                                <td>B2B guests, direct connect, local guest</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exclude</strong></td>
+                                <td>Emergency access accounts, service accounts</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="info-box error">
+                        <div class="info-box-title">🚨 Critical: Break-Glass Accounts</div>
+                        <p>ALWAYS exclude at least 2 emergency access accounts from ALL Conditional Access policies. These accounts should be cloud-only, have long complex passwords, and not require MFA.</p>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Cloud Apps or Actions</h4>
+                    <p>What the user is trying to access.</p>
+                    
+                    <ul>
+                        <li><strong>All cloud apps:</strong> Every app registered in Entra ID</li>
+                        <li><strong>Select apps:</strong> Specific enterprise or registered apps</li>
+                        <li><strong>User actions:</strong>
+                            <ul>
+                                <li>Register security information</li>
+                                <li>Register or join devices</li>
+                            </ul>
+                        </li>
+                        <li><strong>Authentication context:</strong> Custom contexts for step-up auth</li>
+                    </ul>
+                    
+                    <p><strong>Common App IDs:</strong></p>
+                    <ul>
+                        <li>Microsoft 365: <code>Office365</code></li>
+                        <li>Azure Management: <code>797f4846-ba00-4fd7-ba43-dac1f8f63013</code></li>
+                        <li>Microsoft Graph: <code>00000003-0000-0000-c000-000000000000</code></li>
+                        <li>Azure Portal: <code>c44b4083-3bb0-49c1-b47d-974e53cbdf3c</code></li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Conditions</h4>
+                    <p>Additional context signals for policy evaluation.</p>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Condition</th>
+                                    <th>Options</th>
+                                    <th>License</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>User risk</strong></td>
+                                    <td>High, Medium, Low, No risk</td>
+                                    <td>P2</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sign-in risk</strong></td>
+                                    <td>High, Medium, Low, No risk</td>
+                                    <td>P2</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Device platforms</strong></td>
+                                    <td>Android, iOS, Windows, macOS, Linux</td>
+                                    <td>P1</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Locations</strong></td>
+                                    <td>Named locations (IP/Country)</td>
+                                    <td>P1</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Client apps</strong></td>
+                                    <td>Browser, Mobile apps, Desktop clients, Legacy</td>
+                                    <td>P1</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Device filter</strong></td>
+                                    <td>Rule expressions on device properties</td>
+                                    <td>P1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Grant Controls</h4>
+                    <p>What is required for access to be granted.</p>
+                    
+                    <ul>
+                        <li><strong>Block access:</strong> Deny all access</li>
+                        <li><strong>Grant access with controls:</strong>
+                            <ul>
+                                <li>Require multi-factor authentication</li>
+                                <li>Require authentication strength (specific methods)</li>
+                                <li>Require device to be marked as compliant</li>
+                                <li>Require Hybrid Azure AD joined device</li>
+                                <li>Require approved client app</li>
+                                <li>Require app protection policy</li>
+                                <li>Require password change</li>
+                                <li>Require terms of use</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <p><strong>Control Operators:</strong></p>
+                    <ul>
+                        <li><strong>Require all:</strong> All selected controls must be satisfied (AND)</li>
+                        <li><strong>Require one:</strong> Any one control satisfies the requirement (OR)</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content">
+                    <h4>Session Controls</h4>
+                    <p>Controls applied during the session.</p>
+                    
+                    <ul>
+                        <li><strong>App enforced restrictions:</strong> Signals to apps (SharePoint/Exchange) for limited access</li>
+                        <li><strong>Conditional Access App Control:</strong> Route through Microsoft Defender for Cloud Apps</li>
+                        <li><strong>Sign-in frequency:</strong> How often users must re-authenticate (1-365 days)</li>
+                        <li><strong>Persistent browser session:</strong> Allow "stay signed in" or require session cookie only</li>
+                        <li><strong>Customize continuous access evaluation:</strong> Strictly enforce location policies</li>
+                        <li><strong>Disable resilience defaults:</strong> Don't use cached credentials during outages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Named Locations -->
+            <h2 id="named-locations">Named Locations</h2>
+            
+            <p>Named locations define trusted IP ranges or countries for use in Conditional Access policies.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">PowerShell - Create Named Location</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Create IP-based named location (Corporate Network)
+$params = @{
+    "@odata.type" = "#microsoft.graph.ipNamedLocation"
+    DisplayName = "Corporate Network"
+    IsTrusted = $true
+    IpRanges = @(
+        @{
+            "@odata.type" = "#microsoft.graph.iPv4CidrRange"
+            CidrAddress = "203.0.113.0/24"
+        }
+        @{
+            "@odata.type" = "#microsoft.graph.iPv4CidrRange"
+            CidrAddress = "198.51.100.0/24"
+        }
+        @{
+            "@odata.type" = "#microsoft.graph.iPv6CidrRange"
+            CidrAddress = "2001:db8::/32"
+        }
+    )
+}
+
+New-MgIdentityConditionalAccessNamedLocation -BodyParameter $params
+
+# Create country-based named location
+$params = @{
+    "@odata.type" = "#microsoft.graph.countryNamedLocation"
+    DisplayName = "Allowed Countries"
+    CountriesAndRegions = @("US", "CA", "GB", "DE")
+    IncludeUnknownCountriesAndRegions = $false
+}
+
+New-MgIdentityConditionalAccessNamedLocation -BodyParameter $params</code></pre>
+            </div>
+
+            <!-- Common Policies -->
+            <h2 id="common-policies">Common Policy Templates</h2>
+            
+            <p>Microsoft provides templates for common security scenarios. Here are production-ready policy configurations.</p>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">1. Require MFA for All Users</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Purpose:</strong> Foundational policy ensuring all users complete MFA.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">Terraform</span>
+                                    <button class="code-copy-btn">⧉ Copy</button>
+                                </div>
+<pre><code>resource "azuread_conditional_access_policy" "require_mfa_all_users" {
+  display_name = "CA001: Require MFA for all users"
+  state        = "enabledForReportingButNotEnforced"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = [
+        azuread_user.break_glass_1.object_id,
+        azuread_user.break_glass_2.object_id
+      ]
+    }
+    
+    applications {
+      include_applications = ["All"]
+    }
+    
+    client_app_types = ["all"]
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["mfa"]
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">2. Require Phishing-Resistant MFA for Admins</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Purpose:</strong> Higher security for privileged accounts using authentication strength.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">Terraform</span>
+                                    <button class="code-copy-btn">⧉ Copy</button>
+                                </div>
+<pre><code>resource "azuread_conditional_access_policy" "phishing_resistant_admins" {
+  display_name = "CA002: Require phishing-resistant MFA for admins"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_roles = [
+        "62e90394-69f5-4237-9190-012177145e10", # Global Administrator
+        "194ae4cb-b126-40b2-bd5b-6091b380977d", # Security Administrator
+        "f28a1f50-f6e7-4571-818b-6a12f2af6b6c", # SharePoint Administrator
+        "29232cdf-9323-42fd-ade2-1d097af3e4de", # Exchange Administrator
+        "9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3", # Application Administrator
+      ]
+      exclude_users = [
+        azuread_user.break_glass_1.object_id,
+        azuread_user.break_glass_2.object_id
+      ]
+    }
+    
+    applications {
+      include_applications = ["All"]
+    }
+  }
+
+  grant_controls {
+    operator                          = "OR"
+    authentication_strength_policy_id = data.azuread_authentication_strength_policy.phishing_resistant.id
+  }
+}
+
+data "azuread_authentication_strength_policy" "phishing_resistant" {
+  display_name = "Phishing-resistant MFA"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">3. Block Legacy Authentication</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Purpose:</strong> Block authentication protocols that don't support MFA (IMAP, SMTP, POP3, etc.).</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">Terraform</span>
+                                    <button class="code-copy-btn">⧉ Copy</button>
+                                </div>
+<pre><code>resource "azuread_conditional_access_policy" "block_legacy_auth" {
+  display_name = "CA003: Block legacy authentication"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = [
+        azuread_user.break_glass_1.object_id,
+        azuread_user.break_glass_2.object_id
+      ]
+    }
+    
+    applications {
+      include_applications = ["All"]
+    }
+    
+    client_app_types = [
+      "exchangeActiveSync",
+      "other"
+    ]
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["block"]
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">4. Require Compliant Device</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Purpose:</strong> Require devices to meet Intune compliance policies.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">Terraform</span>
+                                    <button class="code-copy-btn">⧉ Copy</button>
+                                </div>
+<pre><code>resource "azuread_conditional_access_policy" "require_compliant_device" {
+  display_name = "CA004: Require compliant device for sensitive apps"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = [
+        azuread_user.break_glass_1.object_id,
+        azuread_user.break_glass_2.object_id
+      ]
+      exclude_groups = [
+        azuread_group.ca_exclusion_compliant_device.object_id
+      ]
+    }
+    
+    applications {
+      include_applications = [
+        data.azuread_service_principal.sharepoint.object_id,
+        data.azuread_service_principal.teams.object_id
+      ]
+    }
+    
+    platforms {
+      include_platforms = ["windows", "macOS", "iOS", "android"]
+    }
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["compliantDevice"]
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">5. Block Access from Untrusted Locations</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Purpose:</strong> Block access from high-risk countries or unknown locations.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">Terraform</span>
+                                    <button class="code-copy-btn">⧉ Copy</button>
+                                </div>
+<pre><code>resource "azuread_conditional_access_policy" "block_untrusted_locations" {
+  display_name = "CA005: Block access from blocked countries"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = [
+        azuread_user.break_glass_1.object_id,
+        azuread_user.break_glass_2.object_id
+      ]
+    }
+    
+    applications {
+      include_applications = ["All"]
+    }
+    
+    locations {
+      include_locations = [
+        azuread_named_location.blocked_countries.id
+      ]
+    }
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["block"]
+  }
+}
+
+resource "azuread_named_location" "blocked_countries" {
+  display_name = "Blocked Countries"
+  country {
+    countries_and_regions = ["RU", "CN", "KP", "IR"]
+    include_unknown_countries_and_regions = true
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">6. Require Password Change for Risky Users</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Purpose:</strong> Force password reset when Identity Protection detects user risk.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">Terraform</span>
+                                    <button class="code-copy-btn">⧉ Copy</button>
+                                </div>
+<pre><code>resource "azuread_conditional_access_policy" "risky_user_password_change" {
+  display_name = "CA006: Require password change for high-risk users"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = [
+        azuread_user.break_glass_1.object_id,
+        azuread_user.break_glass_2.object_id
+      ]
+    }
+    
+    applications {
+      include_applications = ["All"]
+    }
+    
+    user_risk_levels = ["high"]
+  }
+
+  grant_controls {
+    operator          = "AND"
+    built_in_controls = ["mfa", "passwordChange"]
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report-Only Mode -->
+            <h2 id="report-only">Report-Only Mode</h2>
+            
+            <p>Report-only mode allows testing policies without enforcing them. Results are logged in sign-in logs without affecting users.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    POLICY DEPLOYMENT WORKFLOW
+    ═══════════════════════════
+
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │   Create    │     │  Report-    │     │   Enable    │
+    │   Policy    │────▶│  Only Mode  │────▶│   Policy    │
+    │             │     │  (Test)     │     │  (Enforce)  │
+    └─────────────┘     └──────┬──────┘     └─────────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │  Monitor Sign-in    │
+                    │  Logs for Impact    │
+                    │                     │
+                    │  • Would have been  │
+                    │    applied: X users │
+                    │  • Would have       │
+                    │    blocked: Y       │
+                    │  • Failures: Z      │
+                    └─────────────────────┘
+
+    SIGN-IN LOG REPORT-ONLY RESULTS:
+    ─────────────────────────────────
+    • reportOnlySuccess: User would have passed
+    • reportOnlyFailure: User would have been blocked/required control
+    • reportOnlyNotApplied: Policy wouldn't apply
+    • reportOnlyInterrupted: User session interrupted before completion
+</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">KQL - Analyze Report-Only Impact</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code>// Analyze report-only policy impact
+SigninLogs
+| where TimeGenerated > ago(7d)
+| mv-expand ConditionalAccessPolicies
+| extend PolicyName = tostring(ConditionalAccessPolicies.displayName)
+| extend PolicyResult = tostring(ConditionalAccessPolicies.result)
+| where PolicyResult startswith "reportOnly"
+| summarize 
+    Count = count(),
+    UniqueUsers = dcount(UserPrincipalName)
+    by PolicyName, PolicyResult
+| order by Count desc
+
+// Users who would have been blocked
+SigninLogs
+| where TimeGenerated > ago(7d)
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies.result == "reportOnlyFailure"
+| extend PolicyName = tostring(ConditionalAccessPolicies.displayName)
+| summarize BlockedAttempts = count() by UserPrincipalName, PolicyName
+| order by BlockedAttempts desc</code></pre>
+            </div>
+
+            <!-- What If Tool -->
+            <h2 id="what-if">What If Tool</h2>
+            
+            <p>The What If tool simulates policy evaluation for specific scenarios without requiring actual sign-in attempts.</p>
+
+            <h3>Using What If</h3>
+            <ol>
+                <li>Navigate to Entra ID → Protection → Conditional Access → Policies</li>
+                <li>Click "What If" in the toolbar</li>
+                <li>Select user, application, and conditions to simulate</li>
+                <li>Review which policies would apply and their results</li>
+            </ol>
+
+            <div class="info-box success">
+                <div class="info-box-title">✓ What If Best Practices</div>
+                <ul>
+                    <li>Test with representative users from each population</li>
+                    <li>Simulate from different locations and device types</li>
+                    <li>Include guest users in testing</li>
+                    <li>Verify break-glass accounts are properly excluded</li>
+                </ul>
+            </div>
+
+            <!-- Zero Trust -->
+            <h2 id="zero-trust">Conditional Access and Zero Trust</h2>
+            
+            <div class="ascii-diagram">
+<pre>
+    ZERO TRUST PRINCIPLES WITH CONDITIONAL ACCESS
+    ═══════════════════════════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                    ZERO TRUST ARCHITECTURE                           │
+    │                  "Never Trust, Always Verify"                        │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    PRINCIPLE 1: VERIFY EXPLICITLY
+    ────────────────────────────────
+    • Authenticate and authorize based on ALL available data points
+    • User identity → Conditional Access evaluates user/group
+    • Device health → Require compliant/managed device
+    • Location → Named locations, trusted IPs
+    • Risk level → Identity Protection integration
+
+    PRINCIPLE 2: USE LEAST PRIVILEGED ACCESS
+    ─────────────────────────────────────────
+    • Just-in-time access → PIM integration
+    • Just-enough-access → Granular app assignments
+    • Risk-based policies → Higher assurance for sensitive apps
+    • Session controls → Limited session duration
+
+    PRINCIPLE 3: ASSUME BREACH
+    ──────────────────────────
+    • Segment access → Different policies per app sensitivity
+    • End-to-end encryption → Session controls
+    • Continuous monitoring → Sign-in logs, risk detection
+    • Anomaly detection → Identity Protection signals
+
+    CONDITIONAL ACCESS IMPLEMENTATION:
+    ──────────────────────────────────
+    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+    │    IDENTITY     │    │     DEVICE      │    │   APPLICATION   │
+    │                 │    │                 │    │                 │
+    │ • Strong auth   │    │ • Compliance    │    │ • App-specific  │
+    │ • Risk-based    │    │ • Join status   │    │   policies      │
+    │ • MFA required  │    │ • Health checks │    │ • Step-up auth  │
+    └─────────────────┘    └─────────────────┘    └─────────────────┘
+             │                      │                      │
+             └──────────────────────┼──────────────────────┘
+                                    │
+                                    ▼
+                        ┌─────────────────────┐
+                        │  POLICY DECISION    │
+                        │  (Allow/Block/       │
+                        │   Require Controls) │
+                        └─────────────────────┘
+</pre>
+            </div>
+
+            <!-- Terraform -->
+            <h2 id="terraform">Infrastructure as Code</h2>
+            
+            <p>Complete Terraform module for deploying a baseline Conditional Access policy set.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Terraform - Complete CA Module</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># main.tf - Conditional Access Baseline Module
+
+terraform {
+  required_providers {
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 2.47"
+    }
+  }
+}
+
+# Variables
+variable "break_glass_users" {
+  description = "Object IDs of break-glass accounts to exclude from all policies"
+  type        = list(string)
+}
+
+variable "trusted_locations_ips" {
+  description = "List of trusted IP ranges in CIDR notation"
+  type        = list(string)
+  default     = []
+}
+
+variable "blocked_countries" {
+  description = "List of country codes to block"
+  type        = list(string)
+  default     = ["RU", "CN", "KP", "IR"]
+}
+
+# Named Locations
+resource "azuread_named_location" "corporate_network" {
+  display_name = "Corporate Network - Trusted"
+  ip {
+    ip_ranges = var.trusted_locations_ips
+    trusted   = true
+  }
+}
+
+resource "azuread_named_location" "blocked_countries" {
+  display_name = "Blocked Countries"
+  country {
+    countries_and_regions                 = var.blocked_countries
+    include_unknown_countries_and_regions = true
+  }
+}
+
+# CA Groups
+resource "azuread_group" "ca_exclusion_group" {
+  display_name     = "CA-Exclusion-MFA"
+  security_enabled = true
+  description      = "Users excluded from MFA policies (with approval)"
+}
+
+# Policy 1: Block Legacy Authentication
+resource "azuread_conditional_access_policy" "block_legacy_auth" {
+  display_name = "CA001: Block legacy authentication"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = var.break_glass_users
+    }
+    applications {
+      include_applications = ["All"]
+    }
+    client_app_types = ["exchangeActiveSync", "other"]
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["block"]
+  }
+}
+
+# Policy 2: Require MFA for All Users
+resource "azuread_conditional_access_policy" "require_mfa_all" {
+  display_name = "CA002: Require MFA for all users"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users  = ["All"]
+      exclude_users  = var.break_glass_users
+      exclude_groups = [azuread_group.ca_exclusion_group.object_id]
+    }
+    applications {
+      include_applications = ["All"]
+    }
+    client_app_types = ["browser", "mobileAppsAndDesktopClients"]
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["mfa"]
+  }
+}
+
+# Policy 3: Block Untrusted Countries
+resource "azuread_conditional_access_policy" "block_countries" {
+  display_name = "CA003: Block access from blocked countries"
+  state        = "enabled"
+
+  conditions {
+    users {
+      include_users = ["All"]
+      exclude_users = var.break_glass_users
+    }
+    applications {
+      include_applications = ["All"]
+    }
+    locations {
+      include_locations = [azuread_named_location.blocked_countries.id]
+    }
+  }
+
+  grant_controls {
+    operator          = "OR"
+    built_in_controls = ["block"]
+  }
+}
+
+# Outputs
+output "policy_ids" {
+  value = {
+    block_legacy_auth = azuread_conditional_access_policy.block_legacy_auth.id
+    require_mfa_all   = azuread_conditional_access_policy.require_mfa_all.id
+    block_countries   = azuread_conditional_access_policy.block_countries.id
+  }
+}</code></pre>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="page-nav">
+                <a href="entra-id-authentication.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Authentication Methods</span>
+                </a>
+                <a href="entra-identity-protection.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Identity Protection →</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+                <p>Built for security professionals, by security professionals.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAM Fundamentals | IAM Ultimate Guide</title>
+    <meta name="description" content="Core IAM concepts including AAA framework, authentication factors, authorization models (RBAC, ABAC), federation, SSO, and protocol comparisons.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="iam-fundamentals.html" class="active">IAM Fundamentals</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">On-Premises</div>
+                <ul class="sidebar-nav">
+                    <li><a href="active-directory.html">Active Directory</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Microsoft Entra ID</div>
+                <ul class="sidebar-nav">
+                    <li><a href="entra-id-fundamentals.html">Entra ID Basics</a></li>
+                    <li><a href="entra-id-authentication.html">Authentication Methods</a></li>
+                    <li><a href="entra-conditional-access.html">Conditional Access</a></li>
+                    <li><a href="entra-identity-protection.html">Identity Protection</a></li>
+                    <li><a href="entra-id-governance.html">Identity Governance</a></li>
+                    <li><a href="entra-app-integration.html">App Integration</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Hybrid Identity</div>
+                <ul class="sidebar-nav">
+                    <li><a href="hybrid-identity.html">Hybrid Configuration</a></li>
+                    <li><a href="ad-to-entra-migration.html">Migration Guide</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Okta</div>
+                <ul class="sidebar-nav">
+                    <li><a href="okta-fundamentals.html">Okta Basics</a></li>
+                    <li><a href="okta-sso-mfa.html">SSO & MFA</a></li>
+                    <li><a href="okta-lifecycle.html">Lifecycle Management</a></li>
+                    <li><a href="okta-governance.html">Governance</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Advanced Topics</div>
+                <ul class="sidebar-nav">
+                    <li><a href="sso-protocols.html">SSO Protocols Deep Dive</a></li>
+                    <li><a href="pam.html">Privileged Access (PAM)</a></li>
+                    <li><a href="iam-vendors-comparison.html">Vendor Comparison</a></li>
+                    <li><a href="iam-security.html">Security Best Practices</a></li>
+                    <li><a href="iam-troubleshooting.html">Troubleshooting</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <span class="current">IAM Fundamentals</span>
+            </nav>
+
+            <h1>IAM Concepts & Fundamentals</h1>
+            
+            <p>Identity and Access Management (IAM) is the security discipline that ensures the right individuals access the right resources at the right times for the right reasons. This chapter covers the foundational concepts that underpin all modern IAM systems.</p>
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <div class="toc-title">On This Page</div>
+                <ul class="toc-list">
+                    <li><a href="#what-is-iam">What is IAM?</a></li>
+                    <li><a href="#aaa-framework">AAA Framework</a></li>
+                    <li><a href="#identity-lifecycle">Identity Lifecycle</a></li>
+                    <li><a href="#authentication-factors">Authentication Factors</a></li>
+                    <li><a href="#authorization-models">Authorization Models</a></li>
+                    <li><a href="#federation">Identity Federation</a></li>
+                    <li><a href="#sso">Single Sign-On (SSO)</a></li>
+                    <li><a href="#directory-services">Directory Services</a></li>
+                    <li><a href="#ldap">LDAP Protocol</a></li>
+                    <li><a href="#kerberos">Kerberos Authentication</a></li>
+                    <li><a href="#protocol-comparison">Protocol Comparison</a></li>
+                </ul>
+            </div>
+
+            <!-- What is IAM -->
+            <h2 id="what-is-iam">What is IAM and Why It Matters</h2>
+            
+            <p>Identity and Access Management encompasses the policies, processes, and technologies that enable organizations to manage digital identities and control user access to critical information. In today's threat landscape, IAM serves as the foundation of security architecture.</p>
+
+            <div class="info-box info">
+                <div class="info-box-title">💡 Key Insight</div>
+                <p>According to Verizon's Data Breach Investigations Report, over 80% of breaches involve compromised credentials. Robust IAM is not optional—it's the first line of defense.</p>
+            </div>
+
+            <h3>Core IAM Functions</h3>
+            <ul>
+                <li><strong>Identity Management:</strong> Creating, maintaining, and deleting user accounts and attributes</li>
+                <li><strong>Access Management:</strong> Controlling what resources users can access and what actions they can perform</li>
+                <li><strong>Authentication:</strong> Verifying that users are who they claim to be</li>
+                <li><strong>Authorization:</strong> Determining what authenticated users are allowed to do</li>
+                <li><strong>Governance:</strong> Ensuring access is appropriate, reviewed, and compliant</li>
+            </ul>
+
+            <!-- AAA Framework -->
+            <h2 id="aaa-framework">AAA Framework</h2>
+            
+            <p>The AAA framework is the conceptual model for controlling access to network resources, managing policies, and auditing usage. It consists of three interconnected components that work together to secure systems.</p>
+
+            <div class="ascii-diagram">
+<pre>
+                        ┌─────────────────────────────────────────┐
+                        │           AAA FRAMEWORK                  │
+                        └─────────────────────────────────────────┘
+                                          │
+            ┌─────────────────────────────┼─────────────────────────────┐
+            │                             │                             │
+            ▼                             ▼                             ▼
+┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
+│   AUTHENTICATION    │     │   AUTHORIZATION     │     │    ACCOUNTING       │
+│   ─────────────────│     │   ─────────────────  │     │   ─────────────────│
+│                     │     │                     │     │                     │
+│   "Who are you?"    │     │  "What can you do?" │     │  "What did you do?" │
+│                     │     │                     │     │                     │
+│  • Verify identity  │     │  • Check permissions│     │  • Log activities   │
+│  • Validate creds   │     │  • Enforce policies │     │  • Track usage      │
+│  • Prove claims     │     │  • Grant/deny access│     │  • Audit trail      │
+│                     │     │                     │     │                     │
+│  Methods:           │     │  Models:            │     │  Data:              │
+│  • Password         │     │  • RBAC             │     │  • Login times      │
+│  • MFA              │     │  • ABAC             │     │  • Resources        │
+│  • Biometrics       │     │  • PBAC             │     │  • Actions taken    │
+│  • Certificates     │     │  • Claims-based     │     │  • Session duration │
+└─────────────────────┘     └─────────────────────┘     └─────────────────────┘
+            │                             │                             │
+            └─────────────────────────────┼─────────────────────────────┘
+                                          │
+                                          ▼
+                        ┌─────────────────────────────────────────┐
+                        │         SECURE ACCESS DECISION          │
+                        │   ─────────────────────────────────     │
+                        │   User authenticated + authorized =     │
+                        │   Access granted and logged             │
+                        └─────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <!-- Identity Lifecycle -->
+            <h2 id="identity-lifecycle">Identity Lifecycle Management</h2>
+            
+            <p>The identity lifecycle describes the stages an identity goes through from creation to deletion. Effective lifecycle management ensures that access rights remain appropriate as users' relationships with the organization evolve.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    IDENTITY LIFECYCLE (Joiner - Mover - Leaver)
+    ═══════════════════════════════════════════
+
+    ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+    │   JOINER    │────────▶│    MOVER    │────────▶│   LEAVER    │
+    │  (Onboard)  │         │  (Change)   │         │ (Offboard)  │
+    └─────────────┘         └─────────────┘         └─────────────┘
+          │                       │                       │
+          ▼                       ▼                       ▼
+    ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+    │ • Create ID │         │ • Role change│        │ • Disable   │
+    │ • Assign    │         │ • Dept move  │        │ • Revoke    │
+    │   base role │         │ • Promotion  │        │   access    │
+    │ • Provision │         │ • Add/remove │        │ • Archive   │
+    │   accounts  │         │   permissions│        │   data      │
+    │ • Issue     │         │ • Transfer   │        │ • Delete    │
+    │   credentials│        │   ownership  │        │   accounts  │
+    └─────────────┘         └─────────────┘         └─────────────┘
+
+    ┌───────────────────────────────────────────────────────────────┐
+    │                     GOVERNANCE LAYER                          │
+    │  ───────────────────────────────────────────────────────────  │
+    │  • Access Reviews    • Certifications    • Compliance Checks  │
+    │  • Segregation of Duties    • Audit Trails    • Reporting     │
+    └───────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <h3>Lifecycle Stages in Detail</h3>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Joiner Process (Onboarding)</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>When a new employee, contractor, or partner joins the organization:</p>
+                            <ul>
+                                <li>HR system triggers identity creation (authoritative source)</li>
+                                <li>Identity is provisioned in directory services (AD, Entra ID)</li>
+                                <li>Base access assigned based on role/department</li>
+                                <li>Accounts created in downstream applications</li>
+                                <li>Credentials issued (password, MFA enrollment)</li>
+                                <li>Welcome communications sent with access instructions</li>
+                            </ul>
+                            <p><strong>Best Practice:</strong> Automate using HR-driven provisioning (Workday, SuccessFactors → IAM platform → Apps)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Mover Process (Role Changes)</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>When an employee changes roles, departments, or responsibilities:</p>
+                            <ul>
+                                <li>HR update triggers attribute changes</li>
+                                <li>Old role-based access is removed</li>
+                                <li>New role-based access is granted</li>
+                                <li>Manager transfers are processed</li>
+                                <li>Access review may be triggered</li>
+                            </ul>
+                            <p><strong>Challenge:</strong> Access accumulation—users often retain old access. Regular access reviews are essential.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">Leaver Process (Offboarding)</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>When an employee leaves the organization:</p>
+                            <ul>
+                                <li>HR termination triggers immediate action</li>
+                                <li>Account disabled (not deleted immediately for legal hold)</li>
+                                <li>Active sessions terminated</li>
+                                <li>MFA factors deregistered</li>
+                                <li>Downstream app access revoked</li>
+                                <li>Data ownership transferred</li>
+                                <li>After retention period: account and data deleted</li>
+                            </ul>
+                            <p><strong>Critical:</strong> For involuntary terminations, disable access before the employee is notified.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authentication Factors -->
+            <h2 id="authentication-factors">Authentication Factors</h2>
+            
+            <p>Authentication verifies identity through one or more factors. Multi-factor authentication (MFA) combines factors from different categories to provide stronger security than any single factor alone.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor Type</th>
+                            <th>Description</th>
+                            <th>Examples</th>
+                            <th>Strength</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Something You Know</strong></td>
+                            <td>Knowledge-based secrets</td>
+                            <td>Password, PIN, Security Questions</td>
+                            <td>Low (phishable)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Something You Have</strong></td>
+                            <td>Physical possession</td>
+                            <td>Phone, Hardware Token, Smart Card</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Something You Are</strong></td>
+                            <td>Biometric characteristics</td>
+                            <td>Fingerprint, Face, Voice, Iris</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Somewhere You Are</strong></td>
+                            <td>Location-based</td>
+                            <td>GPS, IP Address, Network</td>
+                            <td>Supplementary</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Something You Do</strong></td>
+                            <td>Behavioral patterns</td>
+                            <td>Typing rhythm, Mouse movement</td>
+                            <td>Supplementary</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">⚠️ Security Note</div>
+                <p>SMS-based OTP is considered the weakest MFA method due to SIM-swapping and SS7 vulnerabilities. Prefer authenticator apps, FIDO2 keys, or push notifications.</p>
+            </div>
+
+            <!-- Authorization Models -->
+            <h2 id="authorization-models">Authorization Models</h2>
+            
+            <p>Authorization determines what actions authenticated users can perform. Different models offer varying levels of flexibility and complexity.</p>
+
+            <!-- Tabs for Authorization Models -->
+            <div class="tabs">
+                <div class="tab-headers">
+                    <button class="tab-header active">RBAC</button>
+                    <button class="tab-header">ABAC</button>
+                    <button class="tab-header">ReBAC</button>
+                    <button class="tab-header">PBAC</button>
+                </div>
+                
+                <div class="tab-content active">
+                    <h3>Role-Based Access Control (RBAC)</h3>
+                    <p>Permissions are assigned to roles, and users are assigned to roles. This is the most common model in enterprise environments.</p>
+                    
+                    <div class="ascii-diagram">
+<pre>
+    RBAC MODEL
+    ══════════
+
+    USERS              ROLES                 PERMISSIONS
+    ─────              ─────                 ───────────
+    
+    ┌─────────┐        ┌───────────────┐     ┌─────────────────┐
+    │  Alice  │───────▶│  HR Manager   │────▶│ Read Employee   │
+    └─────────┘        │               │     │ Write Employee  │
+                       │               │     │ Approve Leave   │
+    ┌─────────┐        └───────────────┘     └─────────────────┘
+    │   Bob   │───┐
+    └─────────┘   │    ┌───────────────┐     ┌─────────────────┐
+                  └───▶│  IT Admin     │────▶│ Manage Systems  │
+    ┌─────────┐   ┌───▶│               │     │ Reset Passwords │
+    │ Charlie │───┘    └───────────────┘     │ View Audit Logs │
+    └─────────┘                              └─────────────────┘
+                       ┌───────────────┐     ┌─────────────────┐
+    ┌─────────┐        │  Finance      │────▶│ View Reports    │
+    │  Diana  │───────▶│  Analyst      │     │ Export Data     │
+    └─────────┘        └───────────────┘     └─────────────────┘
+</pre>
+                    </div>
+                    
+                    <p><strong>Pros:</strong> Simple to understand, easy to audit, well-supported by most systems</p>
+                    <p><strong>Cons:</strong> Role explosion in large organizations, not context-aware</p>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Attribute-Based Access Control (ABAC)</h3>
+                    <p>Access decisions based on attributes of the user, resource, action, and environment. Provides fine-grained, dynamic access control.</p>
+                    
+                    <div class="ascii-diagram">
+<pre>
+    ABAC MODEL
+    ══════════
+
+    ┌─────────────────────────────────────────────────────────────┐
+    │                    POLICY DECISION POINT                     │
+    │  ─────────────────────────────────────────────────────────  │
+    │                                                              │
+    │   IF user.department == "Finance"                           │
+    │   AND user.clearance >= resource.classification             │
+    │   AND action == "read"                                      │
+    │   AND environment.time BETWEEN "09:00" AND "17:00"          │
+    │   AND environment.location == "corporate_network"           │
+    │   THEN permit                                               │
+    │                                                              │
+    └─────────────────────────────────────────────────────────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            ▼                   ▼                   ▼
+    ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+    │ USER ATTRS    │   │ RESOURCE ATTRS│   │ ENV ATTRS     │
+    │ ────────────  │   │ ────────────  │   │ ────────────  │
+    │ • Department  │   │ • Owner       │   │ • Time        │
+    │ • Title       │   │ • Classification│  │ • Location   │
+    │ • Clearance   │   │ • Type        │   │ • Device      │
+    │ • Manager     │   │ • Sensitivity │   │ • Network     │
+    └───────────────┘   └───────────────┘   └───────────────┘
+</pre>
+                    </div>
+                    
+                    <p><strong>Pros:</strong> Highly flexible, context-aware, supports complex policies</p>
+                    <p><strong>Cons:</strong> Complex to implement and audit, performance overhead</p>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Relationship-Based Access Control (ReBAC)</h3>
+                    <p>Access determined by the relationship between users and resources. Popular in social platforms and document sharing systems.</p>
+                    
+                    <div class="ascii-diagram">
+<pre>
+    ReBAC MODEL
+    ═══════════
+
+    ┌─────────┐                              ┌──────────────┐
+    │  Alice  │──────── owner ──────────────▶│  Document A  │
+    └─────────┘                              └──────────────┘
+         │                                          │
+         │ manager_of                               │ parent
+         ▼                                          ▼
+    ┌─────────┐                              ┌──────────────┐
+    │   Bob   │──────── viewer ─────────────▶│   Folder X   │
+    └─────────┘                              └──────────────┘
+
+    Access Rule: 
+    user:Alice is owner of document:A → can edit
+    user:Bob is viewer of folder:X → can read documents in X
+    user:Alice is manager_of user:Bob → can see Bob's documents
+</pre>
+                    </div>
+                    
+                    <p><strong>Use Cases:</strong> Google Drive sharing, GitHub permissions, social networks</p>
+                </div>
+                
+                <div class="tab-content">
+                    <h3>Policy-Based Access Control (PBAC)</h3>
+                    <p>Access governed by explicit policies defined in a policy language. Often uses standards like XACML or OPA (Open Policy Agent).</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Rego (OPA Policy)</span>
+                            <button class="code-copy-btn">⧉ Copy</button>
+                        </div>
+<pre><code># Allow read access to documents in user's department
+allow {
+    input.action == "read"
+    input.resource.type == "document"
+    input.resource.department == input.user.department
+}
+
+# Allow managers to approve requests from their reports
+allow {
+    input.action == "approve"
+    input.resource.type == "request"
+    input.resource.requester in data.reports[input.user.id]
+}
+
+# Deny access outside business hours for sensitive data
+deny {
+    input.resource.sensitivity == "high"
+    not business_hours
+}
+
+business_hours {
+    time.hour(time.now_ns()) >= 9
+    time.hour(time.now_ns()) < 17
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identity Federation -->
+            <h2 id="federation">Identity Federation</h2>
+            
+            <p>Federation enables identity information to be shared across organizational boundaries, allowing users to authenticate once and access resources in multiple domains without creating separate accounts.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    IDENTITY FEDERATION
+    ════════════════════
+
+                         Trust Relationship
+    ┌──────────────┐◄─────────────────────────────►┌──────────────┐
+    │   COMPANY A  │                                │   COMPANY B  │
+    │   (IdP)      │                                │   (SP)       │
+    └──────┬───────┘                                └──────┬───────┘
+           │                                               │
+           │ 1. User authenticates                         │
+           ▼                                               │
+    ┌──────────────┐                                       │
+    │    User      │                                       │
+    │   (Alice)    │                                       │
+    └──────┬───────┘                                       │
+           │                                               │
+           │ 2. Request access to App                      │
+           │────────────────────────────────────────────────▶
+           │                                               │
+           │ 3. Redirect to IdP                            │
+           │◄────────────────────────────────────────────────
+           │                                               │
+           │ 4. IdP issues security token (SAML/OIDC)      │
+           │                                               │
+           │ 5. Present token to SP                        │
+           │────────────────────────────────────────────────▶
+           │                                               │
+           │                                    6. SP validates token,
+           │                                       grants access
+           │                                               │
+           │ 7. Access granted to App                      │
+           │◄────────────────────────────────────────────────
+
+    KEY COMPONENTS:
+    ───────────────
+    IdP (Identity Provider): Authenticates users, issues tokens
+    SP (Service Provider): Relies on IdP for authentication
+    Security Token: SAML Assertion, JWT, or other credential
+    Trust: Established via certificate exchange/metadata
+</pre>
+            </div>
+
+            <!-- SSO -->
+            <h2 id="sso">Single Sign-On (SSO)</h2>
+            
+            <p>SSO allows users to authenticate once and gain access to multiple applications without re-entering credentials. It improves user experience while centralizing authentication control.</p>
+
+            <h3>SSO Benefits</h3>
+            <ul>
+                <li><strong>User Experience:</strong> One login for all applications</li>
+                <li><strong>Security:</strong> Fewer passwords to manage and potentially compromise</li>
+                <li><strong>Reduced Helpdesk:</strong> Fewer password reset requests</li>
+                <li><strong>Centralized Control:</strong> Single point for authentication policies and MFA</li>
+                <li><strong>Audit Trail:</strong> Unified logging of authentication events</li>
+            </ul>
+
+            <div class="ascii-diagram">
+<pre>
+    SSO FLOW (SP-Initiated SAML)
+    ═════════════════════════════
+
+    ┌────────┐          ┌────────┐          ┌────────┐
+    │  User  │          │   SP   │          │  IdP   │
+    │Browser │          │  (App) │          │        │
+    └───┬────┘          └───┬────┘          └───┬────┘
+        │                   │                   │
+        │ 1. Access App     │                   │
+        │──────────────────▶│                   │
+        │                   │                   │
+        │ 2. Redirect with  │                   │
+        │    SAML AuthnReq  │                   │
+        │◄──────────────────│                   │
+        │                   │                   │
+        │ 3. Forward AuthnRequest              │
+        │──────────────────────────────────────▶│
+        │                   │                   │
+        │ 4. Login Page     │                   │
+        │◄──────────────────────────────────────│
+        │                   │                   │
+        │ 5. Enter Credentials                 │
+        │──────────────────────────────────────▶│
+        │                   │                   │
+        │ 6. Validate + Issue SAML Response    │
+        │◄──────────────────────────────────────│
+        │                   │                   │
+        │ 7. POST SAML Response                │
+        │──────────────────▶│                   │
+        │                   │                   │
+        │                   │ 8. Validate       │
+        │                   │    Assertion      │
+        │                   │                   │
+        │ 9. Access Granted │                   │
+        │◄──────────────────│                   │
+        │                   │                   │
+</pre>
+            </div>
+
+            <!-- Directory Services -->
+            <h2 id="directory-services">Directory Services Fundamentals</h2>
+            
+            <p>Directory services store and manage identity information in a hierarchical structure. They serve as the authoritative source for user accounts, groups, and their attributes.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    DIRECTORY HIERARCHY (X.500 / LDAP)
+    ════════════════════════════════════
+
+                    ┌─────────────────────┐
+                    │    DC=corp,DC=com   │  ◄── Domain Component
+                    │   (Root / Domain)   │
+                    └──────────┬──────────┘
+                               │
+         ┌─────────────────────┼─────────────────────┐
+         │                     │                     │
+         ▼                     ▼                     ▼
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │  OU=Users   │     │  OU=Groups  │     │ OU=Computers│
+    │(Org. Unit)  │     │             │     │             │
+    └──────┬──────┘     └──────┬──────┘     └──────┬──────┘
+           │                   │                   │
+    ┌──────┴──────┐     ┌──────┴──────┐     ┌──────┴──────┐
+    │             │     │             │     │             │
+    ▼             ▼     ▼             ▼     ▼             ▼
+┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐
+│CN=Alice│  │CN=Bob  │  │CN=Admins│ │CN=Users│  │CN=WS01 │
+│(User)  │  │(User)  │  │(Group) │  │(Group) │  │(Comp)  │
+└────────┘  └────────┘  └────────┘  └────────┘  └────────┘
+
+    Distinguished Name (DN) Examples:
+    ─────────────────────────────────
+    CN=Alice,OU=Users,DC=corp,DC=com
+    CN=Admins,OU=Groups,DC=corp,DC=com
+</pre>
+            </div>
+
+            <!-- LDAP -->
+            <h2 id="ldap">LDAP Protocol Deep Dive</h2>
+            
+            <p>Lightweight Directory Access Protocol (LDAP) is the standard protocol for accessing and managing directory information. It operates over TCP/IP (port 389 for LDAP, port 636 for LDAPS).</p>
+
+            <h3>Common LDAP Operations</h3>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">LDAP Query Examples</span>
+                    <button class="code-copy-btn">⧉ Copy</button>
+                </div>
+<pre><code># Search for all users in the domain
+ldapsearch -x -H ldap://dc.corp.com -b "DC=corp,DC=com" "(objectClass=user)"
+
+# Find a specific user by sAMAccountName
+ldapsearch -x -H ldap://dc.corp.com -b "DC=corp,DC=com" \
+    "(sAMAccountName=alice)" cn mail memberOf
+
+# Find all members of a group
+ldapsearch -x -H ldap://dc.corp.com -b "DC=corp,DC=com" \
+    "(memberOf=CN=Admins,OU=Groups,DC=corp,DC=com)" cn
+
+# Find users with password expiring in 7 days
+ldapsearch -x -H ldap://dc.corp.com -b "DC=corp,DC=com" \
+    "(&(objectClass=user)(pwdLastSet<=NOW-7d))" cn mail
+
+# LDAP Filter Syntax:
+# (&(condition1)(condition2))  - AND
+# (|(condition1)(condition2))  - OR
+# (!(condition))               - NOT
+# (attribute=value)            - Equality
+# (attribute=*value*)          - Substring
+# (attribute>=value)           - Greater/Equal
+# (attribute<=value)           - Less/Equal</code></pre>
+            </div>
+
+            <h3>LDAP Attributes Reference</h3>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>cn</code></td>
+                            <td>Common Name</td>
+                            <td>Alice Smith</td>
+                        </tr>
+                        <tr>
+                            <td><code>sAMAccountName</code></td>
+                            <td>Pre-Windows 2000 logon (AD)</td>
+                            <td>asmith</td>
+                        </tr>
+                        <tr>
+                            <td><code>userPrincipalName</code></td>
+                            <td>UPN (email-like format)</td>
+                            <td>alice@corp.com</td>
+                        </tr>
+                        <tr>
+                            <td><code>mail</code></td>
+                            <td>Email address</td>
+                            <td>alice.smith@corp.com</td>
+                        </tr>
+                        <tr>
+                            <td><code>memberOf</code></td>
+                            <td>Group memberships</td>
+                            <td>DN of groups</td>
+                        </tr>
+                        <tr>
+                            <td><code>distinguishedName</code></td>
+                            <td>Full path in directory</td>
+                            <td>CN=Alice,OU=Users,DC=corp,DC=com</td>
+                        </tr>
+                        <tr>
+                            <td><code>objectGUID</code></td>
+                            <td>Unique identifier</td>
+                            <td>Binary GUID</td>
+                        </tr>
+                        <tr>
+                            <td><code>objectSID</code></td>
+                            <td>Security Identifier (AD)</td>
+                            <td>S-1-5-21-...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Kerberos -->
+            <h2 id="kerberos">Kerberos Authentication Flow</h2>
+            
+            <p>Kerberos is a network authentication protocol that uses tickets to prove identity. It's the default authentication protocol in Active Directory environments and provides mutual authentication between client and server.</p>
+
+            <div class="ascii-diagram">
+<pre>
+    KERBEROS AUTHENTICATION FLOW
+    ═════════════════════════════
+
+    ┌──────────┐     ┌───────────────────────────────────────┐     ┌──────────┐
+    │  Client  │     │         Key Distribution Center       │     │  Service │
+    │  (User)  │     │    ┌──────────┐    ┌──────────┐      │     │  Server  │
+    └────┬─────┘     │    │    AS    │    │   TGS    │      │     └────┬─────┘
+         │           │    │(Auth Svc)│    │(Ticket   │      │          │
+         │           │    │          │    │ Grant)   │      │          │
+         │           │    └────┬─────┘    └────┬─────┘      │          │
+         │           └─────────┼───────────────┼────────────┘          │
+         │                     │               │                       │
+    ═════╪═════════════════════╪═══════════════╪═══════════════════════╪═════
+    STEP 1: Authentication Service Exchange                            │
+         │                     │                                       │
+         │  AS-REQ            │                                       │
+         │  (User ID, TGS ID) │                                       │
+         │────────────────────▶│                                       │
+         │                     │                                       │
+         │  AS-REP            │                                       │
+         │  (TGT encrypted    │                                       │
+         │   with user key)   │                                       │
+         │◄────────────────────│                                       │
+         │                     │                                       │
+    ═════╪═════════════════════╪═══════════════╪═══════════════════════╪═════
+    STEP 2: Ticket Granting Service Exchange   │                       │
+         │                                     │                       │
+         │  TGS-REQ                            │                       │
+         │  (TGT + Service ID + Authenticator) │                       │
+         │────────────────────────────────────▶│                       │
+         │                                     │                       │
+         │  TGS-REP                            │                       │
+         │  (Service Ticket encrypted         │                       │
+         │   with service key)                │                       │
+         │◄────────────────────────────────────│                       │
+         │                                                             │
+    ═════╪═════════════════════════════════════════════════════════════╪═════
+    STEP 3: Client/Server Exchange                                     │
+         │                                                             │
+         │  AP-REQ                                                     │
+         │  (Service Ticket + Authenticator)                           │
+         │─────────────────────────────────────────────────────────────▶
+         │                                                             │
+         │  AP-REP (optional, for mutual auth)                        │
+         │◄─────────────────────────────────────────────────────────────
+         │                                                             │
+         │  ◄═══════════ SESSION ESTABLISHED ══════════▶               │
+         │                                                             │
+
+    KEY COMPONENTS:
+    ───────────────
+    AS (Authentication Service): Validates user credentials, issues TGT
+    TGS (Ticket Granting Service): Issues service tickets
+    TGT (Ticket Granting Ticket): Proves user authenticated to AS
+    Service Ticket: Proves user authorized to access specific service
+    Authenticator: Timestamp encrypted with session key (replay protection)
+</pre>
+            </div>
+
+            <div class="info-box success">
+                <div class="info-box-title">✓ Why Kerberos is Secure</div>
+                <ul>
+                    <li>Passwords never sent over the network</li>
+                    <li>Mutual authentication between client and server</li>
+                    <li>Tickets have limited lifetime (typically 10 hours for TGT)</li>
+                    <li>Timestamps prevent replay attacks</li>
+                    <li>Encryption protects ticket contents</li>
+                </ul>
+            </div>
+
+            <!-- Protocol Comparison -->
+            <h2 id="protocol-comparison">SAML vs OAuth vs OIDC Comparison</h2>
+            
+            <p>Understanding when to use each protocol is crucial for designing authentication architectures. Each serves different purposes and use cases.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>SAML 2.0</th>
+                            <th>OAuth 2.0</th>
+                            <th>OpenID Connect</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Purpose</strong></td>
+                            <td>Authentication & SSO</td>
+                            <td>Authorization (API access)</td>
+                            <td>Authentication (identity layer on OAuth)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Format</strong></td>
+                            <td>XML</td>
+                            <td>JSON</td>
+                            <td>JSON (JWT)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Token Type</strong></td>
+                            <td>SAML Assertion</td>
+                            <td>Access Token</td>
+                            <td>ID Token + Access Token</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Enterprise SSO, Legacy apps</td>
+                            <td>API authorization, Mobile apps</td>
+                            <td>Modern web/mobile authentication</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complexity</strong></td>
+                            <td>High (XML signatures)</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile Support</strong></td>
+                            <td>Poor</td>
+                            <td>Excellent</td>
+                            <td>Excellent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Browser Requirement</strong></td>
+                            <td>Required (redirects)</td>
+                            <td>Optional</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ascii-diagram">
+<pre>
+    PROTOCOL SELECTION GUIDE
+    ═════════════════════════
+
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                    What are you building?                        │
+    └──────────────────────────────┬──────────────────────────────────┘
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         │                         │                         │
+         ▼                         ▼                         ▼
+    Enterprise SSO            API Authorization         Modern Auth
+    Legacy Apps               Third-party access        Web/Mobile Apps
+         │                         │                         │
+         ▼                         ▼                         ▼
+    ┌─────────┐             ┌─────────────┐           ┌───────────┐
+    │  SAML   │             │  OAuth 2.0  │           │   OIDC    │
+    │  2.0    │             │             │           │           │
+    └─────────┘             └─────────────┘           └───────────┘
+         │                         │                         │
+         │                         │                         │
+         │         ┌───────────────┴───────────────┐         │
+         │         │                               │         │
+         │         ▼                               ▼         │
+         │    Need user info?              API access only?  │
+         │         │                               │         │
+         │     Yes │                           Yes │         │
+         │         ▼                               │         │
+         │    ┌─────────┐                          │         │
+         └───▶│  OIDC   │◄─────────────────────────┘         │
+              │ (adds   │                                    │
+              │ identity│◄───────────────────────────────────┘
+              │ layer)  │
+              └─────────┘
+</pre>
+            </div>
+
+            <!-- Summary -->
+            <div class="info-box info">
+                <div class="info-box-title">📚 Chapter Summary</div>
+                <p>This chapter covered the foundational IAM concepts you'll build upon throughout this guide:</p>
+                <ul>
+                    <li><strong>AAA Framework:</strong> Authentication, Authorization, and Accounting</li>
+                    <li><strong>Identity Lifecycle:</strong> Joiner-Mover-Leaver processes</li>
+                    <li><strong>Authorization Models:</strong> RBAC, ABAC, ReBAC, PBAC</li>
+                    <li><strong>Federation & SSO:</strong> Centralized authentication across applications</li>
+                    <li><strong>Protocols:</strong> LDAP, Kerberos, SAML, OAuth 2.0, OIDC</li>
+                </ul>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="page-nav">
+                <a href="index.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Home</span>
+                </a>
+                <a href="active-directory.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Active Directory →</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+                <p>Built for security professionals, by security professionals.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
