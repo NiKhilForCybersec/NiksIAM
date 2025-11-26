@@ -1,0 +1,2095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise IAM & Security Architecture | IAM Ultimate Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Architecture Page Custom Styles */
+        :root {
+            --layer-identity: #3b82f6;
+            --layer-authn: #06b6d4;
+            --layer-authz: #8b5cf6;
+            --layer-pam: #f59e0b;
+            --layer-access: #10b981;
+            --layer-resources: #64748b;
+            --layer-dlp: #ec4899;
+            --layer-detection: #ef4444;
+            --layer-soar: #eab308;
+            --layer-governance: #14b8a6;
+        }
+
+        .arch-page-wrapper {
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .arch-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .arch-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .arch-tab:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .arch-tab.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .arch-content {
+            display: none;
+        }
+
+        .arch-content.active {
+            display: block;
+        }
+
+        /* Architecture Diagram Container */
+        .arch-diagram {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .arch-diagram-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .arch-diagram-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        /* Layered Architecture Grid */
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .arch-layer {
+            display: flex;
+            align-items: stretch;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .arch-layer:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .arch-layer-label {
+            min-width: 180px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            padding-right: 1rem;
+            border-right: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .arch-layer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            flex: 1;
+            align-items: center;
+        }
+
+        /* Component Boxes */
+        .arch-component {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .arch-component:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+
+        .arch-component.clickable::after {
+            content: '+';
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 0.6rem;
+            opacity: 0.6;
+        }
+
+        .arch-component-title {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .arch-component-sub {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 2px;
+        }
+
+        /* Layer Colors */
+        .layer-identity { background: rgba(59, 130, 246, 0.15); border-color: var(--layer-identity); }
+        .layer-identity .arch-layer-label { color: var(--layer-identity); }
+
+        .layer-authn { background: rgba(6, 182, 212, 0.15); border-color: var(--layer-authn); }
+        .layer-authn .arch-layer-label { color: var(--layer-authn); }
+
+        .layer-authz { background: rgba(139, 92, 246, 0.15); border-color: var(--layer-authz); }
+        .layer-authz .arch-layer-label { color: var(--layer-authz); }
+
+        .layer-pam { background: rgba(245, 158, 11, 0.15); border-color: var(--layer-pam); }
+        .layer-pam .arch-layer-label { color: var(--layer-pam); }
+
+        .layer-access { background: rgba(16, 185, 129, 0.15); border-color: var(--layer-access); }
+        .layer-access .arch-layer-label { color: var(--layer-access); }
+
+        .layer-resources { background: rgba(100, 116, 139, 0.15); border-color: var(--layer-resources); }
+        .layer-resources .arch-layer-label { color: var(--layer-resources); }
+
+        .layer-dlp { background: rgba(236, 72, 153, 0.15); border-color: var(--layer-dlp); }
+        .layer-dlp .arch-layer-label { color: var(--layer-dlp); }
+
+        .layer-detection { background: rgba(239, 68, 68, 0.15); border-color: var(--layer-detection); }
+        .layer-detection .arch-layer-label { color: var(--layer-detection); }
+
+        .layer-soar { background: rgba(234, 179, 8, 0.15); border-color: var(--layer-soar); }
+        .layer-soar .arch-layer-label { color: var(--layer-soar); }
+
+        .layer-governance { background: rgba(20, 184, 166, 0.15); border-color: var(--layer-governance); }
+        .layer-governance .arch-layer-label { color: var(--layer-governance); }
+
+        /* Horizontal Flow Diagram */
+        .arch-flow {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .arch-flow-stage {
+            display: flex;
+            flex-direction: column;
+            min-width: 140px;
+            flex: 1;
+        }
+
+        .arch-flow-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 6px 6px 0 0;
+            color: #fff;
+        }
+
+        .arch-flow-body {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.75rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .arch-flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .arch-flow-arrow-label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* Modal for Component Details */
+        .arch-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .arch-modal.active {
+            display: flex;
+        }
+
+        .arch-modal-content {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .arch-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+        }
+
+        .arch-modal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        .arch-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .arch-modal-close:hover {
+            color: var(--accent);
+        }
+
+        .arch-modal-body {
+            padding: 1.5rem;
+        }
+
+        .arch-modal-section {
+            margin-bottom: 1rem;
+        }
+
+        .arch-modal-section h4 {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .arch-modal-section p, .arch-modal-section ul {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .arch-modal-section ul {
+            padding-left: 1.5rem;
+        }
+
+        .arch-modal-section li {
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-modal-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(var(--accent-rgb), 0.2);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Color Legend */
+        .arch-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .arch-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .arch-legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        /* Use Cases Section */
+        .usecase-tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .usecase-tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .usecase-tab:hover, .usecase-tab.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .usecase-content {
+            display: none;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .usecase-content.active {
+            display: block;
+        }
+
+        .usecase-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .usecase-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .usecase-step-num {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.65rem;
+        }
+
+        .usecase-arrow {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        /* Compliance Table */
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .compliance-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .compliance-card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .compliance-card-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compliance-card-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ASCII Diagram Styling */
+        .ascii-arch {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            line-height: 1.3;
+            white-space: pre;
+            overflow-x: auto;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .arch-layer {
+                flex-direction: column;
+            }
+            .arch-layer-label {
+                min-width: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.2);
+                padding-bottom: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-logo-icon">IAM</div>
+            <span>Ultimate Guide</span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="iam-fundamentals.html">Fundamentals</a>
+            <a href="active-directory.html">Active Directory</a>
+            <a href="entra-id-fundamentals.html">Entra ID</a>
+            <a href="okta-fundamentals.html">Okta</a>
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    </header>
+
+    <div class="page-wrapper arch-page-wrapper">
+        <main class="main-content" style="max-width: 100%;">
+            <nav class="breadcrumbs">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <span class="current">Enterprise Architecture</span>
+            </nav>
+
+            <h1>Enterprise IAM & Security Architecture</h1>
+            <p>Comprehensive reference architecture showing how Identity, Access Management, Privileged Access, Detection, and Response components integrate across on-premises, hybrid, and cloud-native environments.</p>
+
+            <!-- Color Legend -->
+            <div class="arch-legend">
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-identity)"></div> Identity</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-authn)"></div> Authentication</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-authz)"></div> Authorization</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-pam)"></div> PAM/PIM</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-access)"></div> Access Enforcement</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-resources)"></div> Resources</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-dlp)"></div> DLP</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-detection)"></div> Detection</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-soar)"></div> Response</div>
+                <div class="arch-legend-item"><div class="arch-legend-color" style="background: var(--layer-governance)"></div> Governance</div>
+            </div>
+
+            <!-- Architecture Tabs -->
+            <div class="arch-tabs">
+                <button class="arch-tab active" data-tab="onprem">On-Premises</button>
+                <button class="arch-tab" data-tab="hybrid">Hybrid</button>
+                <button class="arch-tab" data-tab="cloud">Cloud-Native (Zero Trust)</button>
+                <button class="arch-tab" data-tab="unified">Unified Security Stack</button>
+            </div>
+
+            <!-- ON-PREMISES ARCHITECTURE -->
+            <div class="arch-content active" id="onprem">
+                <div class="arch-diagram">
+                    <div class="arch-diagram-title">On-Premises Security Architecture</div>
+                    <div class="arch-diagram-subtitle">Perimeter-Based "Castle and Moat" Model</div>
+                    
+                    <div class="arch-flow">
+                        <!-- Users -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-identity)">USERS</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="employees">
+                                    <div class="arch-component-title">Employees</div>
+                                    <div class="arch-component-sub">Domain-joined PCs</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="contractors">
+                                    <div class="arch-component-title">Contractors</div>
+                                    <div class="arch-component-sub">VPN required</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="svc-accounts">
+                                    <div class="arch-component-title">Service Accounts</div>
+                                    <div class="arch-component-sub">AD managed</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">802.1X</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Network Edge -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-access)">NETWORK EDGE</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="firewall">
+                                    <div class="arch-component-title">Firewall</div>
+                                    <div class="arch-component-sub">Palo Alto / Fortinet</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="vpn">
+                                    <div class="arch-component-title">VPN Gateway</div>
+                                    <div class="arch-component-sub">:500, :4500 IPSec</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="nac">
+                                    <div class="arch-component-title">NAC (802.1X)</div>
+                                    <div class="arch-component-sub">Cisco ISE</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:88 Kerb</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Identity -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-identity)">IDENTITY</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="ad-ds">
+                                    <div class="arch-component-title">Active Directory</div>
+                                    <div class="arch-component-sub">Domain Controllers</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="radius">
+                                    <div class="arch-component-title">RADIUS/NPS</div>
+                                    <div class="arch-component-sub">:1812 Auth</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="pki">
+                                    <div class="arch-component-title">PKI / CA</div>
+                                    <div class="arch-component-sub">Certificate Services</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">GPO</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Authorization -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-authz)">AUTHORIZATION</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="gpo">
+                                    <div class="arch-component-title">Group Policy</div>
+                                    <div class="arch-component-sub">GPOs</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="acls">
+                                    <div class="arch-component-title">ACLs</div>
+                                    <div class="arch-component-sub">NTFS/Share</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="rbac-ad">
+                                    <div class="arch-component-title">RBAC</div>
+                                    <div class="arch-component-sub">AD Security Groups</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:3389 RDP</div>
+                            </div>
+                        </div>
+                        
+                        <!-- PAM -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-pam)">PAM</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="cyberark">
+                                    <div class="arch-component-title">CyberArk Vault</div>
+                                    <div class="arch-component-sub">Credential Store</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="jumpbox">
+                                    <div class="arch-component-title">Jump Server</div>
+                                    <div class="arch-component-sub">Bastion Host</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="session-rec">
+                                    <div class="arch-component-title">Session Recording</div>
+                                    <div class="arch-component-sub">PSM</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:445 SMB</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resources -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-resources)">RESOURCES</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="file-server">
+                                    <div class="arch-component-title">File Servers</div>
+                                    <div class="arch-component-sub">Windows/NetApp</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="sql-server">
+                                    <div class="arch-component-title">Databases</div>
+                                    <div class="arch-component-sub">SQL Server :1433</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="app-servers">
+                                    <div class="arch-component-title">App Servers</div>
+                                    <div class="arch-component-sub">IIS, Tomcat</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Logs</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detection -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-detection)">DETECTION</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="siem-onprem">
+                                    <div class="arch-component-title">SIEM</div>
+                                    <div class="arch-component-sub">Splunk/QRadar</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="edr-onprem">
+                                    <div class="arch-component-title">EDR</div>
+                                    <div class="arch-component-sub">Trellix/CrowdStrike</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="dlp-onprem">
+                                    <div class="arch-component-title">DLP</div>
+                                    <div class="arch-component-sub">Symantec/Forcepoint</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Alerts</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Governance -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-governance)">GOVERNANCE</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="audit-logs">
+                                    <div class="arch-component-title">Audit Logs</div>
+                                    <div class="arch-component-sub">Event Logs</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="manual-reviews">
+                                    <div class="arch-component-title">Access Reviews</div>
+                                    <div class="arch-component-sub">Manual/Quarterly</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="reports">
+                                    <div class="arch-component-title">Compliance</div>
+                                    <div class="arch-component-sub">Reports</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOC Section -->
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--layer-detection); border-radius: 8px;">
+                        <div style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--layer-detection); margin-bottom: 0.5rem;">SECURITY OPERATIONS CENTER (SOC)</div>
+                        <div class="usecase-flow">
+                            <div class="usecase-step"><span>Alerts</span></div>
+                            <span class="usecase-arrow">→</span>
+                            <div class="usecase-step"><span>Triage</span></div>
+                            <span class="usecase-arrow">→</span>
+                            <div class="usecase-step"><span>Investigate</span></div>
+                            <span class="usecase-arrow">→</span>
+                            <div class="usecase-step"><span>Contain</span></div>
+                            <span class="usecase-arrow">→</span>
+                            <div class="usecase-step"><span>Remediate</span></div>
+                            <span class="usecase-arrow">→</span>
+                            <div class="usecase-step"><span>Report</span></div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.5rem;">Manual SOAR: Ticketing systems (ServiceNow) + Runbooks + Manual intervention</div>
+                    </div>
+                </div>
+                
+                <div class="info-box info">
+                    <div class="info-box-title">On-Premises Key Characteristics</div>
+                    <ul>
+                        <li><strong>Perimeter-based security</strong> - Trust internal network, verify at boundary</li>
+                        <li><strong>VPN required</strong> for remote access</li>
+                        <li><strong>AD as single identity source</strong> - Kerberos/NTLM authentication</li>
+                        <li><strong>Agent-based security</strong> - EDR, DLP agents on endpoints</li>
+                        <li><strong>Manual governance</strong> - Quarterly reviews, spreadsheet tracking</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- HYBRID ARCHITECTURE -->
+            <div class="arch-content" id="hybrid">
+                <div class="arch-diagram">
+                    <div class="arch-diagram-title">Hybrid Security Architecture</div>
+                    <div class="arch-diagram-subtitle">Best of Both Worlds - On-Premises + Cloud Integration</div>
+                    
+                    <!-- Cloud Layer -->
+                    <div style="padding: 1rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border: 2px solid var(--layer-authz); border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--layer-authz); margin-bottom: 1rem; text-align: center;">☁️ CLOUD LAYER</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
+                            <div class="arch-component clickable" data-component="entra-id" style="border-color: var(--layer-identity);">
+                                <div class="arch-component-title">Entra ID</div>
+                                <div class="arch-component-sub">Cloud Identity</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="conditional-access" style="border-color: var(--layer-authz);">
+                                <div class="arch-component-title">Conditional Access</div>
+                                <div class="arch-component-sub">Policy Engine</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="entra-pim" style="border-color: var(--layer-pam);">
+                                <div class="arch-component-title">Entra PIM</div>
+                                <div class="arch-component-sub">JIT Access</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="sentinel" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">Microsoft Sentinel</div>
+                                <div class="arch-component-sub">Cloud SIEM + SOAR</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="purview-dlp" style="border-color: var(--layer-dlp);">
+                                <div class="arch-component-title">Purview DLP</div>
+                                <div class="arch-component-sub">Data Protection</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="defender-xdr" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">Defender XDR</div>
+                                <div class="arch-component-sub">Extended Detection</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="identity-protection" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">Identity Protection</div>
+                                <div class="arch-component-sub">Risk Detection</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Entra Connect Bridge -->
+                    <div style="text-align: center; margin-bottom: 1rem;">
+                        <div style="display: inline-block; padding: 0.75rem 2rem; background: var(--layer-authn); color: #fff; border-radius: 8px; font-family: 'Orbitron', monospace; font-size: 0.8rem;">
+                            ↕ ENTRA CONNECT (PHS/PTA) :443 ↕
+                        </div>
+                    </div>
+                    
+                    <!-- Hybrid Flow -->
+                    <div class="arch-flow">
+                        <!-- Users -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-identity)">USERS</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Office Workers</div>
+                                    <div class="arch-component-sub">On-network</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Remote Workers</div>
+                                    <div class="arch-component-sub">Home/Travel</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Mobile/BYOD</div>
+                                    <div class="arch-component-sub">Intune managed</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:443</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hybrid Access -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-access)">HYBRID ACCESS</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="vpn-hybrid">
+                                    <div class="arch-component-title">VPN</div>
+                                    <div class="arch-component-sub">Legacy apps</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="ztna">
+                                    <div class="arch-component-title">ZTNA</div>
+                                    <div class="arch-component-sub">Modern access</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="app-proxy">
+                                    <div class="arch-component-title">App Proxy</div>
+                                    <div class="arch-component-sub">On-prem web apps</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">SAML/OIDC</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Identity Bridge -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-identity)">IDENTITY BRIDGE</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="ad-ds-hybrid">
+                                    <div class="arch-component-title">AD DS</div>
+                                    <div class="arch-component-sub">On-premises</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title" style="color: var(--layer-authn);">+</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="entra-id-hybrid">
+                                    <div class="arch-component-title">Entra ID</div>
+                                    <div class="arch-component-sub">Cloud</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Policy</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hybrid Policy -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-authz)">HYBRID POLICY</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="gpo-hybrid">
+                                    <div class="arch-component-title">GPO</div>
+                                    <div class="arch-component-sub">On-prem devices</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="ca-hybrid">
+                                    <div class="arch-component-title">Conditional Access</div>
+                                    <div class="arch-component-sub">Cloud + on-prem</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:443</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hybrid PAM -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-pam)">HYBRID PAM</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="cyberark-hybrid">
+                                    <div class="arch-component-title">CyberArk</div>
+                                    <div class="arch-component-sub">On-prem vault</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="pim-hybrid">
+                                    <div class="arch-component-title">Entra PIM</div>
+                                    <div class="arch-component-sub">Cloud roles</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Access</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resources -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-resources)">HYBRID RESOURCES</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component">
+                                    <div class="arch-component-title">On-Prem Servers</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Azure VMs</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">M365 / SaaS</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Legacy Apps</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Logs</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Unified Detection -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-detection)">UNIFIED DETECTION</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="sentinel-hybrid">
+                                    <div class="arch-component-title">Sentinel</div>
+                                    <div class="arch-component-sub">Cloud SIEM</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="log-forwarder">
+                                    <div class="arch-component-title">Log Forwarder</div>
+                                    <div class="arch-component-sub">CEF/Syslog :514</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="defender-hybrid">
+                                    <div class="arch-component-title">Defender XDR</div>
+                                    <div class="arch-component-sub">Unified</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="dlp-hybrid">
+                                    <div class="arch-component-title">Purview DLP</div>
+                                    <div class="arch-component-sub">Endpoint+Cloud</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- On-Premises Layer -->
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(100, 116, 139, 0.1); border: 2px solid var(--layer-resources); border-radius: 8px;">
+                        <div style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--layer-resources); margin-bottom: 1rem; text-align: center;">🏢 ON-PREMISES LAYER</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
+                            <div class="arch-component">
+                                <div class="arch-component-title">AD DS (DCs)</div>
+                            </div>
+                            <div class="arch-component">
+                                <div class="arch-component-title">CyberArk Vault</div>
+                            </div>
+                            <div class="arch-component">
+                                <div class="arch-component-title">File/SQL Servers</div>
+                            </div>
+                            <div class="arch-component">
+                                <div class="arch-component-title">Legacy Apps</div>
+                            </div>
+                            <div class="arch-component">
+                                <div class="arch-component-title">Log Forwarders</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box info">
+                    <div class="info-box-title">Hybrid Architecture Key Characteristics</div>
+                    <ul>
+                        <li><strong>Dual identity plane</strong> - AD + Entra ID synchronized via Entra Connect</li>
+                        <li><strong>Conditional Access extends everywhere</strong> - Including on-prem apps via App Proxy</li>
+                        <li><strong>Unified SIEM</strong> - Sentinel ingests both cloud and on-prem logs</li>
+                        <li><strong>Hybrid PAM</strong> - CyberArk for on-prem, PIM for cloud roles</li>
+                        <li><strong>Single DLP policy</strong> - Purview covers endpoints, cloud apps, and email</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CLOUD-NATIVE ARCHITECTURE -->
+            <div class="arch-content" id="cloud">
+                <div class="arch-diagram">
+                    <div class="arch-diagram-title">Cloud-Native Zero Trust Architecture</div>
+                    <div class="arch-diagram-subtitle">"Never Trust, Always Verify" - Identity is the New Perimeter</div>
+                    
+                    <div class="arch-flow">
+                        <!-- Users (Untrusted) -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-identity)">USERS (UNTRUSTED)</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Any Device</div>
+                                    <div class="arch-component-sub">Managed/BYOD</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Any Network</div>
+                                    <div class="arch-component-sub">Corporate/Home/Public</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">Any Location</div>
+                                    <div class="arch-component-sub">Office/Remote/Travel</div>
+                                </div>
+                                <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(239,68,68,0.2); border-radius: 4px; font-size: 0.65rem; text-align: center; color: var(--layer-detection);">
+                                    ⚠️ ASSUME UNTRUSTED
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:443 TLS</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Zero Trust Edge -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-access)">ZERO TRUST EDGE (SASE)</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="ztna-cloud">
+                                    <div class="arch-component-title">ZTNA</div>
+                                    <div class="arch-component-sub">Zero Trust Network</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="swg">
+                                    <div class="arch-component-title">SWG</div>
+                                    <div class="arch-component-sub">Secure Web Gateway</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="casb">
+                                    <div class="arch-component-title">CASB</div>
+                                    <div class="arch-component-sub">Cloud Access Broker</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="fwaas">
+                                    <div class="arch-component-title">FWaaS</div>
+                                    <div class="arch-component-sub">Firewall as Service</div>
+                                </div>
+                                <div style="margin-top: 0.5rem; font-size: 0.6rem; color: var(--text-secondary);">
+                                    Zscaler / Netskope / Palo Alto Prisma
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">OIDC/SAML</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cloud IdP -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-identity)">CLOUD IdP</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="entra-cloud">
+                                    <div class="arch-component-title">Entra ID / Okta</div>
+                                    <div class="arch-component-sub">Identity Provider</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="passwordless">
+                                    <div class="arch-component-title">Passwordless</div>
+                                    <div class="arch-component-sub">FIDO2 / WHfB</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="risk-mfa">
+                                    <div class="arch-component-title">Risk-based MFA</div>
+                                    <div class="arch-component-sub">Adaptive Auth</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Evaluate</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Conditional Access -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-authz)">CONDITIONAL ACCESS</div>
+                            <div class="arch-flow-body" style="font-size: 0.7rem;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem;">
+                                    <div class="arch-component" style="padding: 0.25rem 0.5rem;">
+                                        <div class="arch-component-title">Device</div>
+                                    </div>
+                                    <div class="arch-component" style="padding: 0.25rem 0.5rem;">
+                                        <div class="arch-component-title">Location</div>
+                                    </div>
+                                    <div class="arch-component" style="padding: 0.25rem 0.5rem;">
+                                        <div class="arch-component-title">App</div>
+                                    </div>
+                                    <div class="arch-component" style="padding: 0.25rem 0.5rem;">
+                                        <div class="arch-component-title">Risk</div>
+                                    </div>
+                                    <div class="arch-component" style="padding: 0.25rem 0.5rem;">
+                                        <div class="arch-component-title">User</div>
+                                    </div>
+                                    <div class="arch-component" style="padding: 0.25rem 0.5rem;">
+                                        <div class="arch-component-title">Session</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 0.5rem; text-align: center; font-size: 0.6rem; color: var(--accent);">
+                                    Every request evaluated
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">:443</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cloud PIM/PAM -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-pam)">CLOUD PIM/PAM</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component clickable" data-component="entra-pim-cloud">
+                                    <div class="arch-component-title">Entra PIM</div>
+                                    <div class="arch-component-sub">JIT Activation</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="approval-workflow">
+                                    <div class="arch-component-title">Approval</div>
+                                    <div class="arch-component-sub">Workflow</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="vault-cloud">
+                                    <div class="arch-component-title">HashiCorp Vault</div>
+                                    <div class="arch-component-sub">Secrets Mgmt</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="managed-identity">
+                                    <div class="arch-component-title">Managed Identity</div>
+                                    <div class="arch-component-sub">Workload ID</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="arch-flow-arrow">
+                            <div>
+                                <div>→</div>
+                                <div class="arch-flow-arrow-label">Token</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cloud Resources -->
+                        <div class="arch-flow-stage">
+                            <div class="arch-flow-header" style="background: var(--layer-resources)">CLOUD RESOURCES</div>
+                            <div class="arch-flow-body">
+                                <div class="arch-component">
+                                    <div class="arch-component-title">SaaS</div>
+                                    <div class="arch-component-sub">M365, SF, Workday</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">IaaS</div>
+                                    <div class="arch-component-sub">Azure/AWS/GCP</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">PaaS</div>
+                                    <div class="arch-component-sub">Functions, DBaaS</div>
+                                </div>
+                                <div class="arch-component">
+                                    <div class="arch-component-title">APIs</div>
+                                    <div class="arch-component-sub">REST, GraphQL</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Operations Layer -->
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 2px solid var(--layer-detection); border-radius: 8px;">
+                        <div style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--layer-detection); margin-bottom: 1rem; text-align: center;">🛡️ CLOUD-NATIVE SECURITY OPERATIONS</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
+                            <div class="arch-component clickable" data-component="sentinel-cloud" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">SIEM</div>
+                                <div class="arch-component-sub">Sentinel / Chronicle</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="xdr-cloud" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">XDR</div>
+                                <div class="arch-component-sub">Defender / CrowdStrike</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="dlp-cloud" style="border-color: var(--layer-dlp);">
+                                <div class="arch-component-title">DLP</div>
+                                <div class="arch-component-sub">Purview / Netskope</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="soar-cloud" style="border-color: var(--layer-soar);">
+                                <div class="arch-component-title">SOAR</div>
+                                <div class="arch-component-sub">Sentinel Playbooks</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="idp-cloud" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">Identity Protection</div>
+                                <div class="arch-component-sub">Risk Scoring</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="ueba" style="border-color: var(--layer-detection);">
+                                <div class="arch-component-title">UEBA</div>
+                                <div class="arch-component-sub">Behavior Analytics</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Signal Flow -->
+                        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 4px;">
+                            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Signal Flow: All Components Feed Detection → Triggers Automated Response</div>
+                            <div class="usecase-flow">
+                                <div class="usecase-step" style="background: var(--layer-detection);"><span style="color:#fff">XDR Alert</span></div>
+                                <span class="usecase-arrow">→</span>
+                                <div class="usecase-step" style="background: var(--layer-detection);"><span style="color:#fff">SIEM Correlate</span></div>
+                                <span class="usecase-arrow">→</span>
+                                <div class="usecase-step" style="background: var(--layer-soar);"><span style="color:#000">SOAR Playbook</span></div>
+                                <span class="usecase-arrow">→</span>
+                                <div class="usecase-step"><span>Auto-Isolate</span></div>
+                                <span class="usecase-arrow">→</span>
+                                <div class="usecase-step"><span>Revoke Session</span></div>
+                                <span class="usecase-arrow">→</span>
+                                <div class="usecase-step" style="background: var(--layer-governance);"><span style="color:#fff">Audit Log</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Governance Layer -->
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(20, 184, 166, 0.1); border: 2px solid var(--layer-governance); border-radius: 8px;">
+                        <div style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--layer-governance); margin-bottom: 1rem; text-align: center;">📋 AUTOMATED GOVERNANCE</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
+                            <div class="arch-component clickable" data-component="access-reviews" style="border-color: var(--layer-governance);">
+                                <div class="arch-component-title">Access Reviews</div>
+                                <div class="arch-component-sub">Automated Quarterly</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="entitlement-mgmt" style="border-color: var(--layer-governance);">
+                                <div class="arch-component-title">Entitlement Mgmt</div>
+                                <div class="arch-component-sub">Access Packages</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="lifecycle-workflows" style="border-color: var(--layer-governance);">
+                                <div class="arch-component-title">Lifecycle Workflows</div>
+                                <div class="arch-component-sub">JML Automation</div>
+                            </div>
+                            <div class="arch-component clickable" data-component="compliance-reports" style="border-color: var(--layer-governance);">
+                                <div class="arch-component-title">Compliance Reports</div>
+                                <div class="arch-component-sub">7-Year Audit Logs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box info">
+                    <div class="info-box-title">Zero Trust Key Principles</div>
+                    <ul>
+                        <li><strong>Verify explicitly</strong> - Authenticate and authorize based on all available data points</li>
+                        <li><strong>Least privileged access</strong> - JIT/JEA, risk-based adaptive policies</li>
+                        <li><strong>Assume breach</strong> - Minimize blast radius, segment access, verify end-to-end encryption</li>
+                        <li><strong>Identity is the perimeter</strong> - No trusted network, every request verified</li>
+                        <li><strong>Continuous validation</strong> - Not just at login, throughout the session</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- UNIFIED SECURITY STACK -->
+            <div class="arch-content" id="unified">
+                <div class="arch-diagram">
+                    <div class="arch-diagram-title">Unified Enterprise Security Stack</div>
+                    <div class="arch-diagram-subtitle">All 10 Security Layers - Integrated View</div>
+                    
+                    <div class="arch-layers">
+                        <!-- Layer 9: Governance -->
+                        <div class="arch-layer layer-governance" onclick="toggleLayerDetails('governance')">
+                            <div class="arch-layer-label">LAYER 9: GOVERNANCE</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="access-certification">
+                                    <div class="arch-component-title">Access Certification</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="audit-logs-unified">
+                                    <div class="arch-component-title">Audit Logs (7yr)</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="compliance-unified">
+                                    <div class="arch-component-title">Compliance Reports</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="risk-dashboard">
+                                    <div class="arch-component-title">Risk Dashboard</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="entitlement-unified">
+                                    <div class="arch-component-title">Entitlement Mgmt</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="lifecycle-unified">
+                                    <div class="arch-component-title">Lifecycle Workflows</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 8: SOAR -->
+                        <div class="arch-layer layer-soar" onclick="toggleLayerDetails('soar')">
+                            <div class="arch-layer-label">LAYER 8: RESPONSE (SOAR)</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="playbooks">
+                                    <div class="arch-component-title">Automated Playbooks</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="auto-remediate">
+                                    <div class="arch-component-title">Auto-Remediation</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="incident-mgmt">
+                                    <div class="arch-component-title">Incident Management</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="threat-intel">
+                                    <div class="arch-component-title">Threat Intelligence</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="ticketing">
+                                    <div class="arch-component-title">Ticketing (ServiceNow)</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 7: Detection -->
+                        <div class="arch-layer layer-detection" onclick="toggleLayerDetails('detection')">
+                            <div class="arch-layer-label">LAYER 7: DETECTION</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="siem-unified">
+                                    <div class="arch-component-title">SIEM</div>
+                                    <div class="arch-component-sub">Sentinel/Splunk</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="edr-unified">
+                                    <div class="arch-component-title">EDR/XDR</div>
+                                    <div class="arch-component-sub">Defender/CrowdStrike</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="ndr">
+                                    <div class="arch-component-title">NDR</div>
+                                    <div class="arch-component-sub">Network Detection</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="ueba-unified">
+                                    <div class="arch-component-title">UEBA</div>
+                                    <div class="arch-component-sub">Behavior Analytics</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="identity-protection-unified">
+                                    <div class="arch-component-title">Identity Protection</div>
+                                    <div class="arch-component-sub">Risk Scoring</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="threat-hunting">
+                                    <div class="arch-component-title">Threat Hunting</div>
+                                    <div class="arch-component-sub">KQL/SPL</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 6: DLP -->
+                        <div class="arch-layer layer-dlp" onclick="toggleLayerDetails('dlp')">
+                            <div class="arch-layer-label">LAYER 6: DATA PROTECTION</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="endpoint-dlp">
+                                    <div class="arch-component-title">Endpoint DLP</div>
+                                    <div class="arch-component-sub">Agent-based</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="cloud-dlp">
+                                    <div class="arch-component-title">Cloud DLP</div>
+                                    <div class="arch-component-sub">SaaS/IaaS</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="email-dlp">
+                                    <div class="arch-component-title">Email DLP</div>
+                                    <div class="arch-component-sub">Exchange/Gmail</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="network-dlp">
+                                    <div class="arch-component-title">Network DLP</div>
+                                    <div class="arch-component-sub">Egress monitoring</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="encryption">
+                                    <div class="arch-component-title">Encryption</div>
+                                    <div class="arch-component-sub">TLS/AIP</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="classification">
+                                    <div class="arch-component-title">Classification</div>
+                                    <div class="arch-component-sub">Sensitivity Labels</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 5: Resources -->
+                        <div class="arch-layer layer-resources" onclick="toggleLayerDetails('resources')">
+                            <div class="arch-layer-label">LAYER 5: RESOURCES</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="saas">
+                                    <div class="arch-component-title">SaaS Apps</div>
+                                    <div class="arch-component-sub">M365, SF, Workday</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="iaas">
+                                    <div class="arch-component-title">IaaS</div>
+                                    <div class="arch-component-sub">Azure/AWS VMs</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="paas">
+                                    <div class="arch-component-title">PaaS</div>
+                                    <div class="arch-component-sub">Functions, DBaaS</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="onprem-servers">
+                                    <div class="arch-component-title">On-Prem</div>
+                                    <div class="arch-component-sub">Legacy Apps</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="databases">
+                                    <div class="arch-component-title">Databases</div>
+                                    <div class="arch-component-sub">SQL, NoSQL</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="apis">
+                                    <div class="arch-component-title">APIs</div>
+                                    <div class="arch-component-sub">REST, GraphQL</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 4: Access Enforcement -->
+                        <div class="arch-layer layer-access" onclick="toggleLayerDetails('access')">
+                            <div class="arch-layer-label">LAYER 4: ACCESS ENFORCEMENT</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="ztna-unified">
+                                    <div class="arch-component-title">ZTNA</div>
+                                    <div class="arch-component-sub">:443</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="vpn-unified">
+                                    <div class="arch-component-title">VPN (Legacy)</div>
+                                    <div class="arch-component-sub">:500, :4500</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="app-proxy-unified">
+                                    <div class="arch-component-title">App Proxy</div>
+                                    <div class="arch-component-sub">:443</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="casb-unified">
+                                    <div class="arch-component-title">CASB</div>
+                                    <div class="arch-component-sub">Shadow IT</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="microsegmentation">
+                                    <div class="arch-component-title">Micro-segment</div>
+                                    <div class="arch-component-sub">NSG/FW</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="api-gateway">
+                                    <div class="arch-component-title">API Gateway</div>
+                                    <div class="arch-component-sub">APIM</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 3: PAM/PIM -->
+                        <div class="arch-layer layer-pam" onclick="toggleLayerDetails('pam')">
+                            <div class="arch-layer-label">LAYER 3: PRIVILEGED ACCESS</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="vault-unified">
+                                    <div class="arch-component-title">Credential Vault</div>
+                                    <div class="arch-component-sub">CyberArk</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="jit-unified">
+                                    <div class="arch-component-title">JIT Access</div>
+                                    <div class="arch-component-sub">Time-bound</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="session-recording">
+                                    <div class="arch-component-title">Session Recording</div>
+                                    <div class="arch-component-sub">Audit</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="approval">
+                                    <div class="arch-component-title">Approval Workflows</div>
+                                    <div class="arch-component-sub">Manager</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="service-account">
+                                    <div class="arch-component-title">Service Acct Mgmt</div>
+                                    <div class="arch-component-sub">gMSA/MI</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="secrets-mgmt">
+                                    <div class="arch-component-title">Secrets Mgmt</div>
+                                    <div class="arch-component-sub">HashiCorp Vault</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 2: Authorization -->
+                        <div class="arch-layer layer-authz" onclick="toggleLayerDetails('authz')">
+                            <div class="arch-layer-label">LAYER 2: AUTHORIZATION</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="ca-unified">
+                                    <div class="arch-component-title">Conditional Access</div>
+                                    <div class="arch-component-sub">Policy Engine</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="rbac-unified">
+                                    <div class="arch-component-title">RBAC</div>
+                                    <div class="arch-component-sub">Role-Based</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="abac">
+                                    <div class="arch-component-title">ABAC</div>
+                                    <div class="arch-component-sub">Attribute-Based</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="risk-policies">
+                                    <div class="arch-component-title">Risk-based Policies</div>
+                                    <div class="arch-component-sub">Adaptive</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="session-controls">
+                                    <div class="arch-component-title">Session Controls</div>
+                                    <div class="arch-component-sub">Frequency/CAE</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="auth-strength">
+                                    <div class="arch-component-title">Auth Strength</div>
+                                    <div class="arch-component-sub">Phishing-resistant</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 1: Authentication -->
+                        <div class="arch-layer layer-authn" onclick="toggleLayerDetails('authn')">
+                            <div class="arch-layer-label">LAYER 1: AUTHENTICATION</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="passwordless-unified">
+                                    <div class="arch-component-title">Passwordless</div>
+                                    <div class="arch-component-sub">FIDO2/WHfB</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="mfa-unified">
+                                    <div class="arch-component-title">MFA</div>
+                                    <div class="arch-component-sub">Push/TOTP</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="sso-unified">
+                                    <div class="arch-component-title">SSO</div>
+                                    <div class="arch-component-sub">SAML/OIDC :443</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="federation">
+                                    <div class="arch-component-title">Federation</div>
+                                    <div class="arch-component-sub">B2B/B2C</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="cert-auth">
+                                    <div class="arch-component-title">Certificate Auth</div>
+                                    <div class="arch-component-sub">PKI/Smart Card</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="biometric">
+                                    <div class="arch-component-title">Biometric</div>
+                                    <div class="arch-component-sub">Face/Touch</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layer 0: Identity -->
+                        <div class="arch-layer layer-identity" onclick="toggleLayerDetails('identity')">
+                            <div class="arch-layer-label">LAYER 0: IDENTITY</div>
+                            <div class="arch-layer-content">
+                                <div class="arch-component clickable" data-component="users-unified">
+                                    <div class="arch-component-title">Users</div>
+                                    <div class="arch-component-sub">Employees</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="groups-unified">
+                                    <div class="arch-component-title">Groups</div>
+                                    <div class="arch-component-sub">Security/Dynamic</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="devices-unified">
+                                    <div class="arch-component-title">Devices</div>
+                                    <div class="arch-component-sub">Managed/BYOD</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="service-accounts-unified">
+                                    <div class="arch-component-title">Service Accounts</div>
+                                    <div class="arch-component-sub">gMSA/sMSA</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="workload-identity">
+                                    <div class="arch-component-title">Workload Identity</div>
+                                    <div class="arch-component-sub">MI/WID</div>
+                                </div>
+                                <div class="arch-component clickable" data-component="external-identity">
+                                    <div class="arch-component-title">External Identity</div>
+                                    <div class="arch-component-sub">B2B/B2C</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Flow Indicator -->
+                    <div style="margin-top: 1rem; text-align: center; font-size: 0.75rem; color: var(--text-secondary);">
+                        <span style="color: var(--accent);">▲</span> Data flows upward through layers | Each layer logs to Detection (Layer 7) | Detection triggers Response (Layer 8) | All audited by Governance (Layer 9) <span style="color: var(--accent);">▲</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USE CASES SECTION -->
+            <h2>Security Use Cases</h2>
+            <p>Click each tab to see how a request flows through the architecture.</p>
+            
+            <div class="usecase-tabs">
+                <button class="usecase-tab active" data-usecase="user-saas">User → SaaS App</button>
+                <button class="usecase-tab" data-usecase="admin-server">Admin → Server (PIM)</button>
+                <button class="usecase-tab" data-usecase="service-api">Service → API</button>
+                <button class="usecase-tab" data-usecase="incident">Incident Response</button>
+                <button class="usecase-tab" data-usecase="dlp-block">DLP Prevention</button>
+                <button class="usecase-tab" data-usecase="guest">Guest Access</button>
+            </div>
+            
+            <div class="usecase-content active" id="user-saas">
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">User Accessing SaaS Application (e.g., Salesforce)</h4>
+                <div class="usecase-flow">
+                    <div class="usecase-step"><span class="usecase-step-num">1</span><span>User opens Salesforce</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">2</span><span>Redirected to IdP</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">3</span><span>MFA Challenge (Push)</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">4</span><span>CA evaluates signals</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">5</span><span>SAML token issued</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">6</span><span>Access granted</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">7</span><span>DLP monitors data</span></div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong>Layers involved:</strong> Identity → Authentication → Authorization → Resources → DLP monitors → SIEM logs
+                </div>
+            </div>
+            
+            <div class="usecase-content" id="admin-server">
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">Admin Accessing Production Server (PIM Flow)</h4>
+                <div class="usecase-flow">
+                    <div class="usecase-step"><span class="usecase-step-num">1</span><span>Admin requests access</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">2</span><span>Phishing-resistant MFA</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">3</span><span>PIM activation required</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">4</span><span>Manager approval</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">5</span><span>8hr time-bound grant</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">6</span><span>PAM vault retrieves cred</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">7</span><span>Session recorded</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">8</span><span>Auto-expires</span></div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong>Layers involved:</strong> Identity → Authentication (phishing-resistant) → Authorization → PAM/PIM → Resources → Session Recording → SIEM → Governance
+                </div>
+            </div>
+            
+            <div class="usecase-content" id="service-api">
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">Service Account Accessing API</h4>
+                <div class="usecase-flow">
+                    <div class="usecase-step"><span class="usecase-step-num">1</span><span>App needs API access</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">2</span><span>Managed Identity auth</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">3</span><span>OAuth client credentials</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">4</span><span>API Gateway validates</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">5</span><span>Scope-limited token</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">6</span><span>API responds</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">7</span><span>SIEM logs call</span></div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong>Layers involved:</strong> Workload Identity → Authentication (OAuth) → API Gateway → Resources → SIEM
+                </div>
+            </div>
+            
+            <div class="usecase-content" id="incident">
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">Automated Incident Response (SOAR)</h4>
+                <div class="usecase-flow">
+                    <div class="usecase-step" style="background: var(--layer-detection);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-detection);">1</span><span style="color:#fff">EDR detects malware</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-detection);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-detection);">2</span><span style="color:#fff">Alert to SIEM</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-detection);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-detection);">3</span><span style="color:#fff">Correlate with IdP logs</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-soar);"><span class="usecase-step-num" style="background:#000; color:var(--layer-soar);">4</span><span style="color:#000">SOAR playbook triggers</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">5</span><span>Auto-isolate device</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">6</span><span>Revoke user sessions</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">7</span><span>Create incident ticket</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">8</span><span>Notify SOC analyst</span></div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong>Layers involved:</strong> Detection (EDR+SIEM) → Response (SOAR) → Access Enforcement (device isolation) → Identity (session revoke) → Governance (audit)
+                </div>
+            </div>
+            
+            <div class="usecase-content" id="dlp-block">
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">DLP Preventing Data Exfiltration</h4>
+                <div class="usecase-flow">
+                    <div class="usecase-step"><span class="usecase-step-num">1</span><span>User attempts upload</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-dlp);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-dlp);">2</span><span style="color:#fff">DLP scans content</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-dlp);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-dlp);">3</span><span style="color:#fff">PII/sensitive detected</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-dlp);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-dlp);">4</span><span style="color:#fff">Policy: BLOCK</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">5</span><span>User notified</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step" style="background: var(--layer-detection);"><span class="usecase-step-num" style="background:#fff; color:var(--layer-detection);">6</span><span style="color:#fff">Alert to SIEM</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">7</span><span>Manager notified</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">8</span><span>Incident logged</span></div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong>Layers involved:</strong> DLP (classification + policy) → Detection (SIEM alert) → Governance (audit log)
+                </div>
+            </div>
+            
+            <div class="usecase-content" id="guest">
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">External Guest/Partner Access (B2B)</h4>
+                <div class="usecase-flow">
+                    <div class="usecase-step"><span class="usecase-step-num">1</span><span>Guest invited via email</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">2</span><span>Redeems invitation</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">3</span><span>Auth via home IdP</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">4</span><span>MFA enforced by CA</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">5</span><span>Limited app access</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">6</span><span>90-day expiration</span></div>
+                    <span class="usecase-arrow">→</span>
+                    <div class="usecase-step"><span class="usecase-step-num">7</span><span>Enhanced monitoring</span></div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary);">
+                    <strong>Layers involved:</strong> External Identity (B2B) → Authentication (federated + MFA) → Authorization (limited CA) → Resources (scoped) → Enhanced Detection
+                </div>
+            </div>
+
+            <!-- COMPLIANCE MAPPING -->
+            <h2>Compliance Framework Mapping</h2>
+            <p>How the security stack maps to common compliance frameworks.</p>
+            
+            <div class="compliance-grid">
+                <div class="compliance-card">
+                    <div class="compliance-card-title">NIST Cybersecurity Framework</div>
+                    <div class="compliance-card-row"><span>Identify</span><span>Layer 0 (Identity)</span></div>
+                    <div class="compliance-card-row"><span>Protect</span><span>Layers 1-6</span></div>
+                    <div class="compliance-card-row"><span>Detect</span><span>Layer 7 (SIEM/XDR)</span></div>
+                    <div class="compliance-card-row"><span>Respond</span><span>Layer 8 (SOAR)</span></div>
+                    <div class="compliance-card-row"><span>Recover</span><span>Layer 9 + DR</span></div>
+                </div>
+                
+                <div class="compliance-card">
+                    <div class="compliance-card-title">Zero Trust Principles</div>
+                    <div class="compliance-card-row"><span>Verify Explicitly</span><span>Layers 1-2</span></div>
+                    <div class="compliance-card-row"><span>Least Privilege</span><span>Layers 2-3 (CA+PAM)</span></div>
+                    <div class="compliance-card-row"><span>Assume Breach</span><span>Layers 7-8</span></div>
+                    <div class="compliance-card-row"><span>Continuous Validation</span><span>All Layers</span></div>
+                </div>
+                
+                <div class="compliance-card">
+                    <div class="compliance-card-title">SOC 2 Trust Criteria</div>
+                    <div class="compliance-card-row"><span>CC6.1 (Access)</span><span>Layers 0-4</span></div>
+                    <div class="compliance-card-row"><span>CC6.6 (External)</span><span>Layer 4 (ZTNA)</span></div>
+                    <div class="compliance-card-row"><span>CC7.1 (Monitoring)</span><span>Layer 7</span></div>
+                    <div class="compliance-card-row"><span>CC7.4 (Incidents)</span><span>Layer 8</span></div>
+                </div>
+                
+                <div class="compliance-card">
+                    <div class="compliance-card-title">ISO 27001 Controls</div>
+                    <div class="compliance-card-row"><span>A.9 (Access Control)</span><span>Layers 0-4</span></div>
+                    <div class="compliance-card-row"><span>A.12 (Operations)</span><span>Layers 7-8</span></div>
+                    <div class="compliance-card-row"><span>A.13 (Communications)</span><span>Layers 4-6</span></div>
+                    <div class="compliance-card-row"><span>A.16 (Incidents)</span><span>Layer 8</span></div>
+                </div>
+            </div>
+
+            <!-- Component Details Modal -->
+            <div class="arch-modal" id="componentModal">
+                <div class="arch-modal-content">
+                    <div class="arch-modal-header">
+                        <div class="arch-modal-title" id="modalTitle">Component Details</div>
+                        <button class="arch-modal-close" onclick="closeModal()">&times;</button>
+                    </div>
+                    <div class="arch-modal-body" id="modalBody">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+
+            <nav class="page-nav">
+                <a href="iam-security.html" class="page-nav-link prev">
+                    <span class="page-nav-label">Previous</span>
+                    <span class="page-nav-title">← Security Best Practices</span>
+                </a>
+                <a href="iam-troubleshooting.html" class="page-nav-link next">
+                    <span class="page-nav-label">Next</span>
+                    <span class="page-nav-title">Troubleshooting →</span>
+                </a>
+            </nav>
+
+            <footer class="footer">
+                <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Component details database
+        const componentDetails = {
+            // Identity Layer
+            'employees': {
+                title: 'Employees (Internal Users)',
+                description: 'Full-time and part-time employees with corporate identities.',
+                vendors: ['Entra ID', 'Okta', 'Active Directory'],
+                protocols: ['Kerberos :88', 'LDAP :389', 'SAML :443', 'OIDC :443'],
+                integrations: ['HR Systems (Workday, SAP)', 'Email (Exchange/Gmail)', 'Collaboration (Teams/Slack)'],
+                tips: ['Sync from authoritative HR source', 'Use dynamic groups for auto-assignment', 'Implement JML (Joiner-Mover-Leaver) workflows']
+            },
+            'ad-ds': {
+                title: 'Active Directory Domain Services',
+                description: 'On-premises directory service for Windows environments. Provides authentication, authorization, and policy management.',
+                vendors: ['Microsoft Active Directory'],
+                protocols: ['Kerberos :88', 'LDAP :389', 'LDAPS :636', 'DNS :53', 'RPC :135', 'SMB :445'],
+                integrations: ['Entra Connect for cloud sync', 'RADIUS/NPS for network auth', 'PKI for certificates'],
+                tips: ['Maintain 2+ DCs per site', 'Enable Advanced Audit Policies', 'Implement tiered administration', 'Regular DVCS health checks']
+            },
+            'cyberark': {
+                title: 'CyberArk Privileged Access Manager',
+                description: 'Enterprise PAM solution for securing, managing, and monitoring privileged accounts.',
+                vendors: ['CyberArk'],
+                protocols: ['HTTPS :443', 'RDP :3389', 'SSH :22', 'PSM gateway'],
+                integrations: ['Active Directory', 'SIEM (Splunk/Sentinel)', 'Ticketing (ServiceNow)'],
+                tips: ['Implement auto-rotation for all privileged passwords', 'Enable session recording for all admin sessions', 'Use PSM for connection brokering', 'Integrate with change management']
+            },
+            'siem-onprem': {
+                title: 'On-Premises SIEM',
+                description: 'Security Information and Event Management for log collection, correlation, and alerting.',
+                vendors: ['Splunk Enterprise', 'IBM QRadar', 'LogRhythm'],
+                protocols: ['Syslog :514', 'Syslog TLS :6514', 'CEF', 'LEEF', 'Windows Event Forwarding'],
+                integrations: ['All log sources', 'SOAR platforms', 'Ticketing systems'],
+                tips: ['Tune correlation rules to reduce noise', 'Implement use case-based detection', 'Set appropriate retention periods', 'Regular threat hunting exercises']
+            },
+            'edr-onprem': {
+                title: 'Endpoint Detection & Response (EDR)',
+                description: 'Agent-based endpoint security for threat detection, investigation, and response.',
+                vendors: ['Trellix (McAfee)', 'CrowdStrike Falcon', 'SentinelOne', 'Microsoft Defender for Endpoint'],
+                protocols: ['HTTPS :443 (cloud console)', 'Agent communication'],
+                integrations: ['SIEM', 'SOAR', 'Threat Intelligence feeds'],
+                tips: ['Deploy to all endpoints including servers', 'Enable behavioral detection', 'Configure auto-containment for high-confidence threats', 'Regular signature updates']
+            },
+            'dlp-onprem': {
+                title: 'Data Loss Prevention (DLP)',
+                description: 'Prevents sensitive data exfiltration through monitoring and policy enforcement.',
+                vendors: ['Symantec DLP', 'Forcepoint DLP', 'Digital Guardian'],
+                protocols: ['HTTPS :443', 'SMTP :25/:587', 'ICAP for proxy integration'],
+                integrations: ['Email gateway', 'Web proxy', 'Endpoints', 'Cloud apps'],
+                tips: ['Start with monitoring mode before blocking', 'Define clear data classification policies', 'Tune to reduce false positives', 'Include user education component']
+            },
+            // Cloud Components
+            'entra-id': {
+                title: 'Microsoft Entra ID',
+                description: 'Cloud-based identity and access management service. Provides SSO, MFA, Conditional Access, and identity governance.',
+                vendors: ['Microsoft'],
+                protocols: ['SAML 2.0 :443', 'OIDC/OAuth 2.0 :443', 'WS-Federation :443', 'SCIM :443'],
+                integrations: ['Microsoft 365', 'Azure resources', '7000+ SaaS apps', 'On-premises apps via App Proxy'],
+                tips: ['Enable Security Defaults or Conditional Access baseline', 'Implement PIM for privileged roles', 'Configure Identity Protection policies', 'Use Entra Connect for hybrid identity']
+            },
+            'conditional-access': {
+                title: 'Conditional Access',
+                description: 'Zero Trust policy engine that evaluates signals and enforces access decisions.',
+                vendors: ['Microsoft Entra ID', 'Okta'],
+                protocols: ['Policy evaluation at :443 (OAuth/SAML flows)'],
+                integrations: ['Identity Protection (risk signals)', 'Intune (device compliance)', 'Defender for Cloud Apps'],
+                tips: ['Always exclude break-glass accounts', 'Start with report-only mode', 'Use named locations for trusted networks', 'Implement auth strength for admins']
+            },
+            'sentinel': {
+                title: 'Microsoft Sentinel',
+                description: 'Cloud-native SIEM and SOAR platform with AI-powered threat detection.',
+                vendors: ['Microsoft'],
+                protocols: ['HTTPS :443', 'CEF', 'Syslog', 'REST API', 'Log Analytics agent'],
+                integrations: ['Microsoft 365 Defender', 'Entra ID', 'Azure services', '100+ data connectors'],
+                tips: ['Enable UEBA for behavior analytics', 'Use Fusion for advanced correlation', 'Implement playbooks for automated response', 'Optimize log ingestion costs']
+            },
+            'defender-xdr': {
+                title: 'Microsoft Defender XDR',
+                description: 'Extended Detection and Response across endpoints, email, identity, and cloud apps.',
+                vendors: ['Microsoft'],
+                protocols: ['HTTPS :443'],
+                integrations: ['Defender for Endpoint', 'Defender for Identity', 'Defender for Office 365', 'Defender for Cloud Apps'],
+                tips: ['Enable automatic attack disruption', 'Configure threat & vulnerability management', 'Integrate with Sentinel for correlation', 'Use advanced hunting for threat hunting']
+            },
+            'purview-dlp': {
+                title: 'Microsoft Purview DLP',
+                description: 'Unified DLP across endpoints, cloud apps, email, and on-premises repositories.',
+                vendors: ['Microsoft'],
+                protocols: ['HTTPS :443', 'Endpoint agent'],
+                integrations: ['Microsoft 365', 'Defender for Cloud Apps', 'Windows endpoints', 'SharePoint/OneDrive'],
+                tips: ['Use sensitive info types for classification', 'Start with monitoring before blocking', 'Configure endpoint DLP for USB/print', 'Integrate with sensitivity labels']
+            },
+            'ztna-cloud': {
+                title: 'Zero Trust Network Access (ZTNA)',
+                description: 'Identity-based application access without traditional VPN. Part of SASE architecture.',
+                vendors: ['Zscaler Private Access', 'Netskope Private Access', 'Palo Alto Prisma Access', 'Cloudflare Access'],
+                protocols: ['HTTPS :443', 'Agent-based tunneling'],
+                integrations: ['IdP (Entra ID/Okta)', 'Device trust (Intune)', 'CASB'],
+                tips: ['Replace VPN for most use cases', 'Implement per-app access policies', 'Integrate with device posture', 'No inbound firewall rules needed']
+            },
+            'casb': {
+                title: 'Cloud Access Security Broker (CASB)',
+                description: 'Visibility and control over cloud application usage, including shadow IT discovery.',
+                vendors: ['Microsoft Defender for Cloud Apps', 'Netskope', 'Zscaler'],
+                protocols: ['HTTPS :443', 'API integration', 'Reverse proxy'],
+                integrations: ['IdP', 'DLP', 'SIEM', 'Cloud apps'],
+                tips: ['Discover shadow IT first', 'Apply session controls for risky apps', 'Integrate with Conditional Access', 'Monitor for anomalous behavior']
+            },
+            // PAM Components
+            'entra-pim': {
+                title: 'Entra Privileged Identity Management (PIM)',
+                description: 'Just-in-time privileged access for Entra ID and Azure resource roles.',
+                vendors: ['Microsoft'],
+                protocols: ['HTTPS :443', 'Graph API'],
+                integrations: ['Entra ID roles', 'Azure RBAC', 'Access Reviews'],
+                tips: ['Require MFA for activation', 'Set max activation duration (8hr)', 'Require justification', 'Enable approval for critical roles']
+            },
+            'vault-cloud': {
+                title: 'HashiCorp Vault',
+                description: 'Secrets management and data encryption platform for cloud-native environments.',
+                vendors: ['HashiCorp'],
+                protocols: ['HTTPS :8200', 'REST API'],
+                integrations: ['Kubernetes', 'CI/CD pipelines', 'Cloud providers', 'Databases'],
+                tips: ['Use dynamic secrets where possible', 'Enable audit logging', 'Implement least privilege policies', 'Use managed identities for auth']
+            },
+            // SOAR
+            'playbooks': {
+                title: 'Automated Playbooks',
+                description: 'Pre-built or custom automation workflows that respond to security incidents.',
+                vendors: ['Microsoft Sentinel', 'Splunk SOAR', 'Palo Alto XSOAR'],
+                protocols: ['REST APIs', 'Webhooks', 'Logic Apps/Functions'],
+                integrations: ['SIEM alerts', 'Ticketing', 'Email', 'Identity providers', 'Firewalls'],
+                tips: ['Start with high-confidence, low-risk automations', 'Include human approval for destructive actions', 'Test in isolated environment first', 'Document all playbooks']
+            },
+            // Governance
+            'access-reviews': {
+                title: 'Access Reviews / Certification',
+                description: 'Periodic review and recertification of user access to applications and resources.',
+                vendors: ['Entra ID Governance', 'SailPoint', 'Saviynt', 'Okta Identity Governance'],
+                protocols: ['REST API', 'Email notifications'],
+                integrations: ['Identity provider', 'Applications', 'Ticketing'],
+                tips: ['Schedule quarterly for most resources', 'Use risk-based frequency for sensitive access', 'Enable auto-removal for denied access', 'Track completion rates']
+            }
+        };
+
+        // Add more component details as needed...
+        // Architecture tab switching
+        document.querySelectorAll('.arch-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.arch-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.arch-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Use case tab switching
+        document.querySelectorAll('.usecase-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.usecase-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.usecase-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.usecase).classList.add('active');
+            });
+        });
+
+        // Component click handler
+        document.querySelectorAll('.arch-component.clickable').forEach(comp => {
+            comp.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const componentId = comp.dataset.component;
+                showComponentDetails(componentId);
+            });
+        });
+
+        function showComponentDetails(componentId) {
+            const details = componentDetails[componentId];
+            if (!details) {
+                // Show generic modal for components without details yet
+                document.getElementById('modalTitle').textContent = componentId.replace(/-/g, ' ').toUpperCase();
+                document.getElementById('modalBody').innerHTML = `
+                    <div class="arch-modal-section">
+                        <p>Detailed documentation for this component coming soon.</p>
+                    </div>
+                `;
+            } else {
+                document.getElementById('modalTitle').textContent = details.title;
+                document.getElementById('modalBody').innerHTML = `
+                    <div class="arch-modal-section">
+                        <h4>Description</h4>
+                        <p>${details.description}</p>
+                    </div>
+                    <div class="arch-modal-section">
+                        <h4>Vendors/Products</h4>
+                        <p>${details.vendors.map(v => `<span class="arch-modal-tag">${v}</span>`).join('')}</p>
+                    </div>
+                    <div class="arch-modal-section">
+                        <h4>Protocols & Ports</h4>
+                        <p>${details.protocols.map(p => `<span class="arch-modal-tag">${p}</span>`).join('')}</p>
+                    </div>
+                    <div class="arch-modal-section">
+                        <h4>Key Integrations</h4>
+                        <ul>${details.integrations.map(i => `<li>${i}</li>`).join('')}</ul>
+                    </div>
+                    <div class="arch-modal-section">
+                        <h4>💡 Configuration Tips</h4>
+                        <ul>${details.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+            document.getElementById('componentModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('componentModal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('componentModal').addEventListener('click', (e) => {
+            if (e.target.id === 'componentModal') {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
