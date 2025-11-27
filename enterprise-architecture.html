@@ -158,6 +158,19 @@
             opacity: 0.6;
         }
 
+        .arch-component.clickable:hover {
+            background: rgba(88, 166, 255, 0.3);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.4);
+            transform: scale(1.08);
+        }
+
+        .arch-component.clickable:hover::after {
+            content: '⤢';
+            opacity: 1;
+            color: var(--accent);
+        }
+
         .arch-component-title {
             font-weight: 600;
             color: #fff;
@@ -1182,7 +1195,7 @@
                             <span style="background: var(--layer-authn); color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">STEP 3</span>
                             <span style="font-weight: 600; color: var(--text-primary);">Primary Authentication</span>
                         </div>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Entra ID presents login page. User enters UPN (user@company.com). Password verified against Password Hash Sync (PHS) or Pass-Through Auth (PTA) if hybrid.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Entra ID presents login page. User enters UPN (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aadfd9cfd8eac9c5c7dacbc4d384c9c5c7">[email&#160;protected]</a>). Password verified against Password Hash Sync (PHS) or Pass-Through Auth (PTA) if hybrid.</p>
                         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.7rem;">
                             <span style="background: rgba(6,182,212,0.2); padding: 0.25rem 0.5rem; border-radius: 4px;">Method: Password or Passwordless</span>
                             <span style="background: rgba(6,182,212,0.2); padding: 0.25rem 0.5rem; border-radius: 4px;">Component: Entra ID</span>
@@ -2274,7 +2287,7 @@ TOTAL: 45 seconds from detection to full containment (vs. ~4 hours manual respon
                             <span style="background: var(--layer-identity); color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">STEP 1</span>
                             <span style="font-weight: 600; color: var(--text-primary);">Project Owner Sends Invitation</span>
                         </div>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Internal project owner shares SharePoint site with external user: consultant@partnercompany.com. B2B invitation email sent automatically.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Internal project owner shares SharePoint site with external user: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7e1d11100d0b120a1f100a3e0e1f0c0a101b0c1d11130e1f1007501d1113">[email&#160;protected]</a>. B2B invitation email sent automatically.</p>
                         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.7rem;">
                             <span style="background: rgba(88,166,255,0.2); padding: 0.25rem 0.5rem; border-radius: 4px;">Method: SharePoint Share</span>
                             <span style="background: rgba(88,166,255,0.2); padding: 0.25rem 0.5rem; border-radius: 4px;">B2B: Invitation Email</span>
@@ -2422,7 +2435,7 @@ TOTAL: 45 seconds from detection to full containment (vs. ~4 hours manual respon
 │   │ Partner's       │                   │                   YOUR ENTRA ID              │ │
 │   │ Entra ID        │                   │  ┌───────────────────────────────────────┐  │ │
 │   │                 │   Federation      │  │ Guest Object                          │  │ │
-│   │ consultant@     │◀─────────────────▶│  │ consultant@partnercompany.com         │  │ │
+│   │ consultant@     │◀─────────────────▶│  │ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0b3bfbea3a5bca4b1bea490a0b1a2a4beb5a2b3bfbda0b1bea9feb3bfbd">[email&#160;protected]</a>         │  │ │
 │   │ partner.com     │   (SAML/OIDC)     │  │ UserType: Guest                       │  │ │
 │   │                 │                   │  │ Source: External Azure AD             │  │ │
 │   └─────────────────┘                   │  └───────────────────────────────────────┘  │ │
@@ -3790,6 +3803,19 @@ COMPLIANCE: QUESTIONABLE                     COMPLIANCE: VERIFIED
                 <p>IAM Ultimate Guide — Enterprise Identity & Access Management Documentation</p>
             </footer>
         </main>
+
+    <!-- Component Details Modal -->
+    <div id="componentModal" class="arch-modal">
+        <div class="arch-modal-content">
+            <div class="arch-modal-header">
+                <h3 id="modalTitle" class="arch-modal-title">Component Details</h3>
+                <button class="arch-modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody" class="arch-modal-body">
+                <!-- Dynamic content injected by JavaScript -->
+            </div>
+        </div>
+    </div>
     </div>
 
     <script src="js/main.js"></script>
@@ -4906,7 +4932,7 @@ COMPLIANCE: QUESTIONABLE                     COMPLIANCE: VERIFIED
             document.getElementById('componentModal').classList.remove('active');
         }
 
-        // Close modal on outside click
+        // Close modal on background click
         document.getElementById('componentModal').addEventListener('click', (e) => {
             if (e.target.id === 'componentModal') {
                 closeModal();
