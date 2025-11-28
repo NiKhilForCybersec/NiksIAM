@@ -3,13 +3,64 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Mobile menu toggle
+    // Mobile menu toggle - toggles sidebar on mobile
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    if (mobileMenuBtn) {
+    const sidebar = document.querySelector('.sidebar');
+    
+    // Create overlay for mobile sidebar
+    let overlay = document.querySelector('.sidebar-overlay');
+    if (!overlay && sidebar) {
+        overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    function closeSidebar() {
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('active');
+        if (mobileMenuBtn) mobileMenuBtn.textContent = '☰';
+    }
+    
+    function openSidebar() {
+        if (sidebar) sidebar.classList.add('open');
+        if (overlay) overlay.classList.add('active');
+        if (mobileMenuBtn) mobileMenuBtn.textContent = '✕';
+    }
+    
+    if (mobileMenuBtn && sidebar) {
         mobileMenuBtn.addEventListener('click', () => {
-            const nav = document.querySelector('.header-nav');
-            if (nav) {
-                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            if (sidebar.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+        
+        // Close sidebar when clicking overlay
+        if (overlay) {
+            overlay.addEventListener('click', closeSidebar);
+        }
+        
+        // Close sidebar when clicking a nav link on mobile
+        sidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+                closeSidebar();
+            }
+        });
+        
+        // Close sidebar on window resize if switching to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeSidebar();
             }
         });
     }
