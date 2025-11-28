@@ -444,23 +444,96 @@ pre code {
     color: var(--text-muted);
 }
 
-/* Content directly in main (index.html style) */
-.main-content > h2,
-.main-content > p,
+/* ========================================
+   DIRECT CONTENT IN MAIN (for pages without content-section wrapper)
+======================================== */
+.main-content > h1 {
+    padding: 2rem 3rem 1rem 4rem;
+    margin: 0;
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.main-content > h2 {
+    padding: 1.5rem 3rem 0.5rem 4rem;
+    margin: 0;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+}
+
+.main-content > h3 {
+    padding: 1rem 3rem 0.5rem 4rem;
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--accent);
+}
+
+.main-content > p {
+    padding: 0 3rem 0 4rem;
+    margin: 0 0 1rem 0;
+}
+
 .main-content > ul,
-.main-content > ol,
-.main-content > pre,
-.main-content > .card-grid,
-.main-content > .info-box,
-.main-content > .term-grid,
+.main-content > ol {
+    padding: 0 3rem 0 4rem;
+    margin: 0 0 1rem 2rem;
+}
+
+.main-content > pre {
+    margin: 1rem 3rem 1rem 4rem;
+}
+
 .main-content > table {
-    padding-left: 4rem;
-    padding-right: 3rem;
+    margin: 1rem 3rem 1rem 4rem;
+    width: calc(100% - 7rem);
+}
+
+.main-content > .toc,
+.main-content > .ascii-diagram,
+.main-content > .info-box,
+.main-content > .accordion,
+.main-content > .code-block,
+.main-content > .tabs,
+.main-content > .scenario-card,
+.main-content > .step-flow,
+.main-content > .network-hops,
+.main-content > .packet-flow,
+.main-content > .wireshark-packet,
+.main-content > .cert-chain,
+.main-content > .cipher-suite,
+.main-content > .term-grid,
+.main-content > .comparison-table,
+.main-content > .table-wrapper,
+.main-content > .arch-diagram,
+.main-content > .arch-tabs,
+.main-content > .arch-content,
+.main-content > .arch-flow,
+.main-content > .arch-layers,
+.main-content > .usecase-tabs,
+.main-content > .usecase-content {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .card-grid {
+    margin: 1.5rem 3rem 1.5rem 4rem;
 }
 
 .main-content > .section-divider {
     margin-left: 4rem;
     margin-right: 3rem;
+}
+
+.main-content > .page-nav {
+    margin: 2rem 3rem 2rem 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.main-content > .footer {
+    margin: 0;
+    padding: 2rem 3rem 2rem 4rem;
 }
 
 /* ========================================
@@ -471,13 +544,6 @@ pre code {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.25rem;
     margin: 1.5rem 0;
-}
-
-.main-content > .card-grid {
-    margin-left: 4rem;
-    margin-right: 3rem;
-    padding-left: 0;
-    padding-right: 0;
 }
 
 .card {
@@ -1130,28 +1196,6 @@ tr:nth-child(even) {
         padding: 1.5rem 2rem 1.5rem 3rem;
     }
     
-    .main-content > h2,
-    .main-content > p,
-    .main-content > ul,
-    .main-content > ol,
-    .main-content > pre,
-    .main-content > .info-box,
-    .main-content > .term-grid,
-    .main-content > table {
-        padding-left: 3rem;
-        padding-right: 2rem;
-    }
-    
-    .main-content > .card-grid {
-        margin-left: 3rem;
-        margin-right: 2rem;
-    }
-    
-    .main-content > .section-divider {
-        margin-left: 3rem;
-        margin-right: 2rem;
-    }
-    
     .hero {
         padding: 2rem 3rem;
     }
@@ -1198,28 +1242,6 @@ tr:nth-child(even) {
     
     .content-header h1 {
         font-size: 1.5rem;
-    }
-    
-    .main-content > h2,
-    .main-content > p,
-    .main-content > ul,
-    .main-content > ol,
-    .main-content > pre,
-    .main-content > .info-box,
-    .main-content > .term-grid,
-    .main-content > table {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-    }
-    
-    .main-content > .card-grid {
-        margin-left: 1.5rem;
-        margin-right: 1.5rem;
-    }
-    
-    .main-content > .section-divider {
-        margin-left: 1.5rem;
-        margin-right: 1.5rem;
     }
     
     .hero {
@@ -1981,95 +2003,6 @@ tr:nth-child(even) {
 }
 
 /* ========================================
-   CONTENT DIRECTLY IN MAIN
-======================================== */
-.main-content > h1 {
-    padding: 2rem 3rem 1rem 4rem;
-    margin: 0;
-    font-size: 2rem;
-}
-
-.main-content > p {
-    padding-left: 4rem;
-    padding-right: 3rem;
-}
-
-.main-content > .toc {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .ascii-diagram {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .accordion {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .code-block {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .tabs {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .arch-diagram {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .arch-tabs {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .arch-flow {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .table-wrapper {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .comparison-table {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .usecase-tabs {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .usecase-content {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .scenario-card {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .step-flow {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-.main-content > .network-hops {
-    margin-left: 4rem;
-    margin-right: 3rem;
-}
-
-/* ========================================
    RESPONSIVE - TABLET ADDITIONS
 ======================================== */
 @media (max-width: 1024px) {
@@ -2081,23 +2014,71 @@ tr:nth-child(even) {
         padding: 1.5rem 2rem 1rem 3rem;
     }
     
+    .main-content > h2 {
+        padding: 1.5rem 2rem 0.5rem 3rem;
+    }
+    
+    .main-content > h3 {
+        padding: 1rem 2rem 0.5rem 3rem;
+    }
+    
+    .main-content > p {
+        padding: 0 2rem 0 3rem;
+    }
+    
+    .main-content > ul,
+    .main-content > ol {
+        padding: 0 2rem 0 3rem;
+        margin-left: 1.5rem;
+    }
+    
+    .main-content > pre {
+        margin: 1rem 2rem 1rem 3rem;
+    }
+    
+    .main-content > table {
+        margin: 1rem 2rem 1rem 3rem;
+        width: calc(100% - 5rem);
+    }
+    
     .main-content > .toc,
     .main-content > .ascii-diagram,
     .main-content > .accordion,
     .main-content > .code-block,
     .main-content > .tabs,
+    .main-content > .info-box,
+    .main-content > .term-grid,
     .main-content > .arch-diagram,
     .main-content > .arch-tabs,
+    .main-content > .arch-content,
     .main-content > .arch-flow,
+    .main-content > .arch-layers,
     .main-content > .table-wrapper,
     .main-content > .comparison-table,
     .main-content > .usecase-tabs,
     .main-content > .usecase-content,
     .main-content > .scenario-card,
     .main-content > .step-flow,
-    .main-content > .network-hops {
+    .main-content > .network-hops,
+    .main-content > .packet-flow,
+    .main-content > .wireshark-packet,
+    .main-content > .cert-chain,
+    .main-content > .cipher-suite {
         margin-left: 3rem;
         margin-right: 2rem;
+    }
+    
+    .main-content > .card-grid {
+        margin: 1.5rem 2rem 1.5rem 3rem;
+    }
+    
+    .main-content > .section-divider {
+        margin-left: 3rem;
+        margin-right: 2rem;
+    }
+    
+    .main-content > .page-nav {
+        margin: 2rem 2rem 2rem 3rem;
     }
 }
 
@@ -2115,23 +2096,73 @@ tr:nth-child(even) {
         font-size: 1.5rem;
     }
     
+    .main-content > h2 {
+        padding: 1rem 1.5rem 0.5rem;
+        font-size: 1.25rem;
+    }
+    
+    .main-content > h3 {
+        padding: 0.75rem 1.5rem 0.5rem;
+        font-size: 1rem;
+    }
+    
+    .main-content > p {
+        padding: 0 1.5rem;
+    }
+    
+    .main-content > ul,
+    .main-content > ol {
+        padding: 0 1.5rem;
+        margin-left: 1rem;
+    }
+    
+    .main-content > pre {
+        margin: 1rem 1.5rem;
+    }
+    
+    .main-content > table {
+        margin: 1rem 1.5rem;
+        width: calc(100% - 3rem);
+    }
+    
     .main-content > .toc,
     .main-content > .ascii-diagram,
     .main-content > .accordion,
     .main-content > .code-block,
     .main-content > .tabs,
+    .main-content > .info-box,
+    .main-content > .term-grid,
     .main-content > .arch-diagram,
     .main-content > .arch-tabs,
+    .main-content > .arch-content,
     .main-content > .arch-flow,
+    .main-content > .arch-layers,
     .main-content > .table-wrapper,
     .main-content > .comparison-table,
     .main-content > .usecase-tabs,
     .main-content > .usecase-content,
     .main-content > .scenario-card,
     .main-content > .step-flow,
-    .main-content > .network-hops {
+    .main-content > .network-hops,
+    .main-content > .packet-flow,
+    .main-content > .wireshark-packet,
+    .main-content > .cert-chain,
+    .main-content > .cipher-suite {
         margin-left: 1.5rem;
         margin-right: 1.5rem;
+    }
+    
+    .main-content > .card-grid {
+        margin: 1.5rem;
+    }
+    
+    .main-content > .section-divider {
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+    
+    .main-content > .page-nav {
+        margin: 1.5rem;
     }
     
     .ascii-diagram pre {
