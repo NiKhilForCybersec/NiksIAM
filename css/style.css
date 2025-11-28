@@ -1060,6 +1060,8 @@ tr:nth-child(even) {
 
 .page-nav-label { font-size: 0.75rem; color: var(--text-muted); }
 .page-nav-title { font-size: 0.875rem; font-weight: 500; }
+.page-nav-link { text-align: right; }
+.page-nav-link.prev { text-align: left; }
 .page-nav-link.next { text-align: right; }
 
 /* ========================================
@@ -1329,5 +1331,851 @@ tr:nth-child(even) {
     body {
         background: white;
         color: black;
+    }
+}
+
+/* ========================================
+   BREADCRUMBS
+======================================== */
+.breadcrumbs {
+    padding: 1rem 3rem 1rem 4rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+}
+
+.breadcrumbs a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumbs .separator {
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+}
+
+.breadcrumbs .current {
+    color: var(--text-primary);
+}
+
+/* ========================================
+   TABLE OF CONTENTS (TOC)
+======================================== */
+.toc {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.toc-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.toc-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+.toc-list li {
+    margin-bottom: 0.4rem;
+}
+
+.toc-list a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.toc-list a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   ASCII DIAGRAMS
+======================================== */
+.ascii-diagram {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.ascii-diagram pre {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 1.5rem;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+/* ========================================
+   ACCORDION
+======================================== */
+.accordion {
+    margin: 1rem 0;
+}
+
+.accordion-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.accordion-header:hover {
+    background: var(--bg-tertiary);
+}
+
+.accordion-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.accordion-icon {
+    color: var(--accent);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-content,
+.accordion-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.accordion-item.active .accordion-content,
+.accordion-item.active .accordion-body {
+    display: block;
+}
+
+/* ========================================
+   CODE BLOCKS
+======================================== */
+.code-block {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.code-language {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.code-copy-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    background: var(--accent);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.code-copy-btn:hover {
+    background: var(--accent-hover);
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+}
+
+.code-block code {
+    background: none;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+/* ========================================
+   TABS (Generic)
+======================================== */
+.tabs {
+    margin: 1.5rem 0;
+}
+
+.tab-headers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tab-header {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.tab-header:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent);
+}
+
+.tab-header.active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ========================================
+   USE CASE COMPONENTS
+======================================== */
+.usecase-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.usecase-tab {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.usecase-tab:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent);
+}
+
+.usecase-tab.active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+
+.usecase-content {
+    display: none;
+}
+
+.usecase-content.active {
+    display: block;
+}
+
+.usecase-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+}
+
+.usecase-step {
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.usecase-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+}
+
+/* ========================================
+   TABLE WRAPPER
+======================================== */
+.table-wrapper {
+    overflow-x: auto;
+    margin: 1rem 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.table-wrapper table {
+    margin: 0;
+    border: none;
+}
+
+.table-wrapper th:first-child,
+.table-wrapper td:first-child {
+    border-left: none;
+}
+
+.table-wrapper th:last-child,
+.table-wrapper td:last-child {
+    border-right: none;
+}
+
+.table-wrapper tr:first-child th {
+    border-top: none;
+}
+
+.table-wrapper tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========================================
+   ARCHITECTURE DIAGRAM COMPONENTS
+======================================== */
+.arch-page-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.arch-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.arch-tab {
+    padding: 0.6rem 1.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.arch-tab:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent);
+}
+
+.arch-tab.active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+
+.arch-content {
+    display: none;
+}
+
+.arch-content.active {
+    display: block;
+}
+
+.arch-diagram {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.arch-diagram-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.arch-diagram-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.arch-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.arch-layer {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.arch-layer-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.arch-layer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.arch-component {
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    transition: all 0.2s;
+}
+
+.arch-component.clickable {
+    cursor: pointer;
+}
+
+.arch-component.clickable:hover {
+    border-color: var(--accent);
+    background: rgba(88, 166, 255, 0.1);
+}
+
+.arch-component-title {
+    font-weight: 600;
+}
+
+.arch-component-sub {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+/* Architecture Legend */
+.arch-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.arch-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.arch-legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+/* Architecture Flow */
+.arch-flow {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.arch-flow-header {
+    padding: 1rem 1.25rem;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.arch-flow-body {
+    padding: 1.25rem;
+}
+
+.arch-flow-stage {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.arch-flow-stage:last-child {
+    margin-bottom: 0;
+}
+
+.arch-flow-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+}
+
+.arch-flow-arrow-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+/* Architecture Modal */
+.arch-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.arch-modal.active {
+    display: flex;
+}
+
+.arch-modal-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.arch-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.arch-modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.arch-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.arch-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.arch-modal-body {
+    padding: 1.5rem;
+}
+
+.arch-modal-section {
+    margin-bottom: 1rem;
+}
+
+.arch-modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.arch-modal-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   LAYER COLORS (for diagrams)
+======================================== */
+.layer-identity { border-left: 3px solid var(--accent); }
+.layer-access { border-left: 3px solid var(--accent-green); }
+.layer-authn { border-left: 3px solid var(--accent-purple); }
+.layer-authz { border-left: 3px solid var(--accent-yellow); }
+.layer-governance { border-left: 3px solid var(--accent-cyan); }
+.layer-pam { border-left: 3px solid var(--accent-red); }
+.layer-detection { border-left: 3px solid var(--accent-orange); }
+.layer-dlp { border-left: 3px solid #c678dd; }
+.layer-soar { border-left: 3px solid #98c379; }
+.layer-resources { border-left: 3px solid var(--text-secondary); }
+
+/* ========================================
+   INFO BOX VARIANTS
+======================================== */
+.info-box.info {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: var(--accent);
+}
+
+.info-box.success {
+    background: rgba(63, 185, 80, 0.1);
+    border-color: var(--accent-green);
+}
+
+.info-box.error {
+    background: rgba(248, 81, 73, 0.1);
+    border-color: var(--accent-red);
+}
+
+/* ========================================
+   CONTENT DIRECTLY IN MAIN
+======================================== */
+.main-content > h1 {
+    padding: 2rem 3rem 1rem 4rem;
+    margin: 0;
+    font-size: 2rem;
+}
+
+.main-content > p {
+    padding-left: 4rem;
+    padding-right: 3rem;
+}
+
+.main-content > .toc {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .ascii-diagram {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .accordion {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .code-block {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .tabs {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .arch-diagram {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .arch-tabs {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .arch-flow {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .table-wrapper {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .comparison-table {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .usecase-tabs {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .usecase-content {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .scenario-card {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .step-flow {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+.main-content > .network-hops {
+    margin-left: 4rem;
+    margin-right: 3rem;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET ADDITIONS
+======================================== */
+@media (max-width: 1024px) {
+    .breadcrumbs {
+        padding: 1rem 2rem 1rem 3rem;
+    }
+    
+    .main-content > h1 {
+        padding: 1.5rem 2rem 1rem 3rem;
+    }
+    
+    .main-content > .toc,
+    .main-content > .ascii-diagram,
+    .main-content > .accordion,
+    .main-content > .code-block,
+    .main-content > .tabs,
+    .main-content > .arch-diagram,
+    .main-content > .arch-tabs,
+    .main-content > .arch-flow,
+    .main-content > .table-wrapper,
+    .main-content > .comparison-table,
+    .main-content > .usecase-tabs,
+    .main-content > .usecase-content,
+    .main-content > .scenario-card,
+    .main-content > .step-flow,
+    .main-content > .network-hops {
+        margin-left: 3rem;
+        margin-right: 2rem;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE ADDITIONS
+======================================== */
+@media (max-width: 768px) {
+    .breadcrumbs {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .main-content > h1 {
+        padding: 1.25rem 1.5rem 0.75rem;
+        font-size: 1.5rem;
+    }
+    
+    .main-content > .toc,
+    .main-content > .ascii-diagram,
+    .main-content > .accordion,
+    .main-content > .code-block,
+    .main-content > .tabs,
+    .main-content > .arch-diagram,
+    .main-content > .arch-tabs,
+    .main-content > .arch-flow,
+    .main-content > .table-wrapper,
+    .main-content > .comparison-table,
+    .main-content > .usecase-tabs,
+    .main-content > .usecase-content,
+    .main-content > .scenario-card,
+    .main-content > .step-flow,
+    .main-content > .network-hops {
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+    
+    .ascii-diagram pre {
+        font-size: 0.55rem;
+        padding: 1rem;
+    }
+    
+    .arch-modal {
+        padding: 1rem;
+    }
+    
+    .arch-modal-content {
+        max-height: 90vh;
+    }
+    
+    .arch-layers {
+        gap: 0.5rem;
+    }
+    
+    .arch-layer-content {
+        flex-direction: column;
+    }
+    
+    .arch-flow-stage {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .usecase-flow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .tab-headers,
+    .arch-tabs,
+    .usecase-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tab-header,
+    .arch-tab,
+    .usecase-tab {
+        flex-shrink: 0;
     }
 }
