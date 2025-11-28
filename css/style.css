@@ -278,7 +278,7 @@ body {
 
 /* Content Header */
 .content-header {
-    padding: 2rem 3rem;
+    padding: 2rem 3rem 2rem 4rem;
     border-bottom: 1px solid var(--border);
     background: var(--bg-secondary);
 }
@@ -298,7 +298,7 @@ body {
 
 /* Content Sections */
 .content-section {
-    padding: 2rem 3rem;
+    padding: 2rem 3rem 2rem 4rem;
 }
 
 /* ========================================
@@ -401,7 +401,7 @@ pre code {
 ======================================== */
 .hero {
     text-align: center;
-    padding: 3rem;
+    padding: 3rem 3rem 3rem 4rem;
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
     border-bottom: 1px solid var(--border);
 }
@@ -454,12 +454,12 @@ pre code {
 .main-content > .info-box,
 .main-content > .term-grid,
 .main-content > table {
-    padding-left: 3rem;
+    padding-left: 4rem;
     padding-right: 3rem;
 }
 
 .main-content > .section-divider {
-    margin-left: 3rem;
+    margin-left: 4rem;
     margin-right: 3rem;
 }
 
@@ -474,7 +474,7 @@ pre code {
 }
 
 .main-content > .card-grid {
-    margin-left: 3rem;
+    margin-left: 4rem;
     margin-right: 3rem;
     padding-left: 0;
     padding-right: 0;
@@ -1067,7 +1067,7 @@ tr:nth-child(even) {
 ======================================== */
 .footer {
     text-align: center;
-    padding: 2rem 3rem;
+    padding: 2rem 3rem 2rem 4rem;
     margin-top: 3rem;
     border-top: 1px solid var(--border);
     color: var(--text-muted);
@@ -1125,7 +1125,7 @@ tr:nth-child(even) {
     
     .content-header,
     .content-section {
-        padding: 1.5rem 2rem;
+        padding: 1.5rem 2rem 1.5rem 3rem;
     }
     
     .main-content > h2,
@@ -1136,22 +1136,22 @@ tr:nth-child(even) {
     .main-content > .info-box,
     .main-content > .term-grid,
     .main-content > table {
-        padding-left: 2rem;
+        padding-left: 3rem;
         padding-right: 2rem;
     }
     
     .main-content > .card-grid {
-        margin-left: 2rem;
+        margin-left: 3rem;
         margin-right: 2rem;
     }
     
     .main-content > .section-divider {
-        margin-left: 2rem;
+        margin-left: 3rem;
         margin-right: 2rem;
     }
     
     .hero {
-        padding: 2rem;
+        padding: 2rem 3rem;
     }
 }
 
@@ -1191,7 +1191,7 @@ tr:nth-child(even) {
     
     .content-header,
     .content-section {
-        padding: 1.25rem 1rem;
+        padding: 1.25rem 1.5rem;
     }
     
     .content-header h1 {
@@ -1206,22 +1206,22 @@ tr:nth-child(even) {
     .main-content > .info-box,
     .main-content > .term-grid,
     .main-content > table {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
     
     .main-content > .card-grid {
-        margin-left: 1rem;
-        margin-right: 1rem;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
     }
     
     .main-content > .section-divider {
-        margin-left: 1rem;
-        margin-right: 1rem;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
     }
     
     .hero {
-        padding: 2rem 1rem;
+        padding: 2rem 1.5rem;
     }
     
     .hero h1 {
@@ -1255,7 +1255,7 @@ tr:nth-child(even) {
     }
     
     .footer {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem;
     }
     
     .scenario-tabs {
