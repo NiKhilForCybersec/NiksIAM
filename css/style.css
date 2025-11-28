@@ -214,11 +214,14 @@ body {
     display: flex;
     flex-direction: column;
     background: var(--bg-primary);
+    /* Add padding to prevent content from touching sidebar edge */
+    padding-left: 0;
 }
 
 .page-wrapper > .main-content {
     margin-left: 0;
     flex: 1;
+    min-width: 0; /* Prevent flex overflow */
 }
 
 .page-wrapper > .sidebar {
@@ -228,11 +231,21 @@ body {
     flex-shrink: 0;
 }
 
+/* When using page-wrapper layout, sidebar is in flow so main-content needs no margin */
+.page-wrapper {
+    display: flex;
+}
+
+.page-wrapper > .sidebar + .main-content {
+    margin-left: 0;
+}
+
 /* Content Header */
 .content-header {
-    padding: 2.5rem 3rem;
+    padding: 2.5rem 4rem;
     border-bottom: 1px solid var(--border);
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    width: 100%;
 }
 
 .content-header h1 {
@@ -250,18 +263,55 @@ body {
 
 /* Content Sections */
 .content-section {
-    padding: 2.5rem 3rem;
+    padding: 2.5rem 4rem;
     max-width: var(--content-max-width);
+    margin: 0 auto;
 }
 
 .content-section.full-width {
     max-width: 100%;
+    margin: 0;
 }
 
 .main-content > section:not(.hero) {
     max-width: var(--content-max-width);
     margin: 0 auto;
-    padding: 2rem 3rem;
+    padding: 2.5rem 4rem;
+}
+
+/* Ensure main content has minimum padding on left */
+.main-content > *:first-child:not(.hero) {
+    margin-top: 0;
+}
+
+/* Direct children of main-content (not in sections) need padding */
+.main-content > h2,
+.main-content > h3,
+.main-content > h4,
+.main-content > p,
+.main-content > ul,
+.main-content > ol,
+.main-content > pre,
+.main-content > .card-grid,
+.main-content > .info-box,
+.main-content > .term-grid,
+.main-content > table,
+.main-content > .section-divider {
+    padding-left: 4rem;
+    padding-right: 4rem;
+    max-width: calc(var(--content-max-width) + 8rem);
+}
+
+.main-content > .card-grid {
+    margin-left: 4rem;
+    margin-right: 4rem;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+}
+
+.main-content > .section-divider {
+    max-width: none;
 }
 
 /* ========================================
@@ -1011,7 +1061,7 @@ td {
 ======================================== */
 .footer {
     text-align: center;
-    padding: 2rem 3rem;
+    padding: 2rem 4rem;
     margin-top: auto;
     border-top: 1px solid var(--border);
     color: var(--text-muted);
@@ -1083,7 +1133,7 @@ td {
 ======================================== */
 .hero {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: 4rem;
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%);
     border-bottom: 1px solid var(--border);
 }
@@ -1158,11 +1208,15 @@ td {
     
     .content-header,
     .content-section {
-        padding: 2rem;
+        padding: 2rem 2.5rem;
     }
     
     .main-content > section:not(.hero) {
-        padding: 1.5rem 2rem;
+        padding: 2rem 2.5rem;
+    }
+    
+    .hero {
+        padding: 3rem 2rem;
     }
     
     .card-grid {
@@ -1171,6 +1225,28 @@ td {
     
     .hero h1 {
         font-size: 2.25rem;
+    }
+    
+    /* Tablet padding for direct children */
+    .main-content > h2,
+    .main-content > h3,
+    .main-content > h4,
+    .main-content > p,
+    .main-content > ul,
+    .main-content > ol,
+    .main-content > pre,
+    .main-content > .card-grid,
+    .main-content > .info-box,
+    .main-content > .term-grid,
+    .main-content > table,
+    .main-content > .section-divider {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+    
+    .main-content > .card-grid {
+        margin-left: 2.5rem;
+        margin-right: 2.5rem;
     }
 }
 
@@ -1214,7 +1290,7 @@ td {
     }
     
     .content-header {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem 1.25rem;
     }
     
     .content-header h1 {
@@ -1223,7 +1299,7 @@ td {
     
     .content-section,
     .main-content > section:not(.hero) {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem 1.25rem;
     }
     
     .card-grid {
@@ -1289,6 +1365,28 @@ td {
     .scenario-header {
         flex-direction: column;
         text-align: center;
+    }
+    
+    /* Mobile padding for direct children */
+    .main-content > h2,
+    .main-content > h3,
+    .main-content > h4,
+    .main-content > p,
+    .main-content > ul,
+    .main-content > ol,
+    .main-content > pre,
+    .main-content > .card-grid,
+    .main-content > .info-box,
+    .main-content > .term-grid,
+    .main-content > table,
+    .main-content > .section-divider {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+    
+    .main-content > .card-grid {
+        margin-left: 1.25rem;
+        margin-right: 1.25rem;
     }
 }
 
