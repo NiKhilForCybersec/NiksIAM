@@ -140,6 +140,49 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Scenario tab switching (for network-auth-flows.html)
+    document.querySelectorAll('.scenario-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active from all tabs
+            document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
+            // Remove active from all content
+            document.querySelectorAll('.scenario-content').forEach(c => c.classList.remove('active'));
+            // Add active to clicked tab
+            tab.classList.add('active');
+            // Show corresponding content
+            const targetId = tab.dataset.scenario;
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+
+    // Accordion toggle
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+
+    // Generic tab switching
+    document.querySelectorAll('.tab-header').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabContainer = tab.closest('.tabs');
+            if (tabContainer) {
+                tabContainer.querySelectorAll('.tab-header').forEach(t => t.classList.remove('active'));
+                tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                const targetId = tab.dataset.tab;
+                const targetContent = tabContainer.querySelector(`#${targetId}`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            }
+        });
+    });
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
