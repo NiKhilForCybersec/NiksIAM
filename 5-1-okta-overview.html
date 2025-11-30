@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Okta Overview - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l2">L2 Technical</div>
+          <h1>Okta: Enterprise Identity Platform</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>Okta is a leading cloud Identity Provider (IdP). This covers architecture, admin console navigation, common configurations, integration patterns, and day-to-day operations for IAM engineers.</p>
+          </div>
+
+          <h2 id="what-is-okta">What is Okta?</h2>
+          <p>Okta is a cloud-native Identity-as-a-Service (IDaaS) platform providing SSO, MFA, lifecycle management, and API access management. It serves as the central identity hub connecting users to all their applications.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    OKTA ARCHITECTURE OVERVIEW                                            │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   IDENTITY SOURCES             OKTA                        APPLICATIONS                 │
+│                                                                                          │
+│   ┌─────────────────┐         ┌─────────────────────────┐   ┌─────────────────┐        │
+│   │ Active Directory│────────►│                         │──►│ Microsoft 365   │        │
+│   └─────────────────┘   AD    │   UNIVERSAL DIRECTORY   │   └─────────────────┘        │
+│                        Agent  │                         │   ┌─────────────────┐        │
+│   ┌─────────────────┐         │   ┌─────────────────┐   │──►│ Salesforce      │        │
+│   │ HR System       │────────►│   │ User Profiles   │   │   └─────────────────┘        │
+│   │ (Workday)       │   SCIM  │   │ Groups          │   │   ┌─────────────────┐        │
+│   └─────────────────┘         │   │ App Assignments │   │──►│ AWS             │        │
+│                               │   └─────────────────┘   │   └─────────────────┘        │
+│   ┌─────────────────┐         │                         │   ┌─────────────────┐        │
+│   │ LDAP Directory  │────────►│   ┌─────────────────┐   │──►│ ServiceNow      │        │
+│   └─────────────────┘  Agent  │   │ Authentication  │   │   └─────────────────┘        │
+│                               │   │ • Password      │   │   ┌─────────────────┐        │
+│   ┌─────────────────┐         │   │ • MFA           │   │──►│ Custom Apps     │        │
+│   │ Other IdPs      │────────►│   │ • Policies      │   │   │ (SAML/OIDC)     │        │
+│   │ (Social, SAML)  │  Fed    │   └─────────────────┘   │   └─────────────────┘        │
+│   └─────────────────┘         │                         │                              │
+│                               │   ┌─────────────────┐   │   ┌─────────────────┐        │
+│                               │   │ Workflows       │   │──►│ API Access      │        │
+│                               │   │ (Automation)    │   │   │ (OAuth)         │        │
+│                               │   └─────────────────┘   │   └─────────────────┘        │
+│                               └─────────────────────────┘                              │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="core-components">Core Okta Components</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>What It Does</th><th>Where in Admin Console</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Universal Directory</strong></td>
+                  <td>Stores user profiles, groups, custom attributes</td>
+                  <td>Directory → People / Groups</td>
+                </tr>
+                <tr>
+                  <td><strong>Single Sign-On</strong></td>
+                  <td>SAML/OIDC federation to applications</td>
+                  <td>Applications → Applications</td>
+                </tr>
+                <tr>
+                  <td><strong>Adaptive MFA</strong></td>
+                  <td>Multi-factor authentication with risk-based policies</td>
+                  <td>Security → Authenticators / Policies</td>
+                </tr>
+                <tr>
+                  <td><strong>Lifecycle Management</strong></td>
+                  <td>Automated provisioning/deprovisioning</td>
+                  <td>Applications → Provisioning</td>
+                </tr>
+                <tr>
+                  <td><strong>Workflows</strong></td>
+                  <td>No-code automation for identity processes</td>
+                  <td>Workflow → Workflows</td>
+                </tr>
+                <tr>
+                  <td><strong>API Access Management</strong></td>
+                  <td>OAuth authorization servers for APIs</td>
+                  <td>Security → API</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="admin-console">Navigating Admin Console</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Admin Console Structure</span></div>
+            <pre><code>Okta Admin Console (admin.okta.com or company-admin.okta.com)
+│
+├── Dashboard
+│   └── Overview, health, recent activity
+│
+├── Directory
+│   ├── People ─────────── User accounts, profile management
+│   ├── Groups ─────────── Security groups, push groups
+│   ├── Profile Editor ─── Custom attributes per app
+│   └── Directory Integrations ── AD, LDAP connections
+│
+├── Applications
+│   ├── Applications ───── All integrated apps (SAML, OIDC, SWA)
+│   └── Identity Governance ─ Access certifications (if licensed)
+│
+├── Security
+│   ├── Authenticators ─── MFA methods (Okta Verify, FIDO2, SMS)
+│   ├── Authentication ─── Sign-on policies
+│   ├── Global Session ─── Session timeout settings
+│   ├── Multifactor ────── MFA enrollment policies
+│   ├── Identity Providers ─ External IdP federation
+│   ├── Delegated Auth ─── Delegate to AD for auth
+│   ├── Networks ───────── IP zones (trusted, blocked)
+│   ├── Device Trust ───── Integrate with MDM
+│   ├── API ────────────── Authorization servers, tokens
+│   └── Threats ────────── ThreatInsight, suspicious activity
+│
+├── Workflow
+│   ├── Workflows ──────── Automation flows
+│   └── Connector Builder ─ Custom connectors
+│
+├── Reports
+│   ├── System Log ─────── Audit logs (critical for troubleshooting)
+│   └── Reports ────────── Pre-built reports
+│
+└── Settings
+    ├── Account ────────── Org settings
+    ├── Features ───────── Feature flags
+    └── Customization ──── Branding, custom domains</code></pre>
+          </div>
+
+          <h2 id="user-management">User Management</h2>
+
+          <h3>User Lifecycle States</h3>
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    OKTA USER LIFECYCLE                                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐      │
+│   │   STAGED     │────►│   PENDING    │────►│   ACTIVE     │────►│  SUSPENDED   │      │
+│   │              │     │   USER       │     │              │     │              │      │
+│   │ Created but  │     │ Activation   │     │ Can login    │     │ Temporarily  │      │
+│   │ not activated│     │ email sent   │     │ and use apps │     │ disabled     │      │
+│   └──────────────┘     └──────────────┘     └──────────────┘     └──────┬───────┘      │
+│                                                    │                     │              │
+│                                                    │                     ▼              │
+│                                                    │              ┌──────────────┐      │
+│                                                    │              │  DEACTIVATED │      │
+│                                                    └─────────────►│              │      │
+│                                                                   │ Can't login  │      │
+│                                                                   │ Data retained│      │
+│                                                                   └──────────────┘      │
+│                                                                          │              │
+│                                                                          ▼              │
+│                                                                   ┌──────────────┐      │
+│                                                                   │   DELETED    │      │
+│                                                                   │ Permanently  │      │
+│                                                                   │ removed      │      │
+│                                                                   └──────────────┘      │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h3>Common User Operations</h3>
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Okta API: User Management</span></div>
+            <pre><code># Create user
+POST https://company.okta.com/api/v1/users?activate=true
+{
+  "profile": {
+    "firstName": "Sarah",
+    "lastName": "Chen",
+    "email": "schen@company.com",
+    "login": "schen@company.com",
+    "department": "Engineering"
+  },
+  "credentials": {
+    "password": { "value": "TempP@ss123!" }
+  }
+}
+
+# Get user
+GET https://company.okta.com/api/v1/users/schen@company.com
+
+# Update user profile
+POST https://company.okta.com/api/v1/users/{userId}
+{
+  "profile": {
+    "department": "Product"
+  }
+}
+
+# Suspend user (temporary disable)
+POST https://company.okta.com/api/v1/users/{userId}/lifecycle/suspend
+
+# Unsuspend user
+POST https://company.okta.com/api/v1/users/{userId}/lifecycle/unsuspend
+
+# Deactivate user (offboarding)
+POST https://company.okta.com/api/v1/users/{userId}/lifecycle/deactivate
+
+# Delete user (permanent)
+DELETE https://company.okta.com/api/v1/users/{userId}
+
+# Reset password
+POST https://company.okta.com/api/v1/users/{userId}/lifecycle/reset_password
+
+# List user's app assignments
+GET https://company.okta.com/api/v1/apps?filter=user.id eq "{userId}"
+
+# List user's groups
+GET https://company.okta.com/api/v1/users/{userId}/groups</code></pre>
+          </div>
+
+          <h2 id="app-integration">Application Integration</h2>
+
+          <h3>Integration Methods</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Method</th><th>How It Works</th><th>Best For</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>SAML 2.0</strong></td>
+                  <td>XML-based federation, Okta as IdP</td>
+                  <td>Enterprise SaaS (Salesforce, ServiceNow)</td>
+                </tr>
+                <tr>
+                  <td><strong>OIDC</strong></td>
+                  <td>OAuth 2.0 + identity layer</td>
+                  <td>Modern apps, SPAs, mobile</td>
+                </tr>
+                <tr>
+                  <td><strong>SWA</strong></td>
+                  <td>Secure Web Authentication (form fill)</td>
+                  <td>Legacy apps without SSO support</td>
+                </tr>
+                <tr>
+                  <td><strong>SCIM</strong></td>
+                  <td>Automated provisioning protocol</td>
+                  <td>User lifecycle sync to apps</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Adding SAML Application</h3>
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">SAML App Setup Steps</span></div>
+            <pre><code>1. Applications → Applications → Create App Integration
+2. Select "SAML 2.0" → Next
+
+3. General Settings:
+   - App name: "Salesforce Production"
+   - App logo: Upload
+   → Next
+
+4. SAML Settings:
+   - Single sign-on URL: https://company.my.salesforce.com/...
+   - Audience URI (SP Entity ID): https://saml.salesforce.com
+   - Name ID format: EmailAddress
+   - Application username: Okta username
+   
+5. Attribute Statements:
+   - FirstName → user.firstName
+   - LastName → user.lastName
+   - Email → user.email
+
+6. Group Attribute Statements:
+   - Name: groups
+   - Filter: Starts with "SF-"
+
+7. Download Okta metadata XML or copy:
+   - IdP Entity ID
+   - SSO URL
+   - Certificate
+
+8. Configure in Salesforce:
+   - Upload Okta metadata
+   - Test SSO connection
+
+9. Assign users/groups:
+   - Applications → Salesforce → Assignments
+   - Add groups: "Salesforce-Users"</code></pre>
+          </div>
+
+          <h2 id="troubleshooting">Troubleshooting</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔴 User can't login - "Authentication failed"</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Check System Log:</strong></p>
+                  <div class="code-block">
+                    <pre><code>Reports → System Log → Filter by user
+
+Look for:
+- user.authentication.auth_via_* - Shows auth attempts
+- user.session.start - Successful login
+- policy.evaluate_sign_on - Which policy evaluated
+
+Common issues:
+- MFA required but not enrolled
+- Sign-on policy blocking (location, device)
+- Account locked or suspended
+- Password expired
+- AD authentication failure (if delegated auth)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔴 SSO to app fails</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Check SAML assertion:</strong></p>
+                  <ul>
+                    <li>Use browser SAML tracer extension</li>
+                    <li>Verify Audience (Entity ID) matches</li>
+                    <li>Verify ACS URL is correct</li>
+                    <li>Check certificate not expired</li>
+                    <li>Verify NameID format matches app expectation</li>
+                  </ul>
+                  <p><strong>Check app assignment:</strong></p>
+                  <ul>
+                    <li>Is user assigned to app (directly or via group)?</li>
+                    <li>Is provisioning complete (if SCIM)?</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Okta is cloud-native IdP:</strong> Not a directory like AD, it's an identity hub</li>
+                <li><strong>Universal Directory:</strong> Can source from AD, LDAP, HR systems, or native</li>
+                <li><strong>Integration methods:</strong> SAML (enterprise), OIDC (modern), SWA (legacy)</li>
+                <li><strong>SCIM:</strong> Standard for automated user provisioning</li>
+                <li><strong>System Log:</strong> First place to troubleshoot - contains all events</li>
+                <li><strong>Lifecycle states:</strong> Staged → Pending → Active → Suspended/Deactivated</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="4-8-entra-workload-id.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Workload Identity</span>
+            </a>
+            <a href="5-2-okta-authentication.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Okta Authentication</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

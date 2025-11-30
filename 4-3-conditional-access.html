@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditional Access - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l2">L2 Technical</div>
+          <h1>Conditional Access: Zero Trust Policy Engine</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>Conditional Access is Microsoft's Zero Trust policy engine. Every sign-in is evaluated against policies that consider user, device, location, app, and risk. This is critical for enterprise security.</p>
+          </div>
+
+          <h2 id="how-it-works">How Conditional Access Works</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    CONDITIONAL ACCESS EVALUATION FLOW                                    │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   USER SIGNS IN                                                                          │
+│        │                                                                                 │
+│        ▼                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                     SIGNAL COLLECTION (Conditions)                               │   │
+│   │  • User: Who? Groups? Roles? Risk level?                                        │   │
+│   │  • Device: Compliant? Hybrid joined? Platform?                                  │   │
+│   │  • Location: Named location? Country? IP range?                                 │   │
+│   │  • Application: Which app? Client app type?                                     │   │
+│   │  • Risk: Sign-in risk? User risk?                                               │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│        │                                                                                 │
+│        ▼                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                     POLICY EVALUATION                                            │   │
+│   │                                                                                  │   │
+│   │  FOR EACH applicable policy:                                                    │   │
+│   │    IF all conditions match THEN apply access controls                           │   │
+│   │                                                                                  │   │
+│   │  Multiple policies can apply - most restrictive wins                            │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│        │                                                                                 │
+│        ▼                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                     ACCESS DECISION                                              │   │
+│   │                                                                                  │   │
+│   │  ✅ GRANT: Allow access (possibly with controls like MFA)                       │   │
+│   │  ❌ BLOCK: Deny access completely                                                │   │
+│   │  ⚠️ GRANT with CONTROLS: Require MFA, compliant device, app protection, etc.   │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="common-policies">Common CA Policies (Enterprise Baseline)</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Policy Name</th><th>Conditions</th><th>Controls</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Require MFA for All Users</strong></td>
+                  <td>All users, all cloud apps</td>
+                  <td>Require MFA</td>
+                  <td>Baseline protection</td>
+                </tr>
+                <tr>
+                  <td><strong>Block Legacy Auth</strong></td>
+                  <td>All users, legacy auth clients</td>
+                  <td>Block</td>
+                  <td>Prevent IMAP/POP/SMTP attacks</td>
+                </tr>
+                <tr>
+                  <td><strong>Require Compliant Device</strong></td>
+                  <td>All users, Office 365 apps</td>
+                  <td>Require compliant device</td>
+                  <td>Ensure managed devices</td>
+                </tr>
+                <tr>
+                  <td><strong>Block High Risk Sign-ins</strong></td>
+                  <td>All users, sign-in risk: High</td>
+                  <td>Block</td>
+                  <td>Stop compromised accounts</td>
+                </tr>
+                <tr>
+                  <td><strong>Require MFA for Admins</strong></td>
+                  <td>Directory roles (GA, etc.)</td>
+                  <td>Require MFA + compliant device</td>
+                  <td>Protect privileged access</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="policy-example">Policy Deep Dive: Require MFA Outside Network</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">CA Policy Configuration</span></div>
+            <pre><code>Policy Name: "Require MFA for External Access"
+
+ASSIGNMENTS:
+  Users and Groups:
+    Include: All users
+    Exclude: Break-glass accounts, Service accounts
+  
+  Cloud Apps:
+    Include: All cloud apps
+    Exclude: None
+  
+  Conditions:
+    Locations:
+      Include: All locations
+      Exclude: "Corporate Network" (named location: 10.0.0.0/8, office IPs)
+    
+    Device Platforms: All platforms
+    Client Apps: Browser, Mobile apps and desktop clients
+
+ACCESS CONTROLS:
+  Grant:
+    ☑ Require multi-factor authentication
+    
+  Session:
+    Sign-in frequency: 12 hours
+
+RESULT: 
+  - On corporate network → No MFA prompt
+  - From home/coffee shop → MFA required every 12 hours</code></pre>
+          </div>
+
+          <h2 id="named-locations">Named Locations Setup</h2>
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">PowerShell: Create Named Locations</span></div>
+            <pre><code># Connect to Microsoft Graph
+Connect-MgGraph -Scopes "Policy.ReadWrite.ConditionalAccess"
+
+# Create IP-based named location
+$params = @{
+    "@odata.type" = "#microsoft.graph.ipNamedLocation"
+    displayName = "Corporate Network"
+    isTrusted = $true
+    ipRanges = @(
+        @{ "@odata.type" = "#microsoft.graph.iPv4CidrRange"; cidrAddress = "10.0.0.0/8" }
+        @{ "@odata.type" = "#microsoft.graph.iPv4CidrRange"; cidrAddress = "192.168.1.0/24" }
+        @{ "@odata.type" = "#microsoft.graph.iPv4CidrRange"; cidrAddress = "203.0.113.50/32" }  # Office IP
+    )
+}
+New-MgIdentityConditionalAccessNamedLocation -BodyParameter $params
+
+# Create country-based named location
+$countryParams = @{
+    "@odata.type" = "#microsoft.graph.countryNamedLocation"
+    displayName = "Blocked Countries"
+    countriesAndRegions = @("KP", "IR", "RU", "CN")  # North Korea, Iran, Russia, China
+    includeUnknownCountriesAndRegions = $false
+}
+New-MgIdentityConditionalAccessNamedLocation -BodyParameter $countryParams</code></pre>
+          </div>
+
+          <h2 id="troubleshooting">Troubleshooting CA Issues</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔴 User blocked but shouldn't be</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Step 1:</strong> Check sign-in logs</p>
+                  <div class="code-block">
+                    <pre><code>Entra ID → Sign-in logs → Filter by user → Click failed sign-in
+Look at: 
+  - "Conditional Access" tab → Shows which policy blocked
+  - "Basic info" tab → Shows IP, device, location detected
+  - "Device info" tab → Shows compliance status</code></pre>
+                  </div>
+                  <p><strong>Step 2:</strong> Use What If tool</p>
+                  <div class="code-block">
+                    <pre><code>Entra ID → Conditional Access → What If
+Select:
+  - User: affected user
+  - Cloud app: app they're accessing
+  - IP address: their current IP
+  - Device platform: their device
+Click "What If" → See which policies would apply</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🟡 User gets MFA prompt repeatedly</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Common causes:</strong></p>
+                  <ul>
+                    <li>Sign-in frequency set too low</li>
+                    <li>Persistent browser session disabled</li>
+                    <li>Multiple CA policies conflicting</li>
+                    <li>Token lifetime too short</li>
+                  </ul>
+                  <p><strong>Fix:</strong> Adjust session controls, use "persistent browser session" for trusted devices</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>CA = Zero Trust policy engine</strong> - evaluates every sign-in</li>
+                <li><strong>Signals:</strong> User, device, location, app, risk</li>
+                <li><strong>Controls:</strong> Block, require MFA, require compliant device, limit session</li>
+                <li><strong>Know baseline policies:</strong> MFA for all, block legacy auth, require compliance</li>
+                <li><strong>Troubleshooting:</strong> Sign-in logs + What If tool</li>
+                <li><strong>Break-glass accounts:</strong> Always exclude from blocking policies</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="4-2-entra-objects.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Entra ID Objects</span>
+            </a>
+            <a href="4-4-entra-pim.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Entra PIM</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+      
+      <div class="sidebar-nav">
+        <!-- Section 1: IAM Foundations -->
+        <div class="nav-section">
+          <div class="nav-section-header">
+            <span>1. IAM Foundations</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
+            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
+            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
+            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
+            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
+            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
+            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
+            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
+          </div>
+        </div>
+
+        <!-- Section 2: Authentication Protocols -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>2. Authentication Protocols</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
+            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
+            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
+            <a href="2-4-saml.html" class="nav-item">SAML</a>
+            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
+            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
+            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
+            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
+            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
+            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
+          </div>
+        </div>
+
+        <!-- Section 3: Federation & SSO -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>3. Federation & SSO</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
+            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
+            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
+            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
+            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
+            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
+          </div>
+        </div>
+
+        <!-- Section 4: Microsoft Entra ID -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>4. Microsoft Entra ID</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
+            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
+            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
+            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
+            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
+            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
+            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
+            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
+          </div>
+        </div>
+
+        <!-- Section 5: Okta -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>5. Okta</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
+            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
+            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
+            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
+            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
+            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
+          </div>
+        </div>
+
+        <!-- Section 6: SailPoint & IGA -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>6. SailPoint & IGA</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
+            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
+            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
+            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
+            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
+            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
+          </div>
+        </div>
+
+        <!-- Section 7: PAM -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>7. Privileged Access (PAM)</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
+            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
+            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
+            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
+            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
+            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
+          </div>
+        </div>
+
+        <!-- Section 8: Cloud IAM -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>8. Cloud IAM</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
+            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
+            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
+            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
+            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
+            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
+            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
+            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
+          </div>
+        </div>
+
+        <!-- Section 9: IAM Architecture -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>9. IAM Architecture</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
+            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
+            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
+            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
+            <a href="9-5-api-security.html" class="nav-item">API Security</a>
+            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
+          </div>
+        </div>
+
+        <!-- Section 10: IAM Migrations -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>10. IAM Migrations</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
+            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
+            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
+            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
+            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
+            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
+          </div>
+        </div>
+
+        <!-- Section 11: Security & Attacks -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>11. Security & Attacks</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
+            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
+            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
+            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
+            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
+          </div>
+        </div>
+
+        <!-- Section 12: Reference -->
+        <div class="nav-section">
+          <div class="nav-section-header collapsed">
+            <span>12. Reference & Interview</span>
+            <span class="nav-section-icon">▼</span>
+          </div>
+          <div class="nav-section-items">
+            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
+            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
+            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
+            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
+            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
+            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="content-header">
+        <div class="breadcrumb">
+          <span>Home</span>
+        </div>
+        <div class="header-actions">
+          <button class="search-trigger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+            <kbd>⌘K</kbd>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero">
+        <h1 class="hero-title">Ultimate IAM Security Guide</h1>
+        <p class="hero-subtitle">
+          The definitive enterprise-grade Identity and Access Management reference for security professionals, 
+          architects, and interview preparation.
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-value">81</div>
+            <div class="stat-label">Pages</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Sections</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">200+</div>
+            <div class="stat-label">Interview Questions</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100+</div>
+            <div class="stat-label">Code Examples</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Cards Grid -->
+      <section class="section-grid">
+        <!-- Section 1 -->
+        <a href="1-1-iam-overview.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🏛️</div>
+            <div>
+              <div class="section-card-number">Section 1</div>
+              <div class="section-card-title">IAM Foundations</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Core concepts including authentication vs authorization, access control models, identity lifecycle, 
+            directory services, and governance fundamentals.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">8 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 2 -->
+        <a href="2-1-authentication-factors.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🔑</div>
+            <div>
+              <div class="section-card-number">Section 2</div>
+              <div class="section-card-title">Authentication Protocols</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Deep dive into Kerberos, NTLM, SAML, OAuth 2.0, OpenID Connect, RADIUS/TACACS+, 
+            PKI, and SSO mechanisms with attack vectors.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">10 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 3 -->
+        <a href="3-1-federation-fundamentals.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🌐</div>
+            <div>
+              <div class="section-card-number">Section 3</div>
+              <div class="section-card-title">Federation & SSO</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Federation trust relationships, SAML and OIDC federation setup, WS-Federation, 
+            B2B/B2C patterns, and troubleshooting techniques.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 4 -->
+        <a href="4-1-entra-overview.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">☁️</div>
+            <div>
+              <div class="section-card-number">Section 4</div>
+              <div class="section-card-title">Microsoft Entra ID</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Comprehensive Azure AD/Entra ID coverage including Conditional Access, PIM, 
+            Identity Protection, hybrid identity, and workload identities.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">8 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 5 -->
+        <a href="5-1-okta-overview.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🎯</div>
+            <div>
+              <div class="section-card-number">Section 5</div>
+              <div class="section-card-title">Okta</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Okta platform deep dive covering Universal Directory, authentication policies, 
+            lifecycle management, Workflows, and OIN integration.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 6 -->
+        <a href="6-1-sailpoint-overview.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">⚙️</div>
+            <div>
+              <div class="section-card-number">Section 6</div>
+              <div class="section-card-title">SailPoint & IGA</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Identity Governance and Administration including access certifications, 
+            role management, separation of duties, and provisioning workflows.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 7 -->
+        <a href="7-1-pam-overview.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🔒</div>
+            <div>
+              <div class="section-card-number">Section 7</div>
+              <div class="section-card-title">Privileged Access (PAM)</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Privileged Access Management including password vaulting, session management, 
+            JIT access, secrets management, and vendor comparisons.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 8 -->
+        <a href="8-1-aws-iam.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">☁️</div>
+            <div>
+              <div class="section-card-number">Section 8</div>
+              <div class="section-card-title">Cloud IAM</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            AWS IAM, Azure RBAC, GCP IAM, Kubernetes RBAC, multi-cloud identity strategies, 
+            Infrastructure as Code, and Cloud PAM solutions.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">8 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 9 -->
+        <a href="9-1-enterprise-iam-arch.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🏗️</div>
+            <div>
+              <div class="section-card-number">Section 9</div>
+              <div class="section-card-title">IAM Architecture</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Enterprise reference architectures, Zero Trust principles, hybrid cloud patterns, 
+            CIAM, API security, and high availability design.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 10 -->
+        <a href="10-1-migration-planning.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">🔄</div>
+            <div>
+              <div class="section-card-number">Section 10</div>
+              <div class="section-card-title">IAM Migrations</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Migration planning methodologies, IdP migrations, legacy modernization, 
+            platform transitions, and coexistence strategies.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 11 -->
+        <a href="11-1-identity-threat-landscape.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">⚔️</div>
+            <div>
+              <div class="section-card-number">Section 11</div>
+              <div class="section-card-title">Security & Attacks</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Identity threat landscape, credential attacks, token/session attacks, 
+            privilege escalation paths, and detection/response playbooks.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">5 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Section 12 -->
+        <a href="12-1-iam-glossary.html" class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-icon">📚</div>
+            <div>
+              <div class="section-card-number">Section 12</div>
+              <div class="section-card-title">Reference & Interview</div>
+            </div>
+          </div>
+          <p class="section-card-description">
+            Comprehensive glossary, 200+ interview questions with answers, scenario-based questions, 
+            protocol flow diagrams, and CLI/API reference.
+          </p>
+          <div class="section-card-meta">
+            <span class="section-card-pages">6 pages</span>
+            <span class="section-card-arrow">→</span>
+          </div>
+        </a>
+      </section>
+
+      <!-- Quick Start Section -->
+      <section style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Quick Start Paths</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-title">Interview Preparation</div>
+            <p class="feature-description">
+              Start with <a href="12-2-interview-questions.html">Interview Questions</a> and 
+              <a href="12-3-scenario-questions.html">Scenario Questions</a> for targeted prep.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔰</div>
+            <div class="feature-title">IAM Beginner</div>
+            <p class="feature-description">
+              Begin with <a href="1-1-iam-overview.html">IAM Overview</a> and work through 
+              Section 1 foundations before protocols.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">☁️</div>
+            <div class="feature-title">Cloud Security</div>
+            <p class="feature-description">
+              Jump to <a href="8-1-aws-iam.html">AWS IAM</a>, <a href="8-3-azure-rbac.html">Azure RBAC</a>, 
+              or <a href="8-4-gcp-iam.html">GCP IAM</a> for cloud-native identity.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔐</div>
+            <div class="feature-title">Protocol Deep Dive</div>
+            <p class="feature-description">
+              Explore <a href="2-2-kerberos.html">Kerberos</a>, <a href="2-4-saml.html">SAML</a>, 
+              <a href="2-5-oauth2.html">OAuth</a>, and <a href="2-6-oidc.html">OIDC</a> in detail.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Search Modal -->
+    <div class="search-modal">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" class="search-input" placeholder="Search documentation...">
+        </div>
+        <div class="search-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

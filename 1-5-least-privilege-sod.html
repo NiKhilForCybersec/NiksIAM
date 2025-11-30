@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Least Privilege & SoD - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Least Privilege & Separation of Duties</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>Two fundamental security principles that prevent insider threats and reduce blast radius of compromises. Essential for compliance (SOX, PCI-DSS, HIPAA).</p>
+          </div>
+
+          <h2 id="least-privilege">Principle of Least Privilege (PoLP)</h2>
+          <p>Users should have <strong>only the minimum permissions</strong> needed to perform their job functions, and only for the time they need them.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                     LEAST PRIVILEGE IN PRACTICE                                          │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ❌ BAD: Permanent Admin Access                                                         │
+│   ┌────────────────────────────────────────────────────────────────────────────┐        │
+│   │  User "jsmith" has Global Admin 24/7/365                                   │        │
+│   │  Risk: Credential theft = complete compromise                              │        │
+│   └────────────────────────────────────────────────────────────────────────────┘        │
+│                                                                                          │
+│   ✅ GOOD: Just-in-Time (JIT) Access                                                     │
+│   ┌────────────────────────────────────────────────────────────────────────────┐        │
+│   │  User "jsmith" has standard access normally                                │        │
+│   │  Requests Global Admin via PIM → Approved → 2 hours only                   │        │
+│   │  Risk: Limited window for credential theft                                 │        │
+│   └────────────────────────────────────────────────────────────────────────────┘        │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h3>Implementing Least Privilege</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Area</th><th>Implementation</th><th>Tools</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Admin Access</strong></td>
+                  <td>JIT elevation, time-limited roles</td>
+                  <td>Entra PIM, CyberArk, AWS IAM Roles</td>
+                </tr>
+                <tr>
+                  <td><strong>Application Access</strong></td>
+                  <td>Role-based, request-based for sensitive</td>
+                  <td>SailPoint, Okta, ServiceNow</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Access</strong></td>
+                  <td>Need-to-know, classification-based</td>
+                  <td>Purview, DLP, file permissions</td>
+                </tr>
+                <tr>
+                  <td><strong>Network Access</strong></td>
+                  <td>Microsegmentation, ZTNA</td>
+                  <td>Zscaler, Palo Alto, Tailscale</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Entra PIM: JIT Admin Access</span></div>
+            <pre><code># User requests elevation via PIM
+# 1. Open PIM in Azure Portal
+# 2. Click "Activate" on eligible role
+# 3. Provide justification
+# 4. Role active for configured duration (e.g., 2 hours)
+
+# PowerShell: Check eligible roles
+Get-AzureADMSPrivilegedRoleAssignment -ProviderId "aadRoles" `
+  -ResourceId $tenantId -Filter "subjectId eq '$userId'"
+
+# Audit: Who activated what
+Get-AzureADAuditDirectoryLogs -Filter "activityDisplayName eq 'Add member to role completed (PIM activation)'"</code></pre>
+          </div>
+
+          <h2 id="sod">Separation of Duties (SoD)</h2>
+          <p>No single person should have enough access to commit fraud or cause significant harm without detection. Split critical functions across multiple people.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                     SEPARATION OF DUTIES EXAMPLES                                        │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   FINANCE: Payment Processing                                                           │
+│   ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐            │
+│   │   CREATE VENDOR     │  │   APPROVE PAYMENT   │  │   RELEASE PAYMENT   │            │
+│   │   (Accounts Payable)│  │   (AP Manager)      │  │   (Treasury)        │            │
+│   │                     │  │                     │  │                     │            │
+│   │   Person A          │  │   Person B          │  │   Person C          │            │
+│   └─────────────────────┘  └─────────────────────┘  └─────────────────────┘            │
+│                                                                                          │
+│   IT: Code Deployment                                                                    │
+│   ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐            │
+│   │   WRITE CODE        │  │   REVIEW/APPROVE    │  │   DEPLOY TO PROD    │            │
+│   │   (Developer)       │  │   (Tech Lead)       │  │   (DevOps/SRE)      │            │
+│   └─────────────────────┘  └─────────────────────┘  └─────────────────────┘            │
+│                                                                                          │
+│   CONFLICT: Same person should NOT have both "Create Vendor" AND "Approve Payment"      │
+│             This would allow creation of fake vendors and self-approval of payments     │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h3>Common SoD Violations (Toxic Combinations)</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Function 1</th><th>Function 2</th><th>Risk</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>Create Vendor</td>
+                  <td>Approve Payment</td>
+                  <td>Create fake vendor, pay self</td>
+                </tr>
+                <tr>
+                  <td>Create User</td>
+                  <td>Assign Permissions</td>
+                  <td>Create backdoor account with admin</td>
+                </tr>
+                <tr>
+                  <td>Write Code</td>
+                  <td>Deploy to Production</td>
+                  <td>Deploy malicious code without review</td>
+                </tr>
+                <tr>
+                  <td>Process Refund</td>
+                  <td>Approve Refund</td>
+                  <td>Self-approve fraudulent refunds</td>
+                </tr>
+                <tr>
+                  <td>Modify Audit Logs</td>
+                  <td>System Admin</td>
+                  <td>Cover tracks after malicious activity</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Implementing SoD Controls</h3>
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">SailPoint: SoD Policy Definition</span></div>
+            <pre><code># SoD Policy: "Vendor Management Conflict"
+{
+  "name": "AP-Vendor-Payment-Conflict",
+  "description": "Users cannot both create vendors and approve payments",
+  "leftCriteria": {
+    "entitlements": ["SAP:Create_Vendor", "Oracle:AP_VENDOR_ENTRY"]
+  },
+  "rightCriteria": {
+    "entitlements": ["SAP:Approve_Payment", "Oracle:AP_PAYMENT_APPROVAL"]
+  },
+  "conflictAction": "BLOCK",  // or "ALLOW_WITH_MITIGATION"
+  "mitigatingControl": "Quarterly review by Internal Audit"
+}</code></pre>
+          </div>
+
+          <h2 id="compliance">Compliance Requirements</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Framework</th><th>Least Privilege Requirement</th><th>SoD Requirement</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>SOX</strong></td>
+                  <td>Access limited to job function</td>
+                  <td>Required for financial systems</td>
+                </tr>
+                <tr>
+                  <td><strong>PCI-DSS</strong></td>
+                  <td>Req 7: Restrict access to need-to-know</td>
+                  <td>Req 6.4.2: Separate dev/test/prod</td>
+                </tr>
+                <tr>
+                  <td><strong>HIPAA</strong></td>
+                  <td>Minimum necessary standard</td>
+                  <td>Workforce clearance procedures</td>
+                </tr>
+                <tr>
+                  <td><strong>ISO 27001</strong></td>
+                  <td>A.9.2.3: Management of privileged access</td>
+                  <td>A.6.1.2: Segregation of duties</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Least Privilege:</strong> Minimum access needed, for minimum time (JIT)</li>
+                <li><strong>SoD:</strong> Split critical functions to prevent fraud without collusion</li>
+                <li><strong>Know toxic combinations:</strong> Create vendor + approve payment, write code + deploy</li>
+                <li><strong>Tools:</strong> Entra PIM (JIT), SailPoint (SoD policies), access certifications</li>
+                <li><strong>Compliance:</strong> SOX requires SoD for financial systems</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="1-4-access-control-models.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Access Control Models</span>
+            </a>
+            <a href="1-6-directory-services.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Directory Services</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+#!/bin/bash
+
+# Generate HTML pages from template
+generate_page() {
+  local filename=$1
+  local title=$2
+  local section_name=$3
+  local badge=$4
+  local prev_page=$5
+  local prev_title=$6
+  local next_page=$7
+  local next_title=$8
+  local content=$9
+  
+  cat > "$filename" << EOF
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title} - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+</head>
+<body>
+  <div class="page-wrapper">
+    <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-header"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
+            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
+            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
+            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
+            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
+            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
+            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
+            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
+            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
+            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
+            <a href="2-4-saml.html" class="nav-item">SAML</a>
+            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
+            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
+            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
+            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
+            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
+            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
+            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
+            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
+            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
+            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
+            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
+            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
+            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
+            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
+            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
+            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
+            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
+            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
+            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
+            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
+            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
+            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
+            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
+            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
+            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
+            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
+            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
+            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
+            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
+            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
+            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
+            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
+            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
+            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
+            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
+            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
+            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
+            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
+            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
+            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
+            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
+            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
+            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
+            <a href="9-5-api-security.html" class="nav-item">API Security</a>
+            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
+            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
+            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
+            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
+            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
+            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
+            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
+            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
+            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
+            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
+            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
+            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
+            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
+            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
+            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main class="main-content">
+      <header class="content-header">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">›</span>
+          <span>${section_name}</span>
+          <span class="breadcrumb-separator">›</span>
+          <span>${title}</span>
+        </div>
+        <div class="header-actions">
+          <button class="search-trigger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+            <kbd>⌘K</kbd>
+          </button>
+        </div>
+      </header>
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge ${badge}">$(echo $badge | sed 's/badge-//' | tr '[:lower:]' '[:upper:]') $([ "$badge" = "badge-l1" ] && echo "Fundamentals" || ([ "$badge" = "badge-l2" ] && echo "Technical" || echo "Expert"))</div>
+          <h1>${title}</h1>
+          ${content}
+          <nav class="page-nav">
+            <a href="${prev_page}" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">${prev_title}</span>
+            </a>
+            <a href="${next_page}" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">${next_title}</span>
+            </a>
+          </nav>
+        </article>
+        <aside class="toc">
+          <div class="toc-header">On This Page</div>
+          <ul class="toc-list"></ul>
+        </aside>
+      </div>
+    </main>
+    <div class="search-modal">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" class="search-input" placeholder="Search documentation...">
+        </div>
+        <div class="search-results"></div>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
+EOF
+  echo "Created: $filename"
+}
+
+echo "Template generator ready"

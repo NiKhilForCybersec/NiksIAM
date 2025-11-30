@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAML 2.0 - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l2">L2 Technical</div>
+          <h1>SAML 2.0: Enterprise SSO Standard</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>SAML (Security Assertion Markup Language) is the enterprise SSO standard. Understand the flow, debug SAML issues, configure integrations, and troubleshoot common problems.</p>
+          </div>
+
+          <h2 id="saml-basics">SAML Basics</h2>
+          <p>SAML enables Single Sign-On between an Identity Provider (IdP) and Service Providers (SPs). User authenticates once at IdP, then accesses multiple SPs without re-entering credentials.</p>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Role</th><th>Examples</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Identity Provider (IdP)</strong></td>
+                  <td>Authenticates users, issues assertions</td>
+                  <td>Okta, Entra ID, Ping, ADFS</td>
+                </tr>
+                <tr>
+                  <td><strong>Service Provider (SP)</strong></td>
+                  <td>Provides the application/service</td>
+                  <td>Salesforce, ServiceNow, AWS, Workday</td>
+                </tr>
+                <tr>
+                  <td><strong>Assertion</strong></td>
+                  <td>XML document proving user identity + attributes</td>
+                  <td>Contains: NameID, attributes, conditions</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="sp-initiated-flow">SP-Initiated Flow (Most Common)</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    SP-INITIATED SAML FLOW                                                │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   USER                   SERVICE PROVIDER           IDENTITY PROVIDER                    │
+│   (Browser)              (Salesforce)               (Okta)                               │
+│      │                        │                           │                              │
+│      │  1. Access app         │                           │                              │
+│      │───────────────────────►│                           │                              │
+│      │                        │                           │                              │
+│      │  2. Redirect to IdP (SAML AuthnRequest)            │                              │
+│      │◄───────────────────────│                           │                              │
+│      │────────────────────────────────────────────────────►                              │
+│      │                        │                           │                              │
+│      │                        │   3. User authenticates   │                              │
+│      │                        │      (login page, MFA)    │                              │
+│      │◄───────────────────────────────────────────────────│                              │
+│      │────────────────────────────────────────────────────►                              │
+│      │                        │                           │                              │
+│      │  4. Redirect back with SAML Response (Assertion)   │                              │
+│      │◄───────────────────────────────────────────────────│                              │
+│      │───────────────────────►│                           │                              │
+│      │                        │                           │                              │
+│      │                        │  5. Validate assertion    │                              │
+│      │                        │     - Check signature     │                              │
+│      │                        │     - Check audience      │                              │
+│      │                        │     - Check time          │                              │
+│      │                        │     - Extract user info   │                              │
+│      │                        │                           │                              │
+│      │  6. Access granted     │                           │                              │
+│      │◄───────────────────────│                           │                              │
+│      │                        │                           │                              │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="saml-assertion">SAML Assertion Structure</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">SAML Assertion (Simplified)</span></div>
+            <pre><code>&lt;saml:Assertion ID="_abc123" IssueInstant="2024-01-15T10:30:00Z"&gt;
+  
+  &lt;!-- WHO issued this assertion --&gt;
+  &lt;saml:Issuer&gt;https://company.okta.com&lt;/saml:Issuer&gt;
+  
+  &lt;!-- Digital signature (proves authenticity) --&gt;
+  &lt;ds:Signature&gt;...certificate and signature...&lt;/ds:Signature&gt;
+  
+  &lt;!-- WHO is the user --&gt;
+  &lt;saml:Subject&gt;
+    &lt;saml:NameID Format="emailAddress"&gt;schen@company.com&lt;/saml:NameID&gt;
+    &lt;saml:SubjectConfirmation Method="bearer"&gt;
+      &lt;saml:SubjectConfirmationData 
+        Recipient="https://salesforce.com/saml/acs"
+        NotOnOrAfter="2024-01-15T10:35:00Z"/&gt;
+    &lt;/saml:SubjectConfirmation&gt;
+  &lt;/saml:Subject&gt;
+  
+  &lt;!-- WHEN is this valid --&gt;
+  &lt;saml:Conditions NotBefore="2024-01-15T10:29:00Z" NotOnOrAfter="2024-01-15T10:35:00Z"&gt;
+    &lt;saml:AudienceRestriction&gt;
+      &lt;saml:Audience&gt;https://salesforce.com&lt;/saml:Audience&gt;
+    &lt;/saml:AudienceRestriction&gt;
+  &lt;/saml:Conditions&gt;
+  
+  &lt;!-- User attributes (for authorization) --&gt;
+  &lt;saml:AttributeStatement&gt;
+    &lt;saml:Attribute Name="firstName"&gt;
+      &lt;saml:AttributeValue&gt;Sarah&lt;/saml:AttributeValue&gt;
+    &lt;/saml:Attribute&gt;
+    &lt;saml:Attribute Name="groups"&gt;
+      &lt;saml:AttributeValue&gt;Sales-Team&lt;/saml:AttributeValue&gt;
+      &lt;saml:AttributeValue&gt;US-Employees&lt;/saml:AttributeValue&gt;
+    &lt;/saml:Attribute&gt;
+  &lt;/saml:AttributeStatement&gt;
+  
+&lt;/saml:Assertion&gt;</code></pre>
+          </div>
+
+          <h2 id="troubleshooting">Troubleshooting SAML</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔧 How to Capture SAML Traffic</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Browser Extensions:</strong></p>
+                  <ul>
+                    <li><strong>SAML-tracer</strong> (Firefox/Chrome) - Shows decoded SAML requests/responses</li>
+                    <li><strong>SAML DevTools</strong> - Chrome extension with decode</li>
+                  </ul>
+                  <p><strong>Steps:</strong></p>
+                  <ol>
+                    <li>Install SAML-tracer extension</li>
+                    <li>Open extension before starting SSO</li>
+                    <li>Attempt SSO login</li>
+                    <li>Look for SAML entries in tracer</li>
+                    <li>Click to view decoded assertion</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔴 Error: "Signature validation failed"</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Causes:</strong></p>
+                  <ul>
+                    <li>IdP certificate expired or rotated</li>
+                    <li>Wrong certificate uploaded to SP</li>
+                    <li>Certificate mismatch between IdP and SP config</li>
+                  </ul>
+                  <p><strong>Fix:</strong></p>
+                  <ol>
+                    <li>Download current certificate from IdP metadata</li>
+                    <li>Upload to SP's SAML configuration</li>
+                    <li>Verify certificate dates (not expired)</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔴 Error: "Audience mismatch"</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Cause:</strong> Entity ID in IdP doesn't match what SP expects</p>
+                  <p><strong>In assertion:</strong> <code>&lt;saml:Audience&gt;https://wrong-url.com&lt;/saml:Audience&gt;</code></p>
+                  <p><strong>Fix:</strong> Update IdP configuration to use correct SP Entity ID (usually from SP metadata)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔴 Error: "Response is not valid (time)"</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Cause:</strong> Clock skew between IdP and SP servers</p>
+                  <p><strong>In assertion:</strong> NotBefore/NotOnOrAfter conditions fail</p>
+                  <p><strong>Fix:</strong></p>
+                  <ul>
+                    <li>Sync server clocks with NTP</li>
+                    <li>Some SPs allow configuring clock skew tolerance (e.g., 5 minutes)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="configuration">Setting Up SAML Integration</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Metadata Exchange</span></div>
+            <pre><code># What you need from IdP (e.g., Okta):
+1. IdP Entity ID: https://company.okta.com
+2. SSO URL: https://company.okta.com/app/salesforce/sso/saml
+3. Certificate: Base64-encoded X.509 cert (for signature validation)
+4. Or: IdP Metadata URL: https://company.okta.com/app/xxx/sso/saml/metadata
+
+# What you need from SP (e.g., Salesforce):
+1. SP Entity ID: https://salesforce.com
+2. ACS URL: https://company.my.salesforce.com/saml/acs
+3. NameID Format: emailAddress or unspecified
+4. Or: SP Metadata URL</code></pre>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Know the flow:</strong> SP redirects to IdP → User authenticates → IdP sends assertion → SP validates</li>
+                <li><strong>Key components:</strong> IdP, SP, Assertion (with NameID, attributes, signature)</li>
+                <li><strong>Troubleshooting tools:</strong> SAML-tracer browser extension</li>
+                <li><strong>Common errors:</strong> Signature validation (cert issue), Audience mismatch (Entity ID wrong), Time issues (clock skew)</li>
+                <li><strong>SAML vs OIDC:</strong> SAML is XML-based, enterprise-focused; OIDC is JSON-based, modern/mobile-friendly</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="2-3-ntlm.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">NTLM</span>
+            </a>
+            <a href="2-5-oauth2.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">OAuth 2.0</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

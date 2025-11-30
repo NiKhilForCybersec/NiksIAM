@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication vs Authorization - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Authentication vs Authorization: The Foundation</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>
+              The fundamental distinction every IAM professional must understand: proving WHO you are 
+              (authentication) versus what you're ALLOWED to do (authorization). Includes real protocols, 
+              token analysis, and enterprise scenarios.
+            </p>
+          </div>
+
+          <h2 id="core-concepts">The Core Distinction</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    AUTHENTICATION vs AUTHORIZATION                                       │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                          AUTHENTICATION (AuthN)                                  │   │
+│   │                          "Who are you?"                                          │   │
+│   │                                                                                  │   │
+│   │   USER ──────► [ Username + Password ] ──────► IDENTITY VERIFIED ✓              │   │
+│   │                [ + MFA Code         ]                                            │   │
+│   │                                                                                  │   │
+│   │   Technologies: Kerberos, SAML, OIDC, LDAP Bind, RADIUS                         │   │
+│   │   Result: System knows WHO you are                                              │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                          │                                              │
+│                                          ▼                                              │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                          AUTHORIZATION (AuthZ)                                   │   │
+│   │                          "What can you do?"                                      │   │
+│   │                                                                                  │   │
+│   │   VERIFIED USER ──────► [ Check Permissions ] ──────► ACCESS GRANTED/DENIED     │   │
+│   │                         [ Check Roles/Groups]                                    │   │
+│   │                                                                                  │   │
+│   │   Technologies: OAuth 2.0 scopes, RBAC, ABAC, AD Groups, IAM Policies           │   │
+│   │   Result: System knows WHAT you can do                                          │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                          │
+│   KEY: Authentication ALWAYS happens before Authorization                                │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="airport-analogy">Real-World Analogy: The Airport</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Step</th><th>Airport Example</th><th>IT Equivalent</th><th>Type</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Show passport at check-in</td><td>Enter username/password</td><td><strong>AuthN</strong></td></tr>
+                <tr><td>2</td><td>Agent verifies identity</td><td>System validates credentials</td><td><strong>AuthN</strong></td></tr>
+                <tr><td>3</td><td>Get boarding pass for Economy</td><td>Get token with roles/groups</td><td><strong>AuthZ</strong></td></tr>
+                <tr><td>4</td><td>TSA checks ID + boarding pass</td><td>App validates token</td><td><strong>Both</strong></td></tr>
+                <tr><td>5</td><td>Can't enter First Class lounge</td><td>Can't access Admin panel</td><td><strong>AuthZ</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="enterprise-day">Enterprise Example: Sarah's Day</h2>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>8:30 AM - Login to Laptop</h4>
+                <p><strong>AuthN:</strong> Sarah enters CORP\schen + password → Kerberos TGT issued</p>
+                <p><strong>AuthZ:</strong> Group Policy applies based on OU and group memberships</p>
+                <div class="code-block">
+                  <pre><code># Groups determine what she can do
+Groups: Domain Users, Engineering-Staff, VPN-Users
+GPOs Applied: Default Domain, Engineering-Workstations</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>9:00 AM - Access GitHub (SSO)</h4>
+                <p><strong>AuthN:</strong> SAML assertion from Okta proves identity</p>
+                <p><strong>AuthZ:</strong> GitHub reads groups claim, grants repo access</p>
+                <div class="code-block">
+                  <pre><code># From SAML assertion
+Teams: engineering-frontend, code-reviewers
+Repo Access: frontend-app (write), backend (read), infra (none)</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>10:00 AM - Try HR SharePoint</h4>
+                <p><strong>AuthN:</strong> ✓ Already authenticated (valid token)</p>
+                <p><strong>AuthZ:</strong> ✗ DENIED - not in HR-Staff group</p>
+                <div class="code-block">
+                  <pre><code># Authorization check failed
+Required: HR-Staff OR HR-Managers
+Sarah has: Engineering-Staff, VPN-Users
+Result: HTTP 403 Forbidden</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="protocols">Protocol Mapping</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Protocol</th><th>Primary Purpose</th><th>Token/Output</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Kerberos</strong></td><td>Authentication</td><td>TGT (who you are)</td></tr>
+                <tr><td><strong>SAML 2.0</strong></td><td>AuthN + Attributes</td><td>Assertion with identity + claims</td></tr>
+                <tr><td><strong>OAuth 2.0</strong></td><td>Authorization</td><td>Access token with scopes</td></tr>
+                <tr><td><strong>OpenID Connect</strong></td><td>Authentication</td><td>ID token (identity proof)</td></tr>
+                <tr><td><strong>LDAP</strong></td><td>AuthN + Directory</td><td>Bind result + attributes</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout warning">
+            <div class="callout-content">
+              <div class="callout-title">⚠️ Common Mistake: "OAuth is for Login"</div>
+              <p>OAuth 2.0 is <strong>authorization</strong>, not authentication. OpenID Connect (OIDC) adds authentication on top of OAuth. Use OIDC when you need to know WHO the user is.</p>
+            </div>
+          </div>
+
+          <h2 id="tokens">ID Token vs Access Token</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">JWT Token Comparison</span></div>
+            <pre><code>// ID TOKEN (Authentication) - WHO you are
+{
+  "sub": "user-id-12345",
+  "name": "Sarah Chen",
+  "email": "schen@company.com",
+  "aud": "client-app-id",      // For the CLIENT
+  "auth_time": 1699900000,
+  "amr": ["pwd", "mfa"]        // How they authenticated
+}
+
+// ACCESS TOKEN (Authorization) - WHAT you can do
+{
+  "sub": "user-id-12345",
+  "aud": "api://backend",       // For the API
+  "scp": "Files.Read Files.Write",  // Permissions
+  "roles": ["User", "Contributor"],
+  "groups": ["engineering-staff"]
+}</code></pre>
+          </div>
+
+          <h2 id="errors">Troubleshooting: 401 vs 403</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Error</th><th>Meaning</th><th>Root Cause</th><th>Fix</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>401 Unauthorized</strong></td>
+                  <td>AuthN Failed</td>
+                  <td>Token missing, expired, or invalid</td>
+                  <td>Re-authenticate, check token</td>
+                </tr>
+                <tr>
+                  <td><strong>403 Forbidden</strong></td>
+                  <td>AuthZ Failed</td>
+                  <td>User identified but lacks permission</td>
+                  <td>Check groups, roles, policies</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Points for Interviews</div>
+              <ul>
+                <li><strong>AuthN vs AuthZ:</strong> WHO you are vs WHAT you can do</li>
+                <li><strong>OAuth is AuthZ</strong>, OIDC adds AuthN on top</li>
+                <li><strong>401 = AuthN problem</strong>, 403 = AuthZ problem</li>
+                <li><strong>ID token</strong> for client app, <strong>Access token</strong> for API</li>
+                <li>AuthN always happens before AuthZ</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="1-1-iam-overview.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">IAM Overview</span>
+            </a>
+            <a href="1-3-identity-lifecycle.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Identity Lifecycle</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

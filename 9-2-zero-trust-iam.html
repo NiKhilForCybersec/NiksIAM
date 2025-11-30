@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero Trust IAM - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l3">L3 Advanced</div>
+          <h1>Zero Trust Identity Architecture</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>Zero Trust is the modern security model: "Never trust, always verify." Identity is the new perimeter. This covers Zero Trust principles, architecture, and real implementation with Microsoft, Okta, and cloud platforms.</p>
+          </div>
+
+          <h2 id="principles">Zero Trust Principles</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    ZERO TRUST vs TRADITIONAL SECURITY                                    │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   TRADITIONAL (Castle and Moat)               ZERO TRUST                                │
+│   ┌─────────────────────────────┐            ┌─────────────────────────────┐            │
+│   │  ┌───────────────────────┐  │            │  Every access request is    │            │
+│   │  │    TRUSTED ZONE       │  │            │  verified regardless of     │            │
+│   │  │  (Inside firewall)    │  │            │  location                   │            │
+│   │  │                       │  │            │                             │            │
+│   │  │  Once inside = trusted│  │            │  ┌─────┐ ──verify──► ┌───┐  │            │
+│   │  │                       │  │            │  │User │             │App│  │            │
+│   │  └───────────────────────┘  │            │  └─────┘ ◄──verify── └───┘  │            │
+│   │         🏰                  │            │                             │            │
+│   │      Firewall              │            │  Every request evaluated:   │            │
+│   │         ▼                   │            │  • Identity verified        │            │
+│   │  ┌───────────────────────┐  │            │  • Device compliance        │            │
+│   │  │  UNTRUSTED ZONE       │  │            │  • Access policies          │            │
+│   │  │  (Outside firewall)   │  │            │  • Continuous monitoring    │            │
+│   │  └───────────────────────┘  │            │                             │            │
+│   └─────────────────────────────┘            └─────────────────────────────┘            │
+│                                                                                          │
+│   PROBLEM: Once attacker gets                 SOLUTION: Even if attacker                │
+│   inside, they move freely                    gets in, every action verified            │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h3>Core Principles</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Principle</th><th>What It Means</th><th>IAM Implementation</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Verify Explicitly</strong></td>
+                  <td>Always authenticate and authorize based on all available data</td>
+                  <td>Conditional Access, MFA, device compliance</td>
+                </tr>
+                <tr>
+                  <td><strong>Least Privilege</strong></td>
+                  <td>Limit user access with JIT/JEA, risk-based policies</td>
+                  <td>PIM, RBAC, time-limited access</td>
+                </tr>
+                <tr>
+                  <td><strong>Assume Breach</strong></td>
+                  <td>Minimize blast radius, segment access, encrypt data</td>
+                  <td>Microsegmentation, session monitoring, anomaly detection</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="identity-pillar">Identity: The Control Plane</h2>
+          <p>In Zero Trust, <strong>identity is the new perimeter</strong>. Every access decision starts with strong identity verification.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    ZERO TRUST IDENTITY VERIFICATION                                      │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ACCESS REQUEST                POLICY ENGINE                    ACCESS DECISION        │
+│                                                                                          │
+│   ┌─────────────────┐          ┌─────────────────────────────┐  ┌─────────────────┐    │
+│   │ User: jsmith    │          │                             │  │                 │    │
+│   │ Device: laptop  │─────────►│  EVALUATE ALL SIGNALS       │─►│  ✅ ALLOW       │    │
+│   │ Location: home  │          │                             │  │  + Require MFA  │    │
+│   │ App: Salesforce │          │  • Is identity verified?    │  │  + 8hr session  │    │
+│   │ Time: 2:00 PM   │          │  • Is MFA completed?        │  │                 │    │
+│   │ Risk: Low       │          │  • Is device compliant?     │  └─────────────────┘    │
+│   └─────────────────┘          │  • Is location trusted?     │                         │
+│                                │  • Is behavior normal?      │  ┌─────────────────┐    │
+│   ┌─────────────────┐          │  • What's the user risk?    │  │                 │    │
+│   │ User: jsmith    │          │  • What's the sign-in risk? │─►│  ❌ BLOCK       │    │
+│   │ Device: unknown │─────────►│                             │  │  High risk      │    │
+│   │ Location: Russia│          │  THEN: Apply appropriate    │  │                 │    │
+│   │ App: Azure Portal│         │        access controls      │  └─────────────────┘    │
+│   │ Time: 3:00 AM   │          │                             │                         │
+│   │ Risk: High      │          └─────────────────────────────┘                         │
+│   └─────────────────┘                                                                   │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="microsoft-zt">Microsoft Zero Trust with Entra ID</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Zero Trust Conditional Access Policies</span></div>
+            <pre><code># Policy 1: Require MFA for All Users
+Users: All users (exclude break-glass)
+Apps: All cloud apps
+Conditions: All
+Grant: Require MFA
+
+# Policy 2: Block Legacy Authentication
+Users: All users
+Apps: All cloud apps
+Conditions: Client apps = Legacy auth clients
+Grant: Block
+
+# Policy 3: Require Compliant Device for Sensitive Apps
+Users: All users
+Apps: Azure Portal, M365 Admin, AWS Console
+Conditions: All platforms
+Grant: Require compliant device + MFA
+
+# Policy 4: Block High-Risk Sign-ins
+Users: All users
+Apps: All cloud apps
+Conditions: Sign-in risk = High
+Grant: Block
+
+# Policy 5: Require Password Change for High-Risk Users
+Users: All users
+Apps: All cloud apps
+Conditions: User risk = High
+Grant: Require password change + MFA
+
+# Policy 6: Restrict by Location
+Users: All users
+Apps: All cloud apps
+Conditions: Location = Blocked countries (Russia, North Korea, etc.)
+Grant: Block</code></pre>
+          </div>
+
+          <h2 id="architecture">Zero Trust Architecture Components</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Purpose</th><th>Technologies</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Identity Provider</strong></td>
+                  <td>Central authentication, SSO, MFA</td>
+                  <td>Entra ID, Okta, Ping Identity</td>
+                </tr>
+                <tr>
+                  <td><strong>Policy Engine</strong></td>
+                  <td>Real-time access decisions</td>
+                  <td>Conditional Access, Okta Policies</td>
+                </tr>
+                <tr>
+                  <td><strong>Device Trust</strong></td>
+                  <td>Verify device health and compliance</td>
+                  <td>Intune, Jamf, CrowdStrike, Carbon Black</td>
+                </tr>
+                <tr>
+                  <td><strong>Network Access</strong></td>
+                  <td>Secure access without VPN</td>
+                  <td>Zscaler, Cloudflare Access, Palo Alto Prisma</td>
+                </tr>
+                <tr>
+                  <td><strong>Risk Assessment</strong></td>
+                  <td>Real-time risk scoring</td>
+                  <td>Entra Identity Protection, Okta ThreatInsight</td>
+                </tr>
+                <tr>
+                  <td><strong>Microsegmentation</strong></td>
+                  <td>Limit lateral movement</td>
+                  <td>Illumio, Guardicore, Azure NSGs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="implementation">Implementation Roadmap</h2>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Phase 1: Foundation (Months 1-3)</h4>
+                <ul>
+                  <li>Deploy MFA for all users (start with admins)</li>
+                  <li>Block legacy authentication</li>
+                  <li>Implement SSO for critical apps</li>
+                  <li>Enable sign-in and audit logging</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Phase 2: Device Trust (Months 3-6)</h4>
+                <ul>
+                  <li>Enroll devices in MDM (Intune/Jamf)</li>
+                  <li>Define compliance policies</li>
+                  <li>Require compliant devices for sensitive apps</li>
+                  <li>Implement Hybrid Azure AD Join</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Phase 3: Risk-Based Access (Months 6-9)</h4>
+                <ul>
+                  <li>Enable Identity Protection</li>
+                  <li>Configure risk-based Conditional Access</li>
+                  <li>Implement PIM for admin access</li>
+                  <li>Deploy ZTNA for remote access</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Phase 4: Continuous Verification (Months 9-12)</h4>
+                <ul>
+                  <li>Session controls and CAE</li>
+                  <li>Behavioral analytics (UEBA)</li>
+                  <li>Microsegmentation</li>
+                  <li>Continuous monitoring and improvement</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Core principle:</strong> "Never trust, always verify"</li>
+                <li><strong>Three pillars:</strong> Verify explicitly, least privilege, assume breach</li>
+                <li><strong>Identity is the new perimeter:</strong> Every access decision starts with identity</li>
+                <li><strong>Continuous verification:</strong> Not just at login, but throughout session</li>
+                <li><strong>Microsoft implementation:</strong> Conditional Access + Identity Protection + PIM</li>
+                <li><strong>No VPN needed:</strong> ZTNA provides secure access from anywhere</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="9-1-enterprise-iam-arch.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Enterprise IAM Architecture</span>
+            </a>
+            <a href="9-3-hybrid-cloud-iam.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Hybrid Cloud IAM</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

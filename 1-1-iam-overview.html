@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IAM Overview - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Identity and Access Management: Complete Overview</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>This is your starting point for IAM. Covers what IAM is, why it matters, the technology landscape, day-to-day operations, and career progression from L1 to Senior IAM Engineer.</p>
+          </div>
+
+          <h2 id="what-is-iam">What is IAM?</h2>
+          <p>Identity and Access Management (IAM) is the discipline of ensuring the <strong>right people</strong> have the <strong>right access</strong> to the <strong>right resources</strong> at the <strong>right time</strong> for the <strong>right reasons</strong>.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    THE IAM LIFECYCLE                                                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│     ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐                 │
+│     │  CREATE  │─────►│  MANAGE  │─────►│  MONITOR │─────►│  REMOVE  │                 │
+│     │ Identity │      │  Access  │      │  Usage   │      │  Access  │                 │
+│     └──────────┘      └──────────┘      └──────────┘      └──────────┘                 │
+│          │                 │                 │                 │                        │
+│          ▼                 ▼                 ▼                 ▼                        │
+│     • Onboarding      • SSO/MFA         • Audit logs     • Offboarding                 │
+│     • Provisioning    • Access Request  • Reviews        • Deprovisioning              │
+│     • Account Setup   • Role Assignment • Certifications • Account Disable             │
+│                                                                                          │
+│   CORE QUESTION: Who has access to what, and should they?                               │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="why-iam">Why IAM Matters</h2>
+          
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Driver</th><th>Business Impact</th><th>IAM Solution</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Security</strong></td>
+                  <td>80% of breaches involve stolen credentials</td>
+                  <td>MFA, Zero Trust, least privilege</td>
+                </tr>
+                <tr>
+                  <td><strong>Compliance</strong></td>
+                  <td>SOX, HIPAA, PCI-DSS, GDPR fines</td>
+                  <td>Access certifications, audit trails</td>
+                </tr>
+                <tr>
+                  <td><strong>Productivity</strong></td>
+                  <td>Users can't work without access</td>
+                  <td>SSO, automated provisioning</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost</strong></td>
+                  <td>Password resets cost $70 each, orphan licenses</td>
+                  <td>SSPR, lifecycle automation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="iam-landscape">The IAM Technology Landscape</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    ENTERPRISE IAM ARCHITECTURE                                           │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                      IDENTITY PROVIDERS (IdP)                                   │   │
+│   │   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │   │
+│   │   │ Active Directory│  │   Entra ID      │  │      Okta       │                │   │
+│   │   │   (On-Prem)     │  │   (Cloud)       │  │    (Cloud)      │                │   │
+│   │   └─────────────────┘  └─────────────────┘  └─────────────────┘                │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                          │                                              │
+│                                    SSO/Federation                                       │
+│                                          │                                              │
+│   ┌────────────────────────────┬─────────┴────────────┬────────────────────────────┐   │
+│   │                            │                      │                            │   │
+│   ▼                            ▼                      ▼                            ▼   │
+│   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐   │
+│   │ SaaS Apps    │      │ On-Prem Apps │      │ Cloud Infra  │      │ Databases    │   │
+│   │ (Salesforce, │      │ (SAP, Oracle,│      │ (AWS, Azure, │      │ (SQL, Oracle │   │
+│   │  ServiceNow) │      │  File Shares)│      │  GCP)        │      │  MongoDB)    │   │
+│   └──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘   │
+│                                                                                          │
+│   SUPPORTING SYSTEMS:                                                                   │
+│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               │
+│   │     IGA      │  │     PAM      │  │    SIEM      │  │     MDM      │               │
+│   │ (SailPoint)  │  │ (CyberArk)   │  │  (Splunk)    │  │  (Intune)    │               │
+│   └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘               │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="core-components">Core IAM Components</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Purpose</th><th>Technologies</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Directory Services</strong></td>
+                  <td>Store and manage identities</td>
+                  <td>Active Directory, Entra ID, LDAP</td>
+                </tr>
+                <tr>
+                  <td><strong>Authentication</strong></td>
+                  <td>Verify user identity</td>
+                  <td>Kerberos, SAML, OIDC, MFA</td>
+                </tr>
+                <tr>
+                  <td><strong>Authorization</strong></td>
+                  <td>Control what users can do</td>
+                  <td>RBAC, ABAC, Conditional Access</td>
+                </tr>
+                <tr>
+                  <td><strong>SSO/Federation</strong></td>
+                  <td>Single login for multiple apps</td>
+                  <td>Okta, Entra ID, Ping Identity</td>
+                </tr>
+                <tr>
+                  <td><strong>Identity Governance</strong></td>
+                  <td>Manage access lifecycle</td>
+                  <td>SailPoint, Saviynt, One Identity</td>
+                </tr>
+                <tr>
+                  <td><strong>Privileged Access</strong></td>
+                  <td>Secure admin/root access</td>
+                  <td>CyberArk, BeyondTrust, Delinea</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="day-in-life">Day in the Life: IAM Engineer by Level</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>👶 Junior IAM Engineer (L1) - Daily Tasks</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <ul>
+                    <li><strong>Morning:</strong> Process access requests queue (ServiceNow tickets)</li>
+                    <li><strong>10 AM:</strong> Reset passwords, unlock accounts, resolve MFA issues</li>
+                    <li><strong>Afternoon:</strong> Provision new hire accounts from HR feed</li>
+                    <li><strong>3 PM:</strong> Disable accounts for terminated employees</li>
+                    <li><strong>End of day:</strong> Document completed tickets, escalate complex issues</li>
+                  </ul>
+                  <p><strong>Tools:</strong> AD Users & Computers, Azure Portal, Okta Admin, ServiceNow</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>💼 Mid-Level IAM Engineer (L2) - Daily Tasks</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <ul>
+                    <li><strong>Morning:</strong> Review overnight sync errors, troubleshoot failed provisioning</li>
+                    <li><strong>10 AM:</strong> Configure new application SSO integration (SAML/OIDC)</li>
+                    <li><strong>Afternoon:</strong> Write PowerShell automation for user onboarding</li>
+                    <li><strong>3 PM:</strong> Participate in access certification review</li>
+                    <li><strong>End of day:</strong> Update runbooks, mentor junior team members</li>
+                  </ul>
+                  <p><strong>Tools:</strong> PowerShell, Graph API, SAML tracer, SailPoint</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🏆 Senior IAM Engineer (L3) - Daily Tasks</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <ul>
+                    <li><strong>Morning:</strong> Architecture review for new Zero Trust initiative</li>
+                    <li><strong>10 AM:</strong> Lead IAM security review with InfoSec team</li>
+                    <li><strong>Afternoon:</strong> Design Conditional Access policies for compliance</li>
+                    <li><strong>3 PM:</strong> Vendor evaluation for PAM solution replacement</li>
+                    <li><strong>End of day:</strong> Strategic planning for cloud identity migration</li>
+                  </ul>
+                  <p><strong>Focus:</strong> Architecture, strategy, cross-team leadership, complex troubleshooting</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="common-tickets">Most Common IAM Tickets</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Ticket Type</th><th>% of Volume</th><th>Resolution</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>Password reset / Account unlock</td>
+                  <td>30%</td>
+                  <td>SSPR, Unlock-ADAccount, verify identity</td>
+                </tr>
+                <tr>
+                  <td>Access request (new app/role)</td>
+                  <td>25%</td>
+                  <td>Manager approval, add to group, provision</td>
+                </tr>
+                <tr>
+                  <td>MFA issues (lost device, setup)</td>
+                  <td>15%</td>
+                  <td>Reset MFA, temporary bypass, re-enroll</td>
+                </tr>
+                <tr>
+                  <td>SSO/login problems</td>
+                  <td>15%</td>
+                  <td>Check CA policies, sign-in logs, token issues</td>
+                </tr>
+                <tr>
+                  <td>New hire provisioning</td>
+                  <td>10%</td>
+                  <td>Create accounts, assign licenses, add groups</td>
+                </tr>
+                <tr>
+                  <td>Termination processing</td>
+                  <td>5%</td>
+                  <td>Disable accounts, revoke access, archive</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="career-path">IAM Career Progression</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    IAM CAREER PATH                                                       │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   Help Desk ──► IAM Analyst ──► IAM Engineer ──► Senior IAM ──► IAM Architect           │
+│   (1-2 yrs)     (1-2 yrs)       (2-3 yrs)        (3-5 yrs)       (5+ yrs)               │
+│                                                                                          │
+│   Skills by Level:                                                                      │
+│                                                                                          │
+│   L1: AD basics, password resets, ticket handling                                       │
+│   L2: PowerShell, SAML/OIDC, provisioning, troubleshooting                             │
+│   L3: Architecture, security, automation, cross-team leadership                        │
+│   Architect: Strategy, vendor selection, Zero Trust, compliance frameworks             │
+│                                                                                          │
+│   Certifications:                                                                        │
+│   • Microsoft: SC-300 (Identity), AZ-500 (Security)                                    │
+│   • Okta: Certified Administrator, Certified Consultant                                │
+│   • SailPoint: IdentityNow Certified Engineer                                          │
+│   • General: CISSP, Security+, CIAM                                                    │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Know the 5 Rights:</strong> Right people, right access, right resources, right time, right reasons</li>
+                <li><strong>Understand business drivers:</strong> Security, compliance, productivity, cost</li>
+                <li><strong>Core components:</strong> Directory, Authentication, Authorization, SSO, IGA, PAM</li>
+                <li><strong>Be ready for scenarios:</strong> "How would you handle a terminated employee?" "Design SSO for new app"</li>
+                <li><strong>Show progression:</strong> Talk about what you've automated, improved, or designed</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="index.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Home</span>
+            </a>
+            <a href="1-2-authn-vs-authz.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Authentication vs Authorization</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

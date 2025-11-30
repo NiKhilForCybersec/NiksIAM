@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hybrid Identity - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
+            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
+            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
+            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
+            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
+            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
+            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
+            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
+            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
+            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
+            <a href="2-4-saml.html" class="nav-item">SAML</a>
+            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
+            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
+            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
+            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
+            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
+            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
+            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
+            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
+            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
+            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
+            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header active"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
+            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
+            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
+            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
+            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
+            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
+            <a href="4-7-hybrid-identity.html" class="nav-item active">Hybrid Identity</a>
+            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
+            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
+            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
+            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
+            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
+            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
+            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
+            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
+            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
+            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
+            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
+            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
+            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
+            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
+            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
+            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
+            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
+            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
+            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
+            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
+            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
+            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
+            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
+            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
+            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
+            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
+            <a href="9-5-api-security.html" class="nav-item">API Security</a>
+            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
+            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
+            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
+            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
+            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
+            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
+            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
+            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
+            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
+            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
+            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
+            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
+            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
+            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
+            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="content-header">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">›</span>
+          <a href="#">Microsoft Entra ID</a>
+          <span class="breadcrumb-separator">›</span>
+          <span>Hybrid Identity</span>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l2">L2 Technical</div>
+          <h1>Hybrid Identity: Complete Enterprise Guide</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>
+              Hybrid identity is how most real enterprises operate - with on-premises Active Directory 
+              synchronized to cloud (Entra ID). This guide covers Azure AD Connect/Cloud Sync setup, 
+              authentication methods (PHS, PTA, Federation), real troubleshooting scenarios, day-to-day 
+              operations, and migration paths. Based on real implementations in enterprises with 
+              10,000-100,000 users.
+            </p>
+          </div>
+
+          <!-- SECTION: What is Hybrid Identity -->
+          <h2 id="what-is-hybrid">What is Hybrid Identity?</h2>
+
+          <p>
+            <strong>Hybrid identity</strong> means your users have a single identity that works both 
+            on-premises (for domain-joined computers, file shares, legacy apps) and in the cloud 
+            (for Microsoft 365, Azure, SaaS applications). The user has ONE username and ONE password 
+            that works everywhere.
+          </p>
+
+          <div class="callout info">
+            <div class="callout-content">
+              <div class="callout-title">🏢 Why Hybrid? The Real Reasons</div>
+              <ul>
+                <li><strong>Legacy investments:</strong> You have on-prem AD with 15+ years of groups, GPOs, and applications</li>
+                <li><strong>On-prem apps:</strong> SAP, Oracle, file shares, print servers still need AD authentication</li>
+                <li><strong>Gradual migration:</strong> Can't move everything to cloud at once</li>
+                <li><strong>Compliance:</strong> Some data/apps must stay on-premises for regulatory reasons</li>
+                <li><strong>User experience:</strong> Single identity regardless of where the resource lives</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>The Hybrid Identity Architecture</h3>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           HYBRID IDENTITY ARCHITECTURE                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ┌─────────────────────────────────────┐        ┌─────────────────────────────────────┐│
+│   │         ON-PREMISES                  │        │              CLOUD                  ││
+│   │                                      │        │                                     ││
+│   │  ┌─────────────────────────────┐    │        │    ┌─────────────────────────────┐  ││
+│   │  │    Active Directory         │    │        │    │       Microsoft Entra ID    │  ││
+│   │  │    Domain Controllers       │    │        │    │       (Azure AD)            │  ││
+│   │  │                             │    │        │    │                             │  ││
+│   │  │  • Users: 15,000           │    │        │    │  • Synced users: 15,000     │  ││
+│   │  │  • Groups: 50,000          │    │        │    │  • Cloud-only users: 500    │  ││
+│   │  │  • Computers: 12,000       │    │        │    │  • Guest users: 2,000       │  ││
+│   │  │  • GPOs: 200               │    │        │    │  • Synced groups: 50,000    │  ││
+│   │  │  • Forests: 2              │    │        │    │  • Enterprise apps: 200     │  ││
+│   │  │                             │    │        │    │                             │  ││
+│   │  └──────────────┬──────────────┘    │        │    └──────────────▲──────────────┘  ││
+│   │                 │                    │        │                   │                 ││
+│   │                 │                    │        │                   │                 ││
+│   │  ┌──────────────▼──────────────┐    │        │                   │                 ││
+│   │  │    Azure AD Connect         │    │        │                   │                 ││
+│   │  │    (or Cloud Sync)          │◄───┼────────┼───────────────────┘                 ││
+│   │  │                             │    │        │                                     ││
+│   │  │  SYNC FEATURES:             │    │        │    ┌─────────────────────────────┐  ││
+│   │  │  • Password Hash Sync       │────┼────────┼───►│      Microsoft 365          │  ││
+│   │  │  • User/Group sync          │    │        │    │  • Exchange Online          │  ││
+│   │  │  • Device writeback         │    │        │    │  • SharePoint Online        │  ││
+│   │  │  • Seamless SSO             │    │        │    │  • Teams                    │  ││
+│   │  │                             │    │        │    │  • OneDrive                 │  ││
+│   │  │  SCHEDULE: Every 30 min     │    │        │    └─────────────────────────────┘  ││
+│   │  └─────────────────────────────┘    │        │                                     ││
+│   │                                      │        │    ┌─────────────────────────────┐  ││
+│   │  ┌─────────────────────────────┐    │        │    │      Azure Resources        │  ││
+│   │  │    On-Prem Applications     │    │        │    │  • Azure VMs                │  ││
+│   │  │                             │    │        │    │  • Azure SQL                │  ││
+│   │  │  • File Shares (Kerberos)   │    │        │    │  • Key Vault                │  ││
+│   │  │  • SAP (LDAP/Kerberos)      │    │        │    │  • App Services             │  ││
+│   │  │  • Oracle EBS               │    │        │    └─────────────────────────────┘  ││
+│   │  │  • Legacy web apps (IWA)    │    │        │                                     ││
+│   │  │  • Print servers            │    │        │    ┌─────────────────────────────┐  ││
+│   │  └─────────────────────────────┘    │        │    │      SaaS Applications      │  ││
+│   │                                      │        │    │  • Salesforce               │  ││
+│   └─────────────────────────────────────┘        │    │  • ServiceNow               │  ││
+│                                                   │    │  • Workday                  │  ││
+│                                                   │    │  • Slack, Zoom, etc.        │  ││
+│                                                   │    └─────────────────────────────┘  ││
+│                                                   │                                     ││
+│                                                   └─────────────────────────────────────┘│
+│                                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────────────────┐│
+│   │                                USER EXPERIENCE                                       ││
+│   │                                                                                      ││
+│   │   User "jsmith" logs in ONCE with jsmith@company.com + password                     ││
+│   │                                                                                      ││
+│   │   ✅ On-prem file shares → Kerberos (AD)                                            ││
+│   │   ✅ Microsoft 365 → Entra ID (synced from AD)                                      ││
+│   │   ✅ Salesforce → SSO via Entra ID                                                  ││
+│   │   ✅ SAP → Kerberos/LDAP (AD)                                                       ││
+│   │   ✅ Azure portal → Entra ID                                                        ││
+│   │                                                                                      ││
+│   │   SAME USERNAME, SAME PASSWORD, EVERYWHERE                                          ││
+│   └─────────────────────────────────────────────────────────────────────────────────────┘│
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <!-- SECTION: Authentication Methods -->
+          <h2 id="auth-methods">Authentication Methods Compared</h2>
+
+          <p>
+            When users authenticate to cloud resources, there are three methods to validate their 
+            password. This is a critical architectural decision with security, availability, and 
+            operational implications.
+          </p>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>How It Works</th>
+                  <th>Pros</th>
+                  <th>Cons</th>
+                  <th>Best For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Password Hash Sync (PHS)</strong></td>
+                  <td>Hash of password hash synced to cloud; Entra validates password directly</td>
+                  <td>
+                    • High availability (cloud-native)<br>
+                    • Simplest to implement<br>
+                    • Works if on-prem is down<br>
+                    • Enables Identity Protection
+                  </td>
+                  <td>
+                    • Password hashes in cloud<br>
+                    • 2-min sync delay for changes
+                  </td>
+                  <td>Most organizations (Microsoft recommended)</td>
+                </tr>
+                <tr>
+                  <td><strong>Pass-Through Auth (PTA)</strong></td>
+                  <td>Cloud sends auth request to on-prem agent; AD validates</td>
+                  <td>
+                    • Password never leaves on-prem<br>
+                    • Real-time policy enforcement<br>
+                    • Immediate account disable
+                  </td>
+                  <td>
+                    • Requires agents on-prem<br>
+                    • Depends on on-prem availability<br>
+                    • More complex
+                  </td>
+                  <td>Organizations with strict password policy</td>
+                </tr>
+                <tr>
+                  <td><strong>Federation (ADFS)</strong></td>
+                  <td>Cloud redirects to on-prem ADFS; ADFS validates and issues token</td>
+                  <td>
+                    • Full control over auth flow<br>
+                    • Supports smart cards, certs<br>
+                    • Complex claims rules
+                  </td>
+                  <td>
+                    • Most complex<br>
+                    • High availability required<br>
+                    • On-prem dependency<br>
+                    • Being phased out
+                  </td>
+                  <td>Organizations with existing ADFS investment (legacy)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Password Hash Sync Deep Dive</h3>
+
+          <p><strong>What Actually Gets Synced:</strong></p>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Password Hash Process</span>
+            </div>
+            <pre><code># On-premises AD stores: MD4 hash of password (NTLM hash)
+# Example: 5f4dcc3b5aa765d61d8327deb882cf99
+
+# Azure AD Connect does:
+1. Retrieves MD4 hash from AD
+2. Adds salt (16 bytes)
+3. Applies PBKDF2-HMAC-SHA256 (1000 iterations)
+4. Syncs the derived hash to Entra ID
+
+# Result: Even if Entra ID is breached, attackers can't reverse to 
+#         get the original password or even the MD4 hash</code></pre>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-content">
+              <div class="callout-title">💡 Microsoft's Recommendation</div>
+              <p>
+                Microsoft recommends <strong>Password Hash Sync + Seamless SSO</strong> as the primary 
+                method for most organizations. It provides the best balance of security, availability, 
+                and user experience. PTA is recommended only if you have regulatory requirements 
+                preventing password hashes in the cloud.
+              </p>
+            </div>
+          </div>
+
+          <!-- SECTION: Azure AD Connect -->
+          <h2 id="aad-connect">Azure AD Connect: The Sync Engine</h2>
+
+          <h3>What is Azure AD Connect?</h3>
+          <p>
+            Azure AD Connect is the on-premises software that synchronizes your AD objects to Entra ID. 
+            It runs on a Windows Server in your data center and connects to both your AD domain 
+            controllers and the Entra ID cloud service.
+          </p>
+
+          <div class="callout warning">
+            <div class="callout-content">
+              <div class="callout-title">⚠️ Azure AD Connect vs Cloud Sync</div>
+              <p><strong>Azure AD Connect (Classic):</strong> Single server, most features, complex scenarios</p>
+              <p><strong>Entra Cloud Sync (New):</strong> Lightweight agents, easier HA, fewer features (catching up)</p>
+              <p>Most enterprises still use Azure AD Connect. Cloud Sync is gaining adoption for simpler scenarios.</p>
+            </div>
+          </div>
+
+          <h3>What Gets Synced (and What Doesn't)</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Object Type</th>
+                  <th>Synced by Default</th>
+                  <th>Key Attributes</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Users</strong></td>
+                  <td>✅ Yes (if in scope)</td>
+                  <td>UPN, mail, displayName, department, title, manager, phone, etc.</td>
+                  <td>Must have mailNickname or UPN domain in verified domains</td>
+                </tr>
+                <tr>
+                  <td><strong>Groups</strong></td>
+                  <td>✅ Yes (security & distribution)</td>
+                  <td>Name, members, type</td>
+                  <td>Can filter by OU or group</td>
+                </tr>
+                <tr>
+                  <td><strong>Contacts</strong></td>
+                  <td>✅ Yes</td>
+                  <td>mail, displayName</td>
+                  <td>Synced as mail contacts</td>
+                </tr>
+                <tr>
+                  <td><strong>Devices</strong></td>
+                  <td>⚠️ Optional (device writeback)</td>
+                  <td>Device ID, registered owner</td>
+                  <td>Hybrid Azure AD Join scenario</td>
+                </tr>
+                <tr>
+                  <td><strong>Passwords</strong></td>
+                  <td>✅ Yes (if PHS enabled)</td>
+                  <td>Password hash (derived)</td>
+                  <td>Synced every 2 minutes</td>
+                </tr>
+                <tr>
+                  <td><strong>Computers</strong></td>
+                  <td>❌ No</td>
+                  <td>N/A</td>
+                  <td>Use Hybrid Azure AD Join for device identity</td>
+                </tr>
+                <tr>
+                  <td><strong>OUs</strong></td>
+                  <td>❌ No</td>
+                  <td>N/A</td>
+                  <td>OU structure not replicated to cloud</td>
+                </tr>
+                <tr>
+                  <td><strong>GPOs</strong></td>
+                  <td>❌ No</td>
+                  <td>N/A</td>
+                  <td>Use Intune for cloud device management</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Day-to-Day Operations: What IAM Engineers Do</h3>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔄 Monitoring Sync Health (Daily)</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Check sync status in Entra ID portal:</strong></p>
+                  <p>Entra ID → Azure AD Connect → Sync Status</p>
+                  <ul>
+                    <li>Last sync time (should be within 30 minutes)</li>
+                    <li>Export errors (objects that failed to sync)</li>
+                    <li>Import errors (read failures from AD)</li>
+                  </ul>
+                  
+                  <p><strong>PowerShell health check:</strong></p>
+                  <div class="code-block">
+                    <pre><code># On Azure AD Connect server
+Import-Module ADSync
+
+# Get last sync status
+Get-ADSyncScheduler
+
+# View sync errors
+Get-ADSyncConnectorRunStatus
+
+# Force a delta sync
+Start-ADSyncSyncCycle -PolicyType Delta
+
+# Force a full sync (use sparingly - resource intensive)
+Start-ADSyncSyncCycle -PolicyType Initial</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔧 Troubleshooting Sync Errors (Common Issues)</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Error: "InvalidSoftMatch"</strong></p>
+                  <ul>
+                    <li><strong>Cause:</strong> User exists in cloud with different immutableID</li>
+                    <li><strong>Fix:</strong> Clear cloud user's immutableID or delete and recreate</li>
+                  </ul>
+                  <div class="code-block">
+                    <pre><code># Find the immutableID in AD
+Get-ADUser jsmith -Properties ms-DS-ConsistencyGuid | Select-Object @{N="ImmutableID";E={[Convert]::ToBase64String($_.ObjectGUID.ToByteArray())}}
+
+# Clear cloud user's immutableID (requires delete/recreate)</code></pre>
+                  </div>
+
+                  <p><strong>Error: "AttributeValueMustBeUnique" (ProxyAddresses)</strong></p>
+                  <ul>
+                    <li><strong>Cause:</strong> Two users have same email address</li>
+                    <li><strong>Fix:</strong> Find and remove duplicate proxyAddresses in AD</li>
+                  </ul>
+                  <div class="code-block">
+                    <pre><code># Find users with duplicate proxyAddresses
+Get-ADUser -Filter * -Properties proxyAddresses | 
+  Where-Object {$_.proxyAddresses -like "*smtp:duplicate@company.com*"}</code></pre>
+                  </div>
+
+                  <p><strong>Error: "User not syncing"</strong></p>
+                  <ul>
+                    <li>Check if user is in synced OU (filtering settings)</li>
+                    <li>Check if user has valid UPN with verified domain</li>
+                    <li>Check if user is filtered by attribute (e.g., adminCount=1)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>⚡ Password Sync Not Working</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Symptom:</strong> User changed password in AD but cloud password still old</p>
+                  
+                  <p><strong>Troubleshooting steps:</strong></p>
+                  <div class="code-block">
+                    <pre><code># 1. Check password sync status
+Get-ADSyncAADPasswordSyncConfiguration -SourceConnector "corp.company.com"
+
+# 2. Check if password sync is enabled for the user
+# (adminCount=1 users are excluded by default - Domain Admins)
+Get-ADUser jsmith -Properties adminCount
+
+# 3. Force password sync for specific user
+$user = Get-ADUser jsmith
+$userDN = $user.DistinguishedName
+Set-ADObject -Identity $userDN -Replace @{"ms-DS-cloudExtensionAttribute1"="ForcePWSync"}
+
+# 4. Trigger password sync cycle
+Invoke-ADSyncDiagnostics -PasswordSync</code></pre>
+                  </div>
+                  
+                  <p><strong>Common causes:</strong></p>
+                  <ul>
+                    <li>User has adminCount=1 (protected users - excluded by default)</li>
+                    <li>Password doesn't meet cloud complexity requirements</li>
+                    <li>Sync agent service stopped</li>
+                    <li>Connectivity issues to Entra ID</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🛠️ Making Attribute Changes</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Key principle:</strong> Always make changes in the <strong>authoritative source</strong></p>
+                  
+                  <p><strong>For synced users:</strong> Change in on-prem AD, wait for sync (or force sync)</p>
+                  <div class="code-block">
+                    <pre><code># Example: Update user's department in AD
+Set-ADUser jsmith -Department "Product Management"
+
+# Force delta sync to push change immediately
+Start-ADSyncSyncCycle -PolicyType Delta</code></pre>
+                  </div>
+                  
+                  <p><strong>For cloud-only users:</strong> Change in Entra ID (portal or Graph API)</p>
+                  <div class="code-block">
+                    <pre><code># Using Microsoft Graph PowerShell
+Update-MgUser -UserId "jsmith@company.com" -Department "Product Management"</code></pre>
+                  </div>
+                  
+                  <div class="callout warning">
+                    <div class="callout-content">
+                      <div class="callout-title">⚠️ Never change synced attributes in cloud</div>
+                      <p>If you change a synced attribute directly in Entra ID, it will be overwritten on the next sync cycle. The on-prem AD is the "source of truth" for synced users.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION: Seamless SSO -->
+          <h2 id="seamless-sso">Seamless SSO: How It Works</h2>
+
+          <p>
+            <strong>Seamless SSO</strong> provides automatic sign-in to cloud resources for users on 
+            domain-joined computers connected to the corporate network. No password prompt for 
+            Microsoft 365 and other Entra ID-integrated apps.
+          </p>
+
+          <h3>How Seamless SSO Works (Technical Flow)</h3>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                            SEAMLESS SSO AUTHENTICATION FLOW                              │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   STEP 1: User opens browser, goes to https://portal.office.com                         │
+│   ┌──────────────────┐                          ┌──────────────────┐                    │
+│   │  User's Browser  │ ────────────────────────►│    Entra ID      │                    │
+│   │  (Domain-joined) │                          │                  │                    │
+│   └──────────────────┘                          └────────┬─────────┘                    │
+│                                                          │                              │
+│   STEP 2: Entra ID sees domain is enabled for Seamless SSO                              │
+│           Returns hidden image request to autologon.microsoftazuread-sso.com            │
+│                                                          │                              │
+│   STEP 3: Browser requests Kerberos ticket for AZUREADSSOACC$ computer account         │
+│   ┌──────────────────┐                          ┌──────────────────┐                    │
+│   │  User's Browser  │ ────────────────────────►│ Domain Controller │                    │
+│   │                  │   TGS-REQ for            │                   │                    │
+│   │                  │   AZUREADSSOACC$         │   Validates user  │                    │
+│   │                  │ ◄────────────────────────│   Issues Kerberos │                    │
+│   │                  │   Kerberos service       │   service ticket  │                    │
+│   └──────────────────┘   ticket                 └──────────────────┘                    │
+│                                                                                          │
+│   STEP 4: Browser sends Kerberos ticket to Entra ID (via autologon endpoint)           │
+│   ┌──────────────────┐                          ┌──────────────────┐                    │
+│   │  User's Browser  │ ────────────────────────►│    Entra ID      │                    │
+│   │                  │   Kerberos ticket for    │                  │                    │
+│   │                  │   AZUREADSSOACC$         │   Decrypts ticket │                    │
+│   │                  │                          │   (has key from   │                    │
+│   │                  │                          │    AD Connect)    │                    │
+│   └──────────────────┘                          └────────┬─────────┘                    │
+│                                                          │                              │
+│   STEP 5: Entra ID validates ticket, extracts user identity, issues tokens             │
+│                                                          │                              │
+│   ┌──────────────────┐                                   │                              │
+│   │  User's Browser  │ ◄─────────────────────────────────┘                              │
+│   │                  │   OAuth tokens issued                                            │
+│   │  USER IS NOW     │   User signed in without password prompt!                        │
+│   │  SIGNED IN ✅    │                                                                  │
+│   └──────────────────┘                                                                  │
+│                                                                                          │
+│   KEY REQUIREMENT: AZUREADSSOACC$ computer account exists in AD with secret known       │
+│                    to both AD and Entra ID (shared during Azure AD Connect setup)       │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h3>Seamless SSO Requirements & Troubleshooting</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Requirement</th>
+                  <th>How to Verify</th>
+                  <th>Common Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Domain-joined computer</td>
+                  <td><code>dsregcmd /status</code></td>
+                  <td>Azure AD-only joined devices don't get Seamless SSO</td>
+                </tr>
+                <tr>
+                  <td>On corporate network (can reach DC)</td>
+                  <td><code>nltest /dsgetdc:domain</code></td>
+                  <td>VPN users may not get SSO if DC not reachable</td>
+                </tr>
+                <tr>
+                  <td>AZUREADSSOACC$ account exists</td>
+                  <td>Search AD for computer account</td>
+                  <td>Account may be deleted or Kerberos key expired</td>
+                </tr>
+                <tr>
+                  <td>autologon URL in Intranet zone</td>
+                  <td>Internet Options → Security → Intranet</td>
+                  <td>Browser won't send Kerberos if treated as Internet</td>
+                </tr>
+                <tr>
+                  <td>Kerberos working</td>
+                  <td><code>klist</code> to view tickets</td>
+                  <td>Time sync issues, encryption type mismatch</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Troubleshooting Seamless SSO</span>
+              <button class="code-copy-btn"><span>📋</span> Copy</button>
+            </div>
+            <pre><code># 1. Check if computer can get Kerberos ticket for SSO account
+klist get AZUREADSSOACC$
+
+# 2. Check if SSO endpoint is in Intranet zone
+# Should show: autologon.microsoftazuread-sso.com in Intranet zone
+
+# 3. Check AZUREADSSOACC$ account in AD
+Get-ADComputer -Identity AZUREADSSOACC$ -Properties *
+
+# 4. Rollover the Kerberos decryption key (every 30 days recommended)
+# On Azure AD Connect server:
+Update-AzureADSSOForest -OnPremCredentials $creds -PreserveCustomPermissionsOnDesktopSsoAccount</code></pre>
+          </div>
+
+          <!-- SECTION: Common Hybrid Scenarios -->
+          <h2 id="scenarios">Real-World Hybrid Scenarios</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>📋 Scenario 1: New Employee Onboarding in Hybrid Environment</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Setup:</strong> HR creates employee in Workday → SailPoint provisions to AD → Azure AD Connect syncs to cloud → User gets M365 access</p>
+                  
+                  <h4>Timeline:</h4>
+                  <ol>
+                    <li><strong>T-7 days:</strong> SailPoint creates AD account (disabled)</li>
+                    <li><strong>T-6 days:</strong> Azure AD Connect syncs user to Entra ID (next cycle, ~30 min)</li>
+                    <li><strong>T-6 days:</strong> M365 license assigned (automated or manual)</li>
+                    <li><strong>T-1 day:</strong> AD account enabled</li>
+                    <li><strong>Day 1, 8 AM:</strong> User logs into domain-joined laptop</li>
+                    <li><strong>Day 1, 8:01 AM:</strong> User opens Outlook → Seamless SSO → Signed into M365</li>
+                  </ol>
+                  
+                  <p><strong>What can go wrong:</strong></p>
+                  <ul>
+                    <li>User not synced (check OU filtering, UPN domain)</li>
+                    <li>License not assigned (user can't access M365 apps)</li>
+                    <li>Password hash not synced yet (can't login to cloud until next PHS cycle)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>📋 Scenario 2: Password Change Propagation</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>User changes password on domain-joined laptop (Ctrl+Alt+Del → Change password)</strong></p>
+                  
+                  <h4>What happens:</h4>
+                  <ol>
+                    <li>Password changed in on-prem AD immediately</li>
+                    <li>User can access on-prem resources with new password immediately</li>
+                    <li>Azure AD Connect PHS agent detects change (polls every 2 minutes)</li>
+                    <li>New password hash synced to Entra ID</li>
+                    <li>Cloud resources now accept new password (within 2-5 minutes)</li>
+                  </ol>
+                  
+                  <p><strong>User experience:</strong> Minimal disruption - new password works in cloud within minutes</p>
+                  
+                  <p><strong>With Pass-Through Auth:</strong> Immediate - cloud validates against on-prem in real-time</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>📋 Scenario 3: Emergency - AD Connect Server Failed</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Impact with Password Hash Sync:</strong></p>
+                  <ul>
+                    <li>✅ Cloud authentication continues to work (hashes already synced)</li>
+                    <li>❌ New users won't sync to cloud</li>
+                    <li>❌ Password changes won't sync (cloud has stale passwords)</li>
+                    <li>❌ Group membership changes won't sync</li>
+                  </ul>
+                  
+                  <p><strong>Impact with Pass-Through Auth (no PHS fallback):</strong></p>
+                  <ul>
+                    <li>✅ Authentication still works if PTA agents are on separate servers</li>
+                    <li>❌ If all PTA agents down, cloud authentication fails completely</li>
+                  </ul>
+                  
+                  <p><strong>Recovery steps:</strong></p>
+                  <ol>
+                    <li>Restore from backup OR install new server in staging mode</li>
+                    <li>Take new server out of staging mode</li>
+                    <li>Force full sync to ensure consistency</li>
+                  </ol>
+                  
+                  <div class="callout tip">
+                    <div class="callout-content">
+                      <div class="callout-title">💡 Best Practice: Enable PHS as Backup</div>
+                      <p>Even if using PTA or Federation, enable Password Hash Sync as a backup. If the on-prem component fails, you can switch to PHS (already synced) in minutes.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION: Migration Path -->
+          <h2 id="migration">Migration: ADFS to Cloud Authentication</h2>
+
+          <p>
+            Many organizations are migrating from ADFS (federation) to cloud-native authentication 
+            (PHS or PTA). This is a common project for senior IAM engineers.
+          </p>
+
+          <h3>Migration Phases</h3>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Assessment (2-4 weeks)</h4>
+                <ul>
+                  <li>Inventory all ADFS relying parties (applications)</li>
+                  <li>Identify apps that can move to Entra ID (SAML/OIDC)</li>
+                  <li>Identify apps that MUST stay on ADFS (claims rules, legacy protocols)</li>
+                  <li>Document custom claims rules</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Enable PHS (1 week)</h4>
+                <ul>
+                  <li>Enable Password Hash Sync on Azure AD Connect</li>
+                  <li>Wait for full sync of all password hashes</li>
+                  <li>Verify PHS is working (users can login to cloud if ADFS bypassed)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Staged Rollout (4-8 weeks)</h4>
+                <ul>
+                  <li>Use Staged Rollout feature to migrate groups of users</li>
+                  <li>Selected users authenticate via PHS instead of ADFS</li>
+                  <li>Monitor for issues, expand group</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Full Cutover (1 day)</h4>
+                <ul>
+                  <li>Change domain from Federated to Managed</li>
+                  <li>All users now authenticate via cloud</li>
+                  <li>ADFS no longer used for Microsoft 365</li>
+                </ul>
+                <div class="code-block">
+                  <pre><code># Convert domain from Federated to Managed (PHS)
+Set-MsolDomainAuthentication -DomainName "company.com" -Authentication Managed</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <h4>Decommission ADFS (2-4 weeks after cutover)</h4>
+                <ul>
+                  <li>Monitor for any remaining ADFS traffic</li>
+                  <li>Migrate any remaining relying parties</li>
+                  <li>Decommission ADFS servers</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION: Interview Tips -->
+          <h2 id="interview-tips">Interview Tips</h2>
+
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Common Interview Questions on Hybrid Identity</div>
+              
+              <p><strong>Technical Questions:</strong></p>
+              <ul>
+                <li>"Explain the difference between Password Hash Sync and Pass-Through Authentication"</li>
+                <li>"How does Seamless SSO work?" (Know the Kerberos flow)</li>
+                <li>"What happens if Azure AD Connect server goes down?"</li>
+                <li>"How would you troubleshoot a user not syncing to the cloud?"</li>
+              </ul>
+
+              <p><strong>Architecture Questions:</strong></p>
+              <ul>
+                <li>"How would you design hybrid identity for a 50,000 user organization?"</li>
+                <li>"What's your recommendation: PHS or PTA?"</li>
+                <li>"How would you migrate from ADFS to cloud authentication?"</li>
+              </ul>
+
+              <p><strong>Key Points to Mention:</strong></p>
+              <ul>
+                <li>PHS is Microsoft's recommendation for most scenarios</li>
+                <li>Always enable PHS as backup even with PTA/Federation</li>
+                <li>Seamless SSO requires domain-joined devices and network connectivity to DC</li>
+                <li>Azure AD Connect should have HA (staging mode server ready)</li>
+                <li>Know the sync cycle times (30 min for objects, 2 min for passwords)</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="4-6-entra-protection.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Entra Protection</span>
+            </a>
+            <a href="4-8-entra-workload-id.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Workload Identity</span>
+            </a>
+          </nav>
+        </article>
+
+        <aside class="toc">
+          <div class="toc-header">On This Page</div>
+          <ul class="toc-list">
+            <li class="toc-item"><a href="#what-is-hybrid" class="toc-link">What is Hybrid Identity?</a></li>
+            <li class="toc-item"><a href="#auth-methods" class="toc-link">Authentication Methods</a></li>
+            <li class="toc-item"><a href="#aad-connect" class="toc-link">Azure AD Connect</a></li>
+            <li class="toc-item"><a href="#seamless-sso" class="toc-link">Seamless SSO</a></li>
+            <li class="toc-item"><a href="#scenarios" class="toc-link">Real-World Scenarios</a></li>
+            <li class="toc-item"><a href="#migration" class="toc-link">ADFS Migration</a></li>
+            <li class="toc-item"><a href="#interview-tips" class="toc-link">Interview Tips</a></li>
+          </ul>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

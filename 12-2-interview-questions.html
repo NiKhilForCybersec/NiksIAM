@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Questions - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+</head>
+<body>
+  <div class="page-wrapper">
+    <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-header"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
+            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
+            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
+            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
+            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
+            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
+            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
+            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
+            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
+            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
+            <a href="2-4-saml.html" class="nav-item">SAML</a>
+            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
+            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
+            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
+            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
+            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
+            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
+            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
+            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
+            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
+            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
+            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
+            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
+            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
+            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
+            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
+            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
+            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
+            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
+            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
+            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
+            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
+            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
+            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
+            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
+            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
+            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
+            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
+            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
+            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
+            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
+            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
+            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
+            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
+            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
+            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
+            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
+            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
+            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
+            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
+            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
+            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
+            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
+            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
+            <a href="9-5-api-security.html" class="nav-item">API Security</a>
+            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
+            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
+            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
+            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
+            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
+            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
+            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
+            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
+            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
+            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
+            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
+            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
+            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
+            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
+            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main class="main-content">
+      <header class="content-header">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">›</span>
+          <span>Reference & Interview Prep</span>
+          <span class="breadcrumb-separator">›</span>
+          <span>Interview Questions</span>
+        </div>
+        <div class="header-actions">
+          <button class="search-trigger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+            <kbd>⌘K</kbd>
+          </button>
+        </div>
+      </header>
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Interview Questions</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What You'll Learn</h3>
+            <p>
+              Over 100 IAM interview questions with detailed answers, organized by difficulty level 
+              (L1 Fundamentals, L2 Technical, L3 Expert) and topic area. Use this comprehensive 
+              guide to prepare for IAM engineer, architect, and security analyst interviews.
+            </p>
+          </div>
+
+          <h2 id="fundamentals">L1 - Fundamentals Questions</h2>
+          
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is the difference between authentication and authorization?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> Authentication (AuthN) verifies WHO you are - it confirms your identity through credentials like passwords, biometrics, or tokens. Authorization (AuthZ) determines WHAT you can do - it controls access to resources based on your permissions, roles, or policies.</p>
+                  <p>Think of it like an airport: showing your ID is authentication, while your boarding pass (authorizing you to board a specific flight) is authorization. Authentication always happens first; you must prove your identity before the system can determine your permissions.</p>
+                  <p><strong>HTTP Status Codes:</strong> 401 Unauthorized = authentication failure, 403 Forbidden = authorization failure.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What are the three authentication factors?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong></p>
+                  <ul>
+                    <li><strong>Something you know:</strong> Passwords, PINs, security questions</li>
+                    <li><strong>Something you have:</strong> Hardware tokens, smart cards, mobile phones, security keys</li>
+                    <li><strong>Something you are:</strong> Biometrics - fingerprints, facial recognition, iris scans</li>
+                  </ul>
+                  <p>MFA (Multi-Factor Authentication) requires two or more factors from different categories. Using a password AND security question is NOT true MFA since both are "something you know."</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Explain the principle of least privilege.</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> The principle of least privilege states that users, systems, and processes should have only the minimum level of access necessary to perform their job functions - no more, no less.</p>
+                  <p><strong>Why it matters:</strong></p>
+                  <ul>
+                    <li>Limits blast radius if an account is compromised</li>
+                    <li>Reduces risk of accidental damage from authorized users</li>
+                    <li>Supports compliance requirements (SOX, HIPAA, etc.)</li>
+                    <li>Makes audit and forensics easier</li>
+                  </ul>
+                  <p><strong>Implementation:</strong> Start with zero access and add only what's needed. Regular access reviews remove accumulated privileges. Just-in-Time (JIT) access grants temporary elevation only when needed.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is SSO and what are its benefits?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> Single Sign-On (SSO) allows users to authenticate once and access multiple applications without re-entering credentials.</p>
+                  <p><strong>Benefits:</strong></p>
+                  <ul>
+                    <li><strong>User experience:</strong> One password, no fatigue, faster access</li>
+                    <li><strong>Security:</strong> Fewer passwords to manage/steal, centralized authentication, easier MFA enforcement</li>
+                    <li><strong>IT efficiency:</strong> Reduced help desk tickets, centralized access management</li>
+                    <li><strong>Compliance:</strong> Centralized audit trail, consistent policy enforcement</li>
+                  </ul>
+                  <p><strong>Protocols:</strong> SAML 2.0 (enterprise), OIDC (modern/mobile), WS-Federation (Microsoft legacy)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is RBAC vs ABAC?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>RBAC (Role-Based Access Control):</strong></p>
+                  <ul>
+                    <li>Access based on predefined roles (HR_Manager, Developer, etc.)</li>
+                    <li>Users assigned to roles, roles have permissions</li>
+                    <li>Simple to understand and audit</li>
+                    <li>Best for stable organizations with clear job functions</li>
+                  </ul>
+                  <p><strong>ABAC (Attribute-Based Access Control):</strong></p>
+                  <ul>
+                    <li>Access based on attributes (user, resource, environment, action)</li>
+                    <li>Dynamic, context-aware decisions</li>
+                    <li>More flexible but complex to implement</li>
+                    <li>Best for dynamic, fine-grained access requirements</li>
+                  </ul>
+                  <p><strong>When to use:</strong> Many organizations use hybrid RBAC+ABAC - roles for base access, attributes for fine-grained control.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="technical">L2 - Technical Questions</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Explain the SAML authentication flow.</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>SP-Initiated Flow (most common):</strong></p>
+                  <ol>
+                    <li>User attempts to access Service Provider (SP) application</li>
+                    <li>SP generates SAML AuthnRequest, redirects user to Identity Provider (IdP)</li>
+                    <li>IdP authenticates user (if not already authenticated)</li>
+                    <li>IdP generates SAML Response containing Assertion with user attributes</li>
+                    <li>User is redirected back to SP with signed SAML Response</li>
+                    <li>SP validates signature, extracts attributes, creates session</li>
+                  </ol>
+                  <p><strong>Key components:</strong> Assertion (claims about user), Bindings (HTTP-POST, HTTP-Redirect), Profiles (Web Browser SSO)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is OAuth 2.0 and how does it differ from OIDC?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>OAuth 2.0:</strong> An authorization framework that allows third-party applications to access resources on behalf of a user without sharing credentials. It issues access tokens for API access but does NOT authenticate users.</p>
+                  <p><strong>OpenID Connect (OIDC):</strong> An authentication layer built on top of OAuth 2.0. It adds ID tokens (JWTs) that contain user identity claims, a UserInfo endpoint, and standardized scopes (openid, profile, email).</p>
+                  <p><strong>Key difference:</strong> OAuth answers "what can this app access?" OIDC answers "who is this user?"</p>
+                  <p><strong>Grant types:</strong> Authorization Code (+ PKCE for public clients), Client Credentials (machine-to-machine), Device Flow (IoT), Implicit (deprecated)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Describe the Kerberos authentication process.</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Step-by-step flow:</strong></p>
+                  <ol>
+                    <li><strong>AS-REQ:</strong> Client sends username + timestamp (encrypted with user's password hash) to KDC</li>
+                    <li><strong>AS-REP:</strong> KDC returns TGT (encrypted with krbtgt hash) + session key (encrypted with user's hash)</li>
+                    <li><strong>TGS-REQ:</strong> Client requests service ticket using TGT + authenticator</li>
+                    <li><strong>TGS-REP:</strong> KDC returns service ticket (encrypted with service's hash)</li>
+                    <li><strong>AP-REQ:</strong> Client presents service ticket to target service</li>
+                  </ol>
+                  <p><strong>Key security:</strong> Password never sent over network. TGT proves authentication without re-entering password. Only KDC can create valid TGTs (krbtgt key).</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is Conditional Access and how would you implement it?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Definition:</strong> Conditional Access policies evaluate signals about the user, device, location, and application to make real-time access decisions. It's the core of Zero Trust "never trust, always verify."</p>
+                  <p><strong>Common conditions:</strong></p>
+                  <ul>
+                    <li>User/Group membership</li>
+                    <li>Device compliance state</li>
+                    <li>Location (named locations, countries)</li>
+                    <li>Application being accessed</li>
+                    <li>Sign-in risk level</li>
+                    <li>Device platform</li>
+                  </ul>
+                  <p><strong>Common controls:</strong> Block access, Require MFA, Require compliant device, Require approved app, Session controls (sign-in frequency, app restrictions)</p>
+                  <p><strong>Best practice:</strong> Start with report-only mode, test with What-If tool, create baseline policies for all users, emergency break-glass accounts excluded.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>How would you design an IAM solution for a multi-cloud environment?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Key principles:</strong></p>
+                  <ul>
+                    <li><strong>Single source of truth:</strong> Use one IdP (Okta, Entra ID, Ping) as the authoritative identity source</li>
+                    <li><strong>Federate to clouds:</strong> SAML/OIDC federation from central IdP to AWS, Azure, GCP</li>
+                    <li><strong>Unified RBAC model:</strong> Map consistent roles across cloud providers</li>
+                    <li><strong>Centralized governance:</strong> IGA platform for access reviews across all clouds</li>
+                    <li><strong>Workload identity:</strong> Use cloud-native identity (AWS IAM roles, Azure Managed Identity, GCP service accounts) for machine-to-machine</li>
+                  </ul>
+                  <p><strong>Tools:</strong> AWS IAM Identity Center, Azure RBAC, GCP IAM, CIEM solutions for permission analytics</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="expert">L3 - Expert Questions</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is a Golden Ticket attack and how do you detect/prevent it?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Attack:</strong> An attacker who extracts the krbtgt account's NTLM hash can forge Ticket Granting Tickets (TGTs) for any user, with any group memberships, including non-existent users. This provides complete domain persistence.</p>
+                  <p><strong>Detection:</strong></p>
+                  <ul>
+                    <li>TGT lifetime longer than domain policy</li>
+                    <li>TGT for user who never performed AS-REQ</li>
+                    <li>Impossible ticket timestamps</li>
+                    <li>Tickets with SID history for non-existent users</li>
+                  </ul>
+                  <p><strong>Prevention/Remediation:</strong></p>
+                  <ul>
+                    <li>Reset krbtgt password TWICE (allows current tickets to expire)</li>
+                    <li>Protect Domain Controller and krbtgt account</li>
+                    <li>Enable Credential Guard</li>
+                    <li>Use Protected Users group for privileged accounts</li>
+                    <li>Monitor Event ID 4768, 4769 for anomalies</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Design an identity architecture for Zero Trust.</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Core principles:</strong></p>
+                  <ul>
+                    <li><strong>Verify explicitly:</strong> Authenticate and authorize based on all available data points</li>
+                    <li><strong>Use least privilege:</strong> JIT/JEA access, risk-based adaptive policies</li>
+                    <li><strong>Assume breach:</strong> Segment access, encrypt all traffic, continuous monitoring</li>
+                  </ul>
+                  <p><strong>Architecture components:</strong></p>
+                  <ul>
+                    <li><strong>Identity:</strong> Strong MFA (phishing-resistant), passwordless, device identity</li>
+                    <li><strong>Endpoints:</strong> Device compliance, EDR integration, device trust levels</li>
+                    <li><strong>Applications:</strong> Per-app access policies, ZTNA replacing VPN</li>
+                    <li><strong>Data:</strong> Data classification, DLP, encryption</li>
+                    <li><strong>Infrastructure:</strong> Micro-segmentation, PAM for admin access</li>
+                    <li><strong>Network:</strong> Software-defined perimeter, identity-aware proxy</li>
+                  </ul>
+                  <p><strong>Signals for policy:</strong> User identity, device health, location, application sensitivity, data classification, user behavior (UEBA), real-time risk score</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>How would you migrate 50,000 users from on-prem AD to cloud IdP?</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>Phase 1 - Assessment:</strong></p>
+                  <ul>
+                    <li>Inventory all applications and authentication methods</li>
+                    <li>Identify AD dependencies (Kerberos, NTLM, LDAP binds)</li>
+                    <li>Map users, groups, OUs to cloud model</li>
+                    <li>Assess password policies and compliance requirements</li>
+                  </ul>
+                  <p><strong>Phase 2 - Coexistence:</strong></p>
+                  <ul>
+                    <li>Deploy hybrid identity (Azure AD Connect or equivalent)</li>
+                    <li>Enable Password Hash Sync or Pass-Through Auth</li>
+                    <li>Implement Seamless SSO for transparent experience</li>
+                    <li>Begin federating cloud-ready applications</li>
+                  </ul>
+                  <p><strong>Phase 3 - Migration Waves:</strong></p>
+                  <ul>
+                    <li>Migrate applications in waves (cloud-native first)</li>
+                    <li>Convert legacy apps to SAML/OIDC where possible</li>
+                    <li>Use application proxies for legacy on-prem apps</li>
+                  </ul>
+                  <p><strong>Phase 4 - Cutover:</strong></p>
+                  <ul>
+                    <li>Move authentication authority to cloud</li>
+                    <li>Implement cloud-native MFA and Conditional Access</li>
+                    <li>Decommission on-prem infrastructure</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="scenario-based">Scenario-Based Questions</h2>
+
+          <div class="callout info">
+            <div class="callout-content">
+              <div class="callout-title">💼 Practical Scenarios</div>
+              <p>These questions test your ability to apply IAM concepts to real-world situations:</p>
+              <ul>
+                <li>"A user reports they can access a system they shouldn't. Walk me through your investigation."</li>
+                <li>"Design an onboarding/offboarding workflow that integrates with Workday."</li>
+                <li>"How would you implement break-glass access for emergency situations?"</li>
+                <li>"We detected an account accessing 50 applications in 5 minutes. What's your response?"</li>
+                <li>"How would you approach an IAM audit for SOX compliance?"</li>
+              </ul>
+            </div>
+          </div>
+
+          <h2 id="tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 How to Succeed</div>
+              <ul>
+                <li><strong>Use the STAR method:</strong> Situation, Task, Action, Result for experience questions</li>
+                <li><strong>Draw diagrams:</strong> For architecture questions, sketch flows and components</li>
+                <li><strong>Mention tradeoffs:</strong> Show you understand security vs usability balance</li>
+                <li><strong>Reference standards:</strong> NIST, CIS, ISO 27001 shows industry awareness</li>
+                <li><strong>Ask clarifying questions:</strong> Shows analytical thinking</li>
+                <li><strong>Be honest:</strong> It's okay to say "I don't know, but here's how I'd find out"</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="12-1-iam-glossary.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">IAM Glossary</span>
+            </a>
+            <a href="12-3-scenario-questions.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Scenario Questions</span>
+            </a>
+          </nav>
+        </article>
+        <aside class="toc">
+          <div class="toc-header">On This Page</div>
+          <ul class="toc-list"></ul>
+        </aside>
+      </div>
+    </main>
+    <div class="search-modal">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" class="search-input" placeholder="Search documentation...">
+        </div>
+        <div class="search-results"></div>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

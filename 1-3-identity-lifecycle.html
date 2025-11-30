@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identity Lifecycle - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <button class="mobile-menu-toggle" aria-label="Toggle navigation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-header active"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
+            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
+            <a href="1-3-identity-lifecycle.html" class="nav-item active">Identity Lifecycle</a>
+            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
+            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
+            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
+            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
+            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
+            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
+            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
+            <a href="2-4-saml.html" class="nav-item">SAML</a>
+            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
+            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
+            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
+            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
+            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
+            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
+            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
+            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
+            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
+            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
+            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
+            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
+            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
+            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
+            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
+            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
+            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
+            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
+            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
+            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
+            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
+            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
+            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
+            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
+            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
+            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
+            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
+            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
+            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
+            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
+            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
+            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
+            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
+            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
+            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
+            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
+            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
+            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
+            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
+            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
+            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
+            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
+            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
+            <a href="9-5-api-security.html" class="nav-item">API Security</a>
+            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
+            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
+            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
+            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
+            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
+            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
+            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
+            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
+            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
+            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
+          <div class="nav-section-items">
+            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
+            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
+            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
+            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
+            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
+            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="content-header">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-separator">›</span>
+          <a href="#">IAM Foundations</a>
+          <span class="breadcrumb-separator">›</span>
+          <span>Identity Lifecycle</span>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Identity Lifecycle: Complete JML Process Guide</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>
+              The complete Joiner-Mover-Leaver (JML) lifecycle as it actually happens in enterprise 
+              environments. This includes real HR integration workflows, what happens when things go 
+              wrong, how automation works, and the exact steps for each lifecycle event. Based on 
+              real implementations at companies with 10,000+ employees.
+            </p>
+          </div>
+
+          <!-- SECTION: JML Overview -->
+          <h2 id="jml-overview">Understanding the JML Process</h2>
+
+          <p>
+            JML (Joiner-Mover-Leaver) is the industry term for managing the complete lifecycle of 
+            an identity. In reality, this is where 70% of your IAM work happens - getting the right 
+            people the right access at the right time, and removing it when they no longer need it.
+          </p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         THE IDENTITY LIFECYCLE IN ENTERPRISE                             │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│    ┌───────────────┐     ┌───────────────┐     ┌───────────────┐     ┌───────────────┐  │
+│    │               │     │               │     │               │     │               │  │
+│    │    JOINER     │────►│    ACTIVE     │────►│    MOVER      │────►│    LEAVER     │  │
+│    │   (Onboard)   │     │  (Day-to-Day) │     │ (Role Change) │     │  (Offboard)   │  │
+│    │               │     │               │     │               │     │               │  │
+│    └───────┬───────┘     └───────┬───────┘     └───────┬───────┘     └───────┬───────┘  │
+│            │                     │                     │                     │          │
+│            ▼                     ▼                     ▼                     ▼          │
+│    ┌───────────────┐     ┌───────────────┐     ┌───────────────┐     ┌───────────────┐  │
+│    │ • Create accts│     │ • Access req  │     │ • Revoke old  │     │ • Disable all │  │
+│    │ • Birthright  │     │ • Self-service│     │ • Grant new   │     │ • Revoke sess │  │
+│    │ • MFA setup   │     │ • Password mgmt│    │ • Transfer    │     │ • Transfer    │  │
+│    │ • Equipment   │     │ • Cert reviews│     │ • Update attrs│     │ • Archive     │  │
+│    └───────────────┘     └───────────────┘     └───────────────┘     └───────────────┘  │
+│                                                                                          │
+│    ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│    │                           SPECIAL LIFECYCLE EVENTS                               │  │
+│    │  • Leave of Absence (LOA)    • Contractor Extension    • Acquisition/Merger     │  │
+│    │  • Return from Leave         • Contractor Conversion   • Divestitures           │  │
+│    │  • Rehires                   • Internship End          • Name Changes           │  │
+│    └─────────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                          │
+│    ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│    │                              CONTINUOUS GOVERNANCE                               │  │
+│    │        Access Certifications │ Anomaly Detection │ Compliance Reporting         │  │
+│    └─────────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <div class="callout warning">
+            <div class="callout-content">
+              <div class="callout-title">⚠️ Why This Matters - Real Statistics</div>
+              <ul>
+                <li><strong>20%</strong> of data breaches involve credential theft from former employees (Verizon DBIR)</li>
+                <li><strong>Average of 30 days</strong> for orphaned accounts to be detected without automation</li>
+                <li><strong>70%</strong> of employees retain access to previous role after internal transfer (SailPoint study)</li>
+                <li><strong>SOX, HIPAA, PCI-DSS</strong> all require documented JML processes for compliance</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- SECTION: HR Integration -->
+          <h2 id="hr-integration">HR System Integration: The Authoritative Source</h2>
+
+          <h3>Why HR is the Source of Truth</h3>
+          <p>
+            In properly designed IAM systems, HR is the <strong>authoritative source</strong> for identity 
+            data. This means HR data drives identity creation, not IT. Here's why:
+          </p>
+
+          <ul>
+            <li><strong>Legal employment relationship:</strong> HR knows who is legally employed, when they start/end</li>
+            <li><strong>Organizational structure:</strong> HR maintains the org chart, reporting relationships, cost centers</li>
+            <li><strong>Job information:</strong> HR defines roles, titles, departments that drive access needs</li>
+            <li><strong>Audit trail:</strong> HR systems have documented approval for hiring/termination decisions</li>
+          </ul>
+
+          <h3>Common HR Systems and Integration Methods</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>HR System</th>
+                  <th>Integration Method</th>
+                  <th>Frequency</th>
+                  <th>Key Events</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Workday</strong></td>
+                  <td>REST API, Integration Cloud, RaaS (Reports as a Service)</td>
+                  <td>Real-time events + scheduled sync every 4 hours</td>
+                  <td>Hire, Terminate, Job Change, Leave, Return</td>
+                </tr>
+                <tr>
+                  <td><strong>SAP SuccessFactors</strong></td>
+                  <td>OData API, SFTP file export, SAP Cloud Integration</td>
+                  <td>Scheduled sync every 4-6 hours</td>
+                  <td>New Hire, Termination, Transfer, Promotion</td>
+                </tr>
+                <tr>
+                  <td><strong>Oracle HCM Cloud</strong></td>
+                  <td>REST API, HCM Extracts, Oracle Integration Cloud</td>
+                  <td>Scheduled + event-based</td>
+                  <td>Hire, Terminate, Assignment Change</td>
+                </tr>
+                <tr>
+                  <td><strong>ADP Workforce Now</strong></td>
+                  <td>ADP Marketplace APIs, SFTP exports</td>
+                  <td>Daily file export (common) or API</td>
+                  <td>New Hire, Termination, Status Change</td>
+                </tr>
+                <tr>
+                  <td><strong>UKG (Kronos)</strong></td>
+                  <td>REST API, scheduled file exports</td>
+                  <td>Daily sync</td>
+                  <td>Hire, Terminate, Transfer</td>
+                </tr>
+                <tr>
+                  <td><strong>Custom/Legacy HRIS</strong></td>
+                  <td>Database queries, CSV exports, custom APIs</td>
+                  <td>Daily batch file</td>
+                  <td>Depends on system capabilities</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Real-World HR Integration Architecture</h3>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         HR → IAM INTEGRATION ARCHITECTURE                                │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ┌─────────────────┐                                                                    │
+│  │     WORKDAY     │                                                                    │
+│  │   (HR Source)   │                                                                    │
+│  │                 │                                                                    │
+│  │ Employee Data:  │         INTEGRATION LAYER                                          │
+│  │ - Employee ID   │    ┌──────────────────────────┐                                   │
+│  │ - Name          │    │                          │                                   │
+│  │ - Email         │    │   SailPoint IdentityNow  │     TARGET SYSTEMS                │
+│  │ - Department    │───►│        or                │                                   │
+│  │ - Manager       │    │   Okta Lifecycle Mgmt    │    ┌─────────────────┐           │
+│  │ - Job Title     │    │        or                │───►│ Active Directory │           │
+│  │ - Location      │    │   Saviynt               │    └─────────────────┘           │
+│  │ - Start Date    │    │        or                │    ┌─────────────────┐           │
+│  │ - End Date      │    │   Custom Script         │───►│   Entra ID      │           │
+│  │ - Status        │    │                          │    └─────────────────┘           │
+│  │ - Cost Center   │    │  Transforms data:        │    ┌─────────────────┐           │
+│  │                 │    │  - Username generation   │───►│     Okta        │           │
+│  └─────────────────┘    │  - Group assignments     │    └─────────────────┘           │
+│                         │  - License assignment    │    ┌─────────────────┐           │
+│                         │  - Role mapping          │───►│   SaaS Apps     │           │
+│                         │                          │    └─────────────────┘           │
+│                         └──────────────────────────┘                                   │
+│                                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────────────────┐│
+│  │                              DATA TRANSFORMATIONS                                    ││
+│  │                                                                                      ││
+│  │   HR Field              →    IAM Attribute            →    Target System            ││
+│  │   ─────────────────────────────────────────────────────────────────────────────     ││
+│  │   Employee ID (12345)   →    employeeID               →    AD: employeeID attribute ││
+│  │   First Name (Sarah)    →    givenName                →    AD: givenName            ││
+│  │   Last Name (Chen)      →    sn                       →    AD: sn (surname)         ││
+│  │   Department (Engineering) → department               →    AD: department + OU      ││
+│  │   Manager (John Smith)  →    manager DN               →    AD: manager attribute    ││
+│  │   Job Title (Sr Dev)    →    title                    →    AD: title + group        ││
+│  │   Location (Toronto)    →    l (location)             →    AD: l + physicalDelivery ││
+│  │   Email (schen@...)     →    mail + UPN               →    AD: mail, userPrinName   ││
+│  │                                                                                      ││
+│  │   COMPUTED FIELDS:                                                                   ││
+│  │   sAMAccountName = first initial + last name + number if collision (schen, schen2)  ││
+│  │   UPN = sAMAccountName@company.com                                                   ││
+│  │   OU = Based on department and location mapping table                                ││
+│  │   Groups = Based on job title/department birthright rules                            ││
+│  └─────────────────────────────────────────────────────────────────────────────────────┘│
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <!-- SECTION: Joiner Process -->
+          <h2 id="joiner-process">Joiner Process: Step-by-Step</h2>
+
+          <h3>Timeline: What Happens When Someone is Hired</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Timeline</th>
+                  <th>Who</th>
+                  <th>Action</th>
+                  <th>Systems Involved</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>T-14 days</strong></td>
+                  <td>Recruiter/HR</td>
+                  <td>Candidate accepts offer, creates new hire record in Workday with start date</td>
+                  <td>Workday</td>
+                </tr>
+                <tr>
+                  <td><strong>T-7 days</strong></td>
+                  <td>IGA System (Automated)</td>
+                  <td>Pre-provisioning: Creates accounts in disabled state, requests equipment</td>
+                  <td>SailPoint → AD, ServiceNow</td>
+                </tr>
+                <tr>
+                  <td><strong>T-3 days</strong></td>
+                  <td>Manager</td>
+                  <td>Reviews birthright access, requests additional access if needed</td>
+                  <td>ServiceNow/SailPoint</td>
+                </tr>
+                <tr>
+                  <td><strong>T-1 day</strong></td>
+                  <td>IAM System (Automated)</td>
+                  <td>Enables accounts, assigns licenses, sends welcome email with credentials</td>
+                  <td>AD, M365, Okta</td>
+                </tr>
+                <tr>
+                  <td><strong>Day 1 (8 AM)</strong></td>
+                  <td>New Employee</td>
+                  <td>Logs in first time, forced password change, MFA enrollment</td>
+                  <td>AD, Okta/Entra, MFA provider</td>
+                </tr>
+                <tr>
+                  <td><strong>Day 1 (9 AM)</strong></td>
+                  <td>New Employee</td>
+                  <td>Accesses SSO portal, sees all birthright applications</td>
+                  <td>Okta/Entra</td>
+                </tr>
+                <tr>
+                  <td><strong>Day 1-5</strong></td>
+                  <td>New Employee + Manager</td>
+                  <td>Requests additional access as needed through self-service</td>
+                  <td>ServiceNow, SailPoint</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Birthright Access: What Gets Provisioned Automatically</h3>
+
+          <p>
+            <strong>Birthright access</strong> is access automatically granted based on who someone is 
+            (role, department, location) without requiring a request. This is the foundation of 
+            efficient JML processes.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Example Birthright Rules (SailPoint)</span>
+              <button class="code-copy-btn"><span>📋</span> Copy</button>
+            </div>
+            <pre><code># Birthright Rules - What everyone gets
+IF employee_type = "FTE" THEN
+  ASSIGN:
+    - AD Group: "All Employees"
+    - AD Group: "Domain Users"
+    - M365 License: "E3"
+    - Okta App: "Email"
+    - Okta App: "Teams"
+    - Okta App: "SharePoint"
+
+# Department-based birthright
+IF department = "Engineering" AND employee_type = "FTE" THEN
+  ASSIGN:
+    - AD Group: "Engineering-Staff"
+    - Okta App: "GitHub"
+    - Okta App: "Jira"
+    - Okta App: "Confluence"
+    - Okta App: "AWS SSO" (read-only role)
+
+# Location-based birthright
+IF location = "Toronto" THEN
+  ASSIGN:
+    - AD Group: "Toronto-Building-Access"
+    - AD OU: "OU=Toronto,OU=Users,DC=corp,DC=company,DC=com"
+
+# Job title-based birthright
+IF job_title CONTAINS "Manager" THEN
+  ASSIGN:
+    - AD Group: "Managers"
+    - Okta App: "Workday-Manager"
+    - Okta App: "TimeTracking-Approver"</code></pre>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-content">
+              <div class="callout-title">💡 Best Practice: Birthright vs Request-Based Access</div>
+              <p><strong>Birthright (Automatic):</strong></p>
+              <ul>
+                <li>Email, collaboration tools (Teams, Slack)</li>
+                <li>Department-level file shares</li>
+                <li>Standard productivity apps</li>
+                <li>Building access appropriate for location</li>
+              </ul>
+              <p><strong>Request-Based (Requires Approval):</strong></p>
+              <ul>
+                <li>Sensitive applications (HR data, financial systems)</li>
+                <li>Admin/privileged access</li>
+                <li>Cross-department resources</li>
+                <li>Production environment access</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>Real Joiner Workflow: Behind the Scenes</h3>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>HR Data Detected (T-7 days)</h4>
+                <p>SailPoint aggregation job runs at 2 AM, detects new record in Workday where:</p>
+                <ul>
+                  <li>Status = "Pre-Hire"</li>
+                  <li>Start Date = 7 days from now</li>
+                  <li>Employee ID assigned</li>
+                </ul>
+                <p>SailPoint creates an "Identity Cube" for the new hire with all HR attributes.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Username Generation</h4>
+                <p>System generates username using company algorithm:</p>
+                <div class="code-block">
+                  <pre><code># Algorithm: first_initial + lastname (max 20 chars)
+# Handle collisions by appending number
+Sarah Chen → schen
+If schen exists → schen2
+If schen2 exists → schen3</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>AD Account Creation</h4>
+                <p>SailPoint calls AD connector to create account:</p>
+                <div class="code-block">
+                  <pre><code># What SailPoint does via AD connector
+New-ADUser `
+  -SamAccountName "schen" `
+  -UserPrincipalName "schen@company.com" `
+  -Name "Sarah Chen" `
+  -GivenName "Sarah" `
+  -Surname "Chen" `
+  -Department "Engineering" `
+  -Title "Software Developer" `
+  -Manager "CN=John Smith,OU=Engineering,DC=corp,DC=company,DC=com" `
+  -Path "OU=Engineering,OU=Users,DC=corp,DC=company,DC=com" `
+  -Enabled $false `  # DISABLED until start date
+  -AccountPassword (ConvertTo-SecureString "TempP@ss123!" -AsPlainText -Force)</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Group Assignments (Birthright)</h4>
+                <p>Based on birthright rules, SailPoint adds to groups:</p>
+                <div class="code-block">
+                  <pre><code>Add-ADGroupMember -Identity "All Employees" -Members schen
+Add-ADGroupMember -Identity "Engineering-Staff" -Members schen
+Add-ADGroupMember -Identity "Toronto-Building-Access" -Members schen</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <h4>Azure AD Sync (within 30 min)</h4>
+                <p>Azure AD Connect detects new AD user, syncs to Entra ID:</p>
+                <ul>
+                  <li>User appears in Entra ID</li>
+                  <li>Password hash synced (if PHS enabled)</li>
+                  <li>Group memberships synced</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">6</div>
+              <div class="step-content">
+                <h4>M365 License Assignment</h4>
+                <p>SailPoint assigns M365 E3 license via Graph API:</p>
+                <div class="code-block">
+                  <pre><code># Graph API call
+POST https://graph.microsoft.com/v1.0/users/schen@company.com/assignLicense
+{
+  "addLicenses": [{ "skuId": "05e9a617-0261-4cee-bb44-138d3ef5d965" }],  # E3
+  "removeLicenses": []
+}</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">7</div>
+              <div class="step-content">
+                <h4>Okta App Assignments</h4>
+                <p>SailPoint assigns applications in Okta based on birthright rules:</p>
+                <ul>
+                  <li>GitHub Enterprise (Engineering birthright)</li>
+                  <li>Jira (Engineering birthright)</li>
+                  <li>Confluence (Engineering birthright)</li>
+                  <li>Slack (All employees birthright)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">8</div>
+              <div class="step-content">
+                <h4>Day 1: Account Activation</h4>
+                <p>At 12:01 AM on start date, scheduled job enables the account:</p>
+                <div class="code-block">
+                  <pre><code>Enable-ADAccount -Identity schen
+Set-ADUser -Identity schen -ChangePasswordAtLogon $true</code></pre>
+                </div>
+                <p>Welcome email sent with:</p>
+                <ul>
+                  <li>Username</li>
+                  <li>Temporary password (via separate secure channel or manager)</li>
+                  <li>SSO portal URL</li>
+                  <li>MFA setup instructions</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION: Mover Process -->
+          <h2 id="mover-process">Mover Process: Role Changes & Transfers</h2>
+
+          <p>
+            The "Mover" process handles internal changes: promotions, transfers, department changes, 
+            manager changes. This is where <strong>privilege creep</strong> happens if not managed properly.
+          </p>
+
+          <div class="callout critical">
+            <div class="callout-content">
+              <div class="callout-title">🔴 The Privilege Creep Problem</div>
+              <p>
+                Without proper mover processes, employees accumulate access as they move through the 
+                organization. A 10-year employee who has been in 4 departments may have access to 
+                all 4 department's sensitive data - a major security and compliance risk.
+              </p>
+              <p><strong>Example:</strong> Sarah started in Sales, moved to Marketing, then to Product. Without 
+              proper access revocation, she still has access to Sales CRM, Marketing analytics, AND Product roadmaps.</p>
+            </div>
+          </div>
+
+          <h3>Types of Mover Events</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Event Type</th>
+                  <th>What Changes</th>
+                  <th>IAM Actions Required</th>
+                  <th>Risk Level</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Department Transfer</strong></td>
+                  <td>Department, Manager, possibly location</td>
+                  <td>Revoke old dept access, grant new dept birthright, update OU, update groups</td>
+                  <td>🔴 High</td>
+                </tr>
+                <tr>
+                  <td><strong>Promotion (same dept)</strong></td>
+                  <td>Job title, possibly manager</td>
+                  <td>May gain additional access (e.g., now a manager), update title attribute</td>
+                  <td>🟡 Medium</td>
+                </tr>
+                <tr>
+                  <td><strong>Manager Change</strong></td>
+                  <td>Reporting relationship only</td>
+                  <td>Update manager attribute in AD, may affect delegated access</td>
+                  <td>🟢 Low</td>
+                </tr>
+                <tr>
+                  <td><strong>Location Change</strong></td>
+                  <td>Office location, possibly time zone</td>
+                  <td>Update building access groups, update location attribute</td>
+                  <td>🟢 Low</td>
+                </tr>
+                <tr>
+                  <td><strong>Employee to Contractor</strong></td>
+                  <td>Employment type</td>
+                  <td>Major access review, remove FTE-specific access, add contractor restrictions</td>
+                  <td>🔴 High</td>
+                </tr>
+                <tr>
+                  <td><strong>Contractor to Employee</strong></td>
+                  <td>Employment type</td>
+                  <td>Add FTE birthright access, remove contractor restrictions</td>
+                  <td>🟡 Medium</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Mover Workflow: Department Transfer Example</h3>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>HR Updates Workday</h4>
+                <p>HR enters job change in Workday: Sarah Chen transfers from Engineering to Product Management, effective next Monday.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>SailPoint Detects Change</h4>
+                <p>Aggregation detects: Department changed from "Engineering" to "Product". Triggers "Mover" workflow.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Revocation of Old Access</h4>
+                <p>System identifies access that should be revoked:</p>
+                <div class="code-block">
+                  <pre><code># Access to revoke (Engineering-specific)
+Remove-ADGroupMember -Identity "Engineering-Staff" -Members schen
+# Okta: Unassign GitHub Enterprise
+# Okta: Unassign AWS SSO (Engineering role)</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Grant New Birthright Access</h4>
+                <p>System grants new department birthright:</p>
+                <div class="code-block">
+                  <pre><code># Access to grant (Product-specific)
+Add-ADGroupMember -Identity "Product-Staff" -Members schen
+# Okta: Assign ProductBoard
+# Okta: Assign Pendo
+# Okta: Assign Figma</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <h4>Update Attributes</h4>
+                <p>Update AD and downstream systems:</p>
+                <div class="code-block">
+                  <pre><code>Set-ADUser -Identity schen `
+  -Department "Product Management" `
+  -Manager "CN=Mike Johnson,OU=Product,DC=corp,DC=company,DC=com"
+
+# Move to new OU
+Move-ADObject -Identity "CN=Sarah Chen,OU=Engineering,OU=Users,DC=corp,DC=company,DC=com" `
+  -TargetPath "OU=Product,OU=Users,DC=corp,DC=company,DC=com"</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">6</div>
+              <div class="step-content">
+                <h4>Notification</h4>
+                <p>Email sent to:</p>
+                <ul>
+                  <li>Sarah (summary of access changes)</li>
+                  <li>Old manager (FYI on access removal)</li>
+                  <li>New manager (FYI on access granted, request additional if needed)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-content">
+              <div class="callout-title">💡 Best Practice: Grace Period for Movers</div>
+              <p>
+                Many organizations implement a 7-14 day "grace period" where old access is maintained 
+                alongside new access. This allows knowledge transfer and prevents productivity loss.
+              </p>
+              <p><strong>Implementation:</strong></p>
+              <ul>
+                <li>Day 1: New access granted</li>
+                <li>Days 1-7: Both old and new access active</li>
+                <li>Day 8: Old access automatically revoked</li>
+                <li>Email reminder on Day 5: "Your Engineering access will be removed in 2 days"</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- SECTION: Leaver Process -->
+          <h2 id="leaver-process">Leaver Process: Offboarding</h2>
+
+          <p>
+            The Leaver process is the most critical lifecycle event from a security perspective. 
+            A single orphaned account can lead to a data breach. Speed is essential.
+          </p>
+
+          <h3>Leaver Types and Urgency</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Termination Type</th>
+                  <th>Notice Period</th>
+                  <th>Urgency</th>
+                  <th>Special Considerations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Voluntary Resignation</strong></td>
+                  <td>2 weeks typical</td>
+                  <td>🟡 Standard</td>
+                  <td>Knowledge transfer, can plan ahead</td>
+                </tr>
+                <tr>
+                  <td><strong>Involuntary Termination</strong></td>
+                  <td>Immediate</td>
+                  <td>🔴 Urgent</td>
+                  <td>Disable BEFORE employee is notified</td>
+                </tr>
+                <tr>
+                  <td><strong>Layoff (RIF)</strong></td>
+                  <td>Same day or notice period</td>
+                  <td>🔴 Urgent</td>
+                  <td>Mass offboarding, coordinate with HR</td>
+                </tr>
+                <tr>
+                  <td><strong>Retirement</strong></td>
+                  <td>Weeks/months notice</td>
+                  <td>🟢 Planned</td>
+                  <td>Knowledge transfer, may have consultant return</td>
+                </tr>
+                <tr>
+                  <td><strong>Contractor End</strong></td>
+                  <td>Known end date</td>
+                  <td>🟡 Standard</td>
+                  <td>Contract may be extended, verify with procurement</td>
+                </tr>
+                <tr>
+                  <td><strong>Security Incident</strong></td>
+                  <td>Immediate</td>
+                  <td>🔴🔴 Emergency</td>
+                  <td>Coordinate with Security, may need forensics</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Immediate Offboarding Checklist (First 15 Minutes)</h3>
+
+          <div class="callout critical">
+            <div class="callout-content">
+              <div class="callout-title">🔴 CRITICAL: Immediate Actions for Involuntary Termination</div>
+              <p>These actions must be completed BEFORE or AS the employee is notified:</p>
+              <ol>
+                <li><strong>Disable AD Account</strong>
+                  <div class="code-block">
+                    <pre><code>Disable-ADAccount -Identity jsmith</code></pre>
+                  </div>
+                </li>
+                <li><strong>Revoke All Active Sessions</strong>
+                  <div class="code-block">
+                    <pre><code># Azure AD / Entra ID
+Revoke-AzureADUserAllRefreshToken -ObjectId (Get-AzureADUser -ObjectId jsmith@company.com).ObjectId
+
+# Microsoft Graph (newer)
+Invoke-MgGraphRequest -Method POST -Uri "https://graph.microsoft.com/v1.0/users/jsmith@company.com/revokeSignInSessions"</code></pre>
+                  </div>
+                </li>
+                <li><strong>Reset Password</strong> (prevents cached credential use)
+                  <div class="code-block">
+                    <pre><code>Set-ADAccountPassword -Identity jsmith -Reset -NewPassword (ConvertTo-SecureString ([System.Web.Security.Membership]::GeneratePassword(16,4)) -AsPlainText -Force)</code></pre>
+                  </div>
+                </li>
+                <li><strong>Disable in Okta</strong> (if separate from AD)
+                  <div class="code-block">
+                    <pre><code># Okta API
+POST https://company.okta.com/api/v1/users/00u1abcd/lifecycle/suspend</code></pre>
+                  </div>
+                </li>
+                <li><strong>Disable VPN/Remote Access</strong> - Contact network team or disable in VPN admin</li>
+                <li><strong>Disable Badge Access</strong> - Contact physical security</li>
+              </ol>
+            </div>
+          </div>
+
+          <h3>Same-Day Offboarding Actions</h3>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>📧 Email and Communication</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <ul>
+                    <li><strong>Convert mailbox to shared</strong> (if needed for business continuity)</li>
+                    <li><strong>Set up auto-reply</strong> if appropriate: "John is no longer with the company. Please contact..."</li>
+                    <li><strong>Forward email to manager</strong> (with manager approval, time-limited)</li>
+                    <li><strong>Remove from distribution lists</strong></li>
+                    <li><strong>Remove from Teams/Slack channels</strong></li>
+                  </ul>
+                  <div class="code-block">
+                    <pre><code># Convert to shared mailbox (Exchange Online)
+Set-Mailbox -Identity jsmith@company.com -Type Shared
+
+# Set forwarding
+Set-Mailbox -Identity jsmith@company.com -ForwardingAddress manager@company.com -DeliverToMailboxAndForward $false</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>📁 Data and Files</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <ul>
+                    <li><strong>Transfer OneDrive ownership</strong> to manager</li>
+                    <li><strong>Transfer SharePoint site ownership</strong> for any sites they owned</li>
+                    <li><strong>Reassign shared documents</strong></li>
+                    <li><strong>Archive user's data</strong> per retention policy</li>
+                  </ul>
+                  <div class="code-block">
+                    <pre><code># OneDrive ownership transfer (SharePoint Online Management Shell)
+Set-SPOUser -Site https://company-my.sharepoint.com/personal/jsmith_company_com -LoginName manager@company.com -IsSiteCollectionAdmin $true</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔐 Privileged Access (If Applicable)</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p><strong>If the user had privileged access:</strong></p>
+                  <ul>
+                    <li>Force rotation of any shared privileged passwords they knew</li>
+                    <li>Review and rotate service account credentials they managed</li>
+                    <li>Audit recent privileged actions in PAM system</li>
+                    <li>Remove from PAM groups immediately</li>
+                    <li>Revoke any active privileged sessions</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>☁️ SaaS and Cloud Applications</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p>Disable/remove from all SaaS applications:</p>
+                  <ul>
+                    <li>Salesforce - deactivate user</li>
+                    <li>Slack - deactivate (keeps message history)</li>
+                    <li>GitHub - remove from org or downgrade to outside collaborator</li>
+                    <li>AWS - remove IAM user, remove from SSO assignments</li>
+                    <li>Jira/Confluence - deactivate user</li>
+                    <li>Any application with direct accounts (not SSO)</li>
+                  </ul>
+                  <p><strong>Note:</strong> If using Okta/Entra SSO with provisioning, deactivating the user in IdP should automatically deprovision from connected apps.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>Post-Offboarding Tasks (1-30 Days)</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Timeline</th>
+                  <th>Action</th>
+                  <th>Owner</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Day 1-7</td>
+                  <td>Remove from all security groups</td>
+                  <td>IAM Team</td>
+                </tr>
+                <tr>
+                  <td>Day 7</td>
+                  <td>Reclaim licenses (M365, SaaS apps)</td>
+                  <td>IAM Team</td>
+                </tr>
+                <tr>
+                  <td>Day 14</td>
+                  <td>Move AD account to "Disabled Users" OU</td>
+                  <td>IAM Team</td>
+                </tr>
+                <tr>
+                  <td>Day 30</td>
+                  <td>Delete account (per retention policy) or archive</td>
+                  <td>IAM Team</td>
+                </tr>
+                <tr>
+                  <td>Day 30</td>
+                  <td>Delete mailbox or convert to inactive</td>
+                  <td>Messaging Team</td>
+                </tr>
+                <tr>
+                  <td>Per Policy</td>
+                  <td>Archive OneDrive data, then delete</td>
+                  <td>Data Governance</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- SECTION: Automation -->
+          <h2 id="automation">Automation: Making JML Scalable</h2>
+
+          <h3>Why Manual JML Doesn't Scale</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Company Size</th>
+                  <th>Monthly JML Events</th>
+                  <th>Manual Time (15 min each)</th>
+                  <th>FTEs Needed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>500 employees</td>
+                  <td>~40 (8% turnover + moves)</td>
+                  <td>10 hours/month</td>
+                  <td>0.1 FTE</td>
+                </tr>
+                <tr>
+                  <td>5,000 employees</td>
+                  <td>~400</td>
+                  <td>100 hours/month</td>
+                  <td>0.6 FTE</td>
+                </tr>
+                <tr>
+                  <td>50,000 employees</td>
+                  <td>~4,000</td>
+                  <td>1,000 hours/month</td>
+                  <td>6 FTEs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Automation Maturity Model</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>Description</th>
+                  <th>Tools</th>
+                  <th>Time Savings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Level 1: Manual</strong></td>
+                  <td>All JML done via tickets, manual AD work</td>
+                  <td>ServiceNow, ADUC</td>
+                  <td>Baseline</td>
+                </tr>
+                <tr>
+                  <td><strong>Level 2: Scripts</strong></td>
+                  <td>PowerShell scripts for common tasks</td>
+                  <td>PowerShell, scheduled tasks</td>
+                  <td>30% faster</td>
+                </tr>
+                <tr>
+                  <td><strong>Level 3: IGA Tool</strong></td>
+                  <td>Automated provisioning from HR trigger</td>
+                  <td>SailPoint, Saviynt, Okta LCM</td>
+                  <td>70% faster</td>
+                </tr>
+                <tr>
+                  <td><strong>Level 4: Full Automation</strong></td>
+                  <td>Zero-touch JML with governance</td>
+                  <td>IGA + ITSM + HR integration</td>
+                  <td>90% faster</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- SECTION: Interview Tips -->
+          <h2 id="interview-tips">Interview Tips</h2>
+
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 What Interviewers Ask About Identity Lifecycle</div>
+              
+              <p><strong>Junior Level:</strong></p>
+              <ul>
+                <li>"Walk me through how you would onboard a new employee"</li>
+                <li>"What is JML?" (Know: Joiner-Mover-Leaver)</li>
+                <li>"Why is timely offboarding important?"</li>
+              </ul>
+
+              <p><strong>Mid Level:</strong></p>
+              <ul>
+                <li>"How would you automate the joiner process?"</li>
+                <li>"What is birthright access and how do you define it?"</li>
+                <li>"How do you handle privilege creep during internal transfers?"</li>
+              </ul>
+
+              <p><strong>Senior Level:</strong></p>
+              <ul>
+                <li>"Design a JML process for a company with 50,000 employees across 20 countries"</li>
+                <li>"How would you integrate Workday with your IAM stack?"</li>
+                <li>"What metrics would you use to measure JML process effectiveness?"</li>
+              </ul>
+
+              <p><strong>Key Metrics to Know:</strong></p>
+              <ul>
+                <li>Time to provision (target: &lt;24 hours for joiners)</li>
+                <li>Time to deprovision (target: &lt;15 minutes for involuntary)</li>
+                <li>Orphaned account rate (target: 0%)</li>
+                <li>Birthright access coverage (target: &gt;80% of new hire access automated)</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="1-2-authn-vs-authz.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Authentication vs Authorization</span>
+            </a>
+            <a href="1-4-access-control-models.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Access Control Models</span>
+            </a>
+          </nav>
+        </article>
+
+        <aside class="toc">
+          <div class="toc-header">On This Page</div>
+          <ul class="toc-list">
+            <li class="toc-item"><a href="#jml-overview" class="toc-link">JML Overview</a></li>
+            <li class="toc-item"><a href="#hr-integration" class="toc-link">HR Integration</a></li>
+            <li class="toc-item"><a href="#joiner-process" class="toc-link">Joiner Process</a></li>
+            <li class="toc-item"><a href="#mover-process" class="toc-link">Mover Process</a></li>
+            <li class="toc-item"><a href="#leaver-process" class="toc-link">Leaver Process</a></li>
+            <li class="toc-item"><a href="#automation" class="toc-link">Automation</a></li>
+            <li class="toc-item"><a href="#interview-tips" class="toc-link">Interview Tips</a></li>
+          </ul>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS IAM - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l2">L2 Technical</div>
+          <h1>AWS IAM: Cloud Identity Fundamentals</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>AWS IAM controls who can do what in your AWS environment. This covers users, roles, policies, best practices, and real enterprise configurations for secure AWS access.</p>
+          </div>
+
+          <h2 id="iam-components">AWS IAM Components</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    AWS IAM ARCHITECTURE                                                  │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   PRINCIPALS                    POLICIES                    RESOURCES                   │
+│   (Who)                         (What they can do)          (What they access)          │
+│                                                                                          │
+│   ┌─────────────────┐          ┌─────────────────┐         ┌─────────────────┐         │
+│   │ IAM Users       │───attach─►│ IAM Policies    │─────────►│ S3 Buckets      │         │
+│   │ (jsmith)        │          │ (permissions)   │         │                 │         │
+│   └─────────────────┘          └─────────────────┘         └─────────────────┘         │
+│                                        │                   ┌─────────────────┐         │
+│   ┌─────────────────┐                  │                   │ EC2 Instances   │         │
+│   │ IAM Roles       │──────────────────┘                   │                 │         │
+│   │ (for services)  │                                      └─────────────────┘         │
+│   └─────────────────┘                                      ┌─────────────────┐         │
+│                                                            │ Lambda          │         │
+│   ┌─────────────────┐          ┌─────────────────┐         │ Functions       │         │
+│   │ IAM Groups      │───attach─►│ Group Policies  │         └─────────────────┘         │
+│   │ (Developers)    │          │                 │         ┌─────────────────┐         │
+│   └─────────────────┘          └─────────────────┘         │ RDS Databases   │         │
+│         │                                                  │                 │         │
+│         │ members                                          └─────────────────┘         │
+│         ▼                                                  ┌─────────────────┐         │
+│   ┌─────────────────┐                                      │ IAM itself      │         │
+│   │ Users in Group  │                                      │ (iam:*)         │         │
+│   └─────────────────┘                                      └─────────────────┘         │
+│                                                                                          │
+│   KEY CONCEPT: Policies define permissions, then attach to principals                   │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="users-groups-roles">Users, Groups, and Roles</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Principal Type</th><th>What It Is</th><th>When to Use</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>IAM User</strong></td>
+                  <td>Long-term identity with credentials</td>
+                  <td>Avoid if possible; use SSO instead</td>
+                </tr>
+                <tr>
+                  <td><strong>IAM Group</strong></td>
+                  <td>Collection of users (for policy attachment)</td>
+                  <td>Group users by job function</td>
+                </tr>
+                <tr>
+                  <td><strong>IAM Role</strong></td>
+                  <td>Temporary credentials assumed by principals</td>
+                  <td>EC2, Lambda, cross-account, SSO users</td>
+                </tr>
+                <tr>
+                  <td><strong>Federated User</strong></td>
+                  <td>External user via SAML/OIDC</td>
+                  <td>Enterprise users via Identity Center</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout critical">
+            <div class="callout-content">
+              <div class="callout-title">🔴 Best Practice: Avoid IAM Users</div>
+              <p>Don't create IAM users for humans. Instead use <strong>AWS Identity Center (SSO)</strong> to federate from your IdP (Okta, Entra ID). IAM users should only be for:</p>
+              <ul>
+                <li>Service accounts that can't use roles</li>
+                <li>Break-glass emergency access</li>
+                <li>Legacy systems requiring access keys</li>
+              </ul>
+            </div>
+          </div>
+
+          <h2 id="iam-policies">IAM Policies</h2>
+          <p>JSON documents that define permissions. Understanding policy structure is essential.</p>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">IAM Policy Structure</span></div>
+            <pre><code>{
+  "Version": "2012-10-17",  // Always use this version
+  "Statement": [
+    {
+      "Sid": "AllowS3ReadAccess",        // Statement ID (optional, for documentation)
+      "Effect": "Allow",                  // Allow or Deny
+      "Action": [                         // What actions are permitted
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [                       // Which resources
+        "arn:aws:s3:::my-bucket",
+        "arn:aws:s3:::my-bucket/*"
+      ],
+      "Condition": {                      // When (optional)
+        "IpAddress": {
+          "aws:SourceIp": "10.0.0.0/8"
+        }
+      }
+    }
+  ]
+}</code></pre>
+          </div>
+
+          <h3>Policy Types</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Policy Type</th><th>Where It Lives</th><th>Use Case</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>AWS Managed</strong></td>
+                  <td>Maintained by AWS</td>
+                  <td>Common use cases (ReadOnlyAccess, PowerUserAccess)</td>
+                </tr>
+                <tr>
+                  <td><strong>Customer Managed</strong></td>
+                  <td>Your AWS account</td>
+                  <td>Custom permissions for your org</td>
+                </tr>
+                <tr>
+                  <td><strong>Inline</strong></td>
+                  <td>Embedded in user/role/group</td>
+                  <td>One-off permissions, not reusable</td>
+                </tr>
+                <tr>
+                  <td><strong>Resource-based</strong></td>
+                  <td>Attached to resource (S3, KMS)</td>
+                  <td>Cross-account access, public access</td>
+                </tr>
+                <tr>
+                  <td><strong>Permission Boundary</strong></td>
+                  <td>Maximum permissions limit</td>
+                  <td>Delegation - limit what admins can grant</td>
+                </tr>
+                <tr>
+                  <td><strong>SCP (Organizations)</strong></td>
+                  <td>AWS Organization level</td>
+                  <td>Guardrails across all accounts</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="iam-roles">IAM Roles Deep Dive</h2>
+          <p>Roles are temporary credentials that principals assume. The most secure way to grant AWS access.</p>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Role Trust Policy (Who Can Assume)</span></div>
+            <pre><code>// EC2 instance can assume this role
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+
+// Cross-account: Account 222222222222 can assume
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::222222222222:root"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": "secret-external-id"
+        }
+      }
+    }
+  ]
+}
+
+// SAML federation (Identity Center/SSO)
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::111111111111:saml-provider/Okta"
+      },
+      "Action": "sts:AssumeRoleWithSAML",
+      "Condition": {
+        "StringEquals": {
+          "SAML:aud": "https://signin.aws.amazon.com/saml"
+        }
+      }
+    }
+  ]
+}</code></pre>
+          </div>
+
+          <h2 id="least-privilege">Least Privilege Patterns</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Least Privilege Examples</span></div>
+            <pre><code>// ❌ TOO BROAD - S3 full access
+{
+  "Effect": "Allow",
+  "Action": "s3:*",
+  "Resource": "*"
+}
+
+// ✅ BETTER - Specific bucket, specific actions
+{
+  "Effect": "Allow",
+  "Action": [
+    "s3:GetObject",
+    "s3:PutObject"
+  ],
+  "Resource": "arn:aws:s3:::app-data-bucket/uploads/*"
+}
+
+// ✅ BEST - Add conditions
+{
+  "Effect": "Allow",
+  "Action": [
+    "s3:GetObject",
+    "s3:PutObject"
+  ],
+  "Resource": "arn:aws:s3:::app-data-bucket/uploads/*",
+  "Condition": {
+    "StringEquals": {
+      "aws:PrincipalTag/team": "engineering"
+    },
+    "Bool": {
+      "aws:SecureTransport": "true"
+    }
+  }
+}</code></pre>
+          </div>
+
+          <h2 id="cli-examples">Common AWS CLI Commands</h2>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">AWS CLI: IAM Operations</span></div>
+            <pre><code># List users
+aws iam list-users
+
+# Get user details
+aws iam get-user --user-name jsmith
+
+# List roles
+aws iam list-roles
+
+# Get role details (including trust policy)
+aws iam get-role --role-name MyAppRole
+
+# List attached policies
+aws iam list-attached-user-policies --user-name jsmith
+aws iam list-attached-role-policies --role-name MyAppRole
+
+# Get policy document
+aws iam get-policy-version --policy-arn arn:aws:iam::123456789:policy/MyPolicy --version-id v1
+
+# Assume a role (get temporary credentials)
+aws sts assume-role \
+  --role-arn arn:aws:iam::123456789:role/MyRole \
+  --role-session-name "my-session"
+
+# Check who you are
+aws sts get-caller-identity
+
+# Simulate policy (test if action is allowed)
+aws iam simulate-principal-policy \
+  --policy-source-arn arn:aws:iam::123456789:user/jsmith \
+  --action-names s3:GetObject \
+  --resource-arns arn:aws:s3:::my-bucket/file.txt</code></pre>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Roles over users:</strong> Use roles for EC2, Lambda, cross-account. Avoid IAM users for humans.</li>
+                <li><strong>Policy evaluation:</strong> Explicit Deny > Explicit Allow > Implicit Deny</li>
+                <li><strong>Trust policy vs permission policy:</strong> Trust = who can assume, Permission = what they can do</li>
+                <li><strong>SCPs:</strong> Organization-level guardrails (don't grant, only restrict)</li>
+                <li><strong>Permission boundaries:</strong> Maximum permissions for delegation</li>
+                <li><strong>Know common conditions:</strong> aws:SourceIp, aws:PrincipalTag, aws:RequestedRegion</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="7-6-pam-vendors.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">PAM Vendors</span>
+            </a>
+            <a href="8-2-aws-identity-center.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">AWS Identity Center</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

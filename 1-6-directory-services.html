@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directory Services - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Directory Services: AD, LDAP & Cloud Directories</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>Directory services are the backbone of enterprise IAM - they store identities, authenticate users, and provide the foundation for access control. This covers Active Directory, LDAP, Entra ID, and how they work together in real enterprises.</p>
+          </div>
+
+          <h2 id="what-is-directory">What is a Directory Service?</h2>
+          <p>A directory service is a <strong>specialized database</strong> optimized for reading, searching, and browsing identity data. Unlike relational databases, directories are hierarchical and designed for high read-to-write ratios (read 1000x more than write).</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    DIRECTORY SERVICE HIERARCHY (LDAP/AD)                                 │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   DC=company,DC=com  (Root - Domain Component)                                          │
+│   │                                                                                      │
+│   ├── OU=Users  (Organizational Unit)                                                   │
+│   │   ├── CN=Sarah Chen  (Common Name - User Object)                                    │
+│   │   │   ├── sAMAccountName: schen                                                     │
+│   │   │   ├── userPrincipalName: schen@company.com                                      │
+│   │   │   ├── mail: sarah.chen@company.com                                              │
+│   │   │   ├── department: Engineering                                                   │
+│   │   │   ├── manager: CN=John Smith,OU=Users,DC=company,DC=com                        │
+│   │   │   └── memberOf: CN=Engineering-Staff,OU=Groups,DC=company,DC=com               │
+│   │   │                                                                                  │
+│   │   └── CN=John Smith                                                                 │
+│   │                                                                                      │
+│   ├── OU=Groups                                                                         │
+│   │   ├── CN=Engineering-Staff                                                          │
+│   │   │   └── member: CN=Sarah Chen,OU=Users,DC=company,DC=com                         │
+│   │   └── CN=Domain Admins                                                              │
+│   │                                                                                      │
+│   ├── OU=Computers                                                                      │
+│   │   └── CN=WORKSTATION01                                                              │
+│   │                                                                                      │
+│   └── OU=Service Accounts                                                               │
+│       └── CN=svc-sqlserver                                                              │
+│                                                                                          │
+│   Distinguished Name (DN): CN=Sarah Chen,OU=Users,DC=company,DC=com                     │
+│   This uniquely identifies every object in the directory                                │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="active-directory">Active Directory (AD)</h2>
+          <p>Microsoft's directory service, the backbone of 95%+ of enterprise Windows environments.</p>
+
+          <h3>AD Components</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>What It Is</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Domain</strong></td>
+                  <td>Security boundary (e.g., corp.company.com)</td>
+                  <td>Contains users, groups, computers, policies</td>
+                </tr>
+                <tr>
+                  <td><strong>Domain Controller (DC)</strong></td>
+                  <td>Server running AD DS</td>
+                  <td>Authenticates users, replicates directory</td>
+                </tr>
+                <tr>
+                  <td><strong>Forest</strong></td>
+                  <td>Collection of domains sharing schema</td>
+                  <td>Ultimate security boundary</td>
+                </tr>
+                <tr>
+                  <td><strong>Organizational Unit (OU)</strong></td>
+                  <td>Container for organizing objects</td>
+                  <td>Apply GPOs, delegate administration</td>
+                </tr>
+                <tr>
+                  <td><strong>Group Policy (GPO)</strong></td>
+                  <td>Configuration applied to users/computers</td>
+                  <td>Security settings, software deployment</td>
+                </tr>
+                <tr>
+                  <td><strong>Global Catalog</strong></td>
+                  <td>Partial replica of all objects in forest</td>
+                  <td>Fast searches across domains</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>AD Object Types</h3>
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">PowerShell: Working with AD Objects</span></div>
+            <pre><code># Get user with all properties
+Get-ADUser -Identity schen -Properties *
+
+# Key user attributes
+Get-ADUser schen -Properties `
+  sAMAccountName,        # Logon name (pre-Windows 2000)
+  userPrincipalName,     # UPN: schen@company.com
+  distinguishedName,     # Full path in directory
+  memberOf,              # Group memberships
+  manager,               # Manager's DN
+  department,            # Department name
+  title,                 # Job title
+  mail,                  # Email address
+  lastLogonTimestamp,    # Last logon (replicated)
+  pwdLastSet,           # Password last changed
+  accountExpires,        # Account expiration
+  userAccountControl     # Account flags (enabled, locked, etc.)
+
+# Get group members
+Get-ADGroupMember -Identity "Engineering-Staff"
+
+# Get user's group memberships (including nested)
+Get-ADPrincipalGroupMembership -Identity schen
+
+# Find all users in an OU
+Get-ADUser -Filter * -SearchBase "OU=Engineering,OU=Users,DC=company,DC=com"
+
+# Find locked out accounts
+Search-ADAccount -LockedOut
+
+# Find disabled accounts
+Search-ADAccount -AccountDisabled</code></pre>
+          </div>
+
+          <h2 id="ldap">LDAP Protocol</h2>
+          <p>LDAP (Lightweight Directory Access Protocol) is the protocol used to communicate with directories. AD uses LDAP, as do OpenLDAP, 389 Directory Server, and others.</p>
+
+          <h3>LDAP Operations</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Operation</th><th>What It Does</th><th>Example Use</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Bind</strong></td>
+                  <td>Authenticate to directory</td>
+                  <td>Login with username/password</td>
+                </tr>
+                <tr>
+                  <td><strong>Search</strong></td>
+                  <td>Find objects matching filter</td>
+                  <td>Find all users in Engineering</td>
+                </tr>
+                <tr>
+                  <td><strong>Compare</strong></td>
+                  <td>Check if attribute has value</td>
+                  <td>Verify group membership</td>
+                </tr>
+                <tr>
+                  <td><strong>Add</strong></td>
+                  <td>Create new object</td>
+                  <td>Create new user account</td>
+                </tr>
+                <tr>
+                  <td><strong>Modify</strong></td>
+                  <td>Change object attributes</td>
+                  <td>Update user's phone number</td>
+                </tr>
+                <tr>
+                  <td><strong>Delete</strong></td>
+                  <td>Remove object</td>
+                  <td>Delete terminated user</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">LDAP Search Examples</span></div>
+            <pre><code># LDAP Search Filter Syntax
+
+# Find user by sAMAccountName
+(sAMAccountName=schen)
+
+# Find all users
+(objectClass=user)
+
+# Find all enabled users
+(&(objectClass=user)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))
+
+# Find users in Engineering department
+(&(objectClass=user)(department=Engineering))
+
+# Find users whose name starts with "S"
+(&(objectClass=user)(cn=S*))
+
+# Find members of a group
+(memberOf=CN=Engineering-Staff,OU=Groups,DC=company,DC=com)
+
+# LDAP URL format
+ldap://dc01.company.com:389/OU=Users,DC=company,DC=com?sAMAccountName,mail?sub?(department=Engineering)
+
+# Components:
+# - Host: dc01.company.com
+# - Port: 389 (636 for LDAPS)
+# - Base DN: OU=Users,DC=company,DC=com
+# - Attributes: sAMAccountName,mail
+# - Scope: sub (subtree)
+# - Filter: (department=Engineering)</code></pre>
+          </div>
+
+          <h2 id="cloud-directories">Cloud Directories</h2>
+
+          <h3>Microsoft Entra ID (Azure AD)</h3>
+          <p>Cloud-native directory service. NOT a cloud version of AD - it's a different architecture.</p>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Feature</th><th>Active Directory</th><th>Entra ID</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Protocol</strong></td>
+                  <td>Kerberos, NTLM, LDAP</td>
+                  <td>OAuth 2.0, OIDC, SAML</td>
+                </tr>
+                <tr>
+                  <td><strong>Structure</strong></td>
+                  <td>Hierarchical (OUs)</td>
+                  <td>Flat (no OUs)</td>
+                </tr>
+                <tr>
+                  <td><strong>Group Policy</strong></td>
+                  <td>Yes (GPOs)</td>
+                  <td>No (use Intune)</td>
+                </tr>
+                <tr>
+                  <td><strong>Authentication</strong></td>
+                  <td>On-premises DCs</td>
+                  <td>Cloud service</td>
+                </tr>
+                <tr>
+                  <td><strong>Device Join</strong></td>
+                  <td>Domain Join</td>
+                  <td>Azure AD Join</td>
+                </tr>
+                <tr>
+                  <td><strong>Use Case</strong></td>
+                  <td>On-prem Windows, legacy apps</td>
+                  <td>Cloud apps, SaaS, M365</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Hybrid Identity: AD + Entra ID</h3>
+          <p>Most enterprises run both, synchronized via Azure AD Connect.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    HYBRID DIRECTORY ARCHITECTURE                                         │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ON-PREMISES                                      CLOUD                                │
+│   ┌─────────────────────────┐                     ┌─────────────────────────┐          │
+│   │   Active Directory      │                     │     Entra ID            │          │
+│   │                         │                     │                         │          │
+│   │   • Users              │    Azure AD         │   • Synced Users        │          │
+│   │   • Groups             │◄───Connect────────►│   • Synced Groups       │          │
+│   │   • Computers          │    (sync)           │   • Cloud-only Users    │          │
+│   │   • GPOs               │                     │   • Guest Users         │          │
+│   │                         │                     │   • App Registrations   │          │
+│   └───────────┬─────────────┘                     └───────────┬─────────────┘          │
+│               │                                               │                         │
+│               │ Kerberos/LDAP                                │ OAuth/OIDC/SAML        │
+│               ▼                                               ▼                         │
+│   ┌─────────────────────────┐                     ┌─────────────────────────┐          │
+│   │   On-Prem Apps          │                     │   Cloud Apps            │          │
+│   │   • File Shares         │                     │   • Microsoft 365       │          │
+│   │   • SAP, Oracle         │                     │   • Salesforce          │          │
+│   │   • Legacy Web Apps     │                     │   • ServiceNow          │          │
+│   │   • Print Servers       │                     │   • AWS, Azure, GCP     │          │
+│   └─────────────────────────┘                     └─────────────────────────┘          │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="common-tasks">Day-to-Day AD Operations</h2>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>👤 Create New User Account</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <div class="code-block">
+                    <pre><code># Create user with all standard attributes
+New-ADUser -Name "Sarah Chen" `
+  -GivenName "Sarah" `
+  -Surname "Chen" `
+  -SamAccountName "schen" `
+  -UserPrincipalName "schen@company.com" `
+  -EmailAddress "sarah.chen@company.com" `
+  -Department "Engineering" `
+  -Title "Software Developer" `
+  -Manager "CN=John Smith,OU=Users,DC=company,DC=com" `
+  -Path "OU=Engineering,OU=Users,DC=company,DC=com" `
+  -AccountPassword (ConvertTo-SecureString "TempP@ss123!" -AsPlainText -Force) `
+  -ChangePasswordAtLogon $true `
+  -Enabled $true
+
+# Add to groups
+Add-ADGroupMember -Identity "Engineering-Staff" -Members "schen"
+Add-ADGroupMember -Identity "VPN-Users" -Members "schen"</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔓 Unlock Account / Reset Password</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <div class="code-block">
+                    <pre><code># Check if account is locked
+Get-ADUser schen -Properties LockedOut, lockoutTime
+# LockedOut: True means locked
+
+# Unlock account
+Unlock-ADAccount -Identity schen
+
+# Reset password
+Set-ADAccountPassword -Identity schen -Reset `
+  -NewPassword (ConvertTo-SecureString "NewP@ss456!" -AsPlainText -Force)
+
+# Force password change at next logon
+Set-ADUser -Identity schen -ChangePasswordAtLogon $true
+
+# Check password last set
+Get-ADUser schen -Properties pwdLastSet | 
+  Select Name, @{N='PwdLastSet';E={[DateTime]::FromFileTime($_.pwdLastSet)}}</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>🔍 Troubleshoot User Login Issues</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <div class="code-block">
+                    <pre><code># Full account status check
+Get-ADUser schen -Properties * | Select-Object `
+  Name,
+  Enabled,                    # Is account enabled?
+  LockedOut,                  # Is account locked?
+  PasswordExpired,            # Has password expired?
+  PasswordNeverExpires,       # Is password set to never expire?
+  AccountExpirationDate,      # Does account have expiration?
+  @{N='LastLogon';E={[DateTime]::FromFileTime($_.lastLogonTimestamp)}},
+  @{N='PwdLastSet';E={[DateTime]::FromFileTime($_.pwdLastSet)}},
+  @{N='BadPwdCount';E={$_.badPwdCount}}  # Failed password attempts
+
+# Check which DC authenticated the user
+nltest /dsgetdc:company.com
+
+# Check replication between DCs
+repadmin /showrepl
+
+# Find which DC has most recent info for user
+Get-ADDomainController -Filter * | ForEach-Object {
+    Get-ADUser schen -Server $_.HostName -Properties lastLogonTimestamp |
+    Select @{N='DC';E={$_.HostName}}, lastLogonTimestamp
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="security">Security Considerations</h2>
+
+          <div class="callout critical">
+            <div class="callout-content">
+              <div class="callout-title">🔴 AD Security Best Practices</div>
+              <ul>
+                <li><strong>Protect Domain Admins:</strong> Limit to 2-3 accounts, use PIM for JIT access</li>
+                <li><strong>Tiered Administration:</strong> Tier 0 (DCs), Tier 1 (Servers), Tier 2 (Workstations)</li>
+                <li><strong>Secure DCs:</strong> No internet access, limited RDP, separate admin accounts</li>
+                <li><strong>Monitor:</strong> Watch for DCSync, Golden Ticket, Silver Ticket attacks</li>
+                <li><strong>LAPS:</strong> Local Administrator Password Solution for workstations</li>
+                <li><strong>Credential Guard:</strong> Protect credentials on Windows 10/11</li>
+              </ul>
+            </div>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>Know DN syntax:</strong> CN=User,OU=Users,DC=company,DC=com</li>
+                <li><strong>AD vs Entra ID:</strong> Different protocols (Kerberos vs OAuth), different structures</li>
+                <li><strong>LDAP port:</strong> 389 (LDAP), 636 (LDAPS), 3268 (Global Catalog)</li>
+                <li><strong>Replication:</strong> Multi-master, typically 15-minute intervals</li>
+                <li><strong>Global Catalog:</strong> Partial replica of all domains, port 3268</li>
+                <li><strong>Security:</strong> Protect Tier 0, use tiered admin model</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="1-5-least-privilege-sod.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Least Privilege & SoD</span>
+            </a>
+            <a href="1-7-identity-governance.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Identity Governance</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

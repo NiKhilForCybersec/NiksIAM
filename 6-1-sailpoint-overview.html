@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SailPoint Overview - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l2">L2 Technical</div>
+          <h1>SailPoint: Identity Governance Platform</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>SailPoint is the leader in Identity Governance and Administration (IGA). This covers IdentityNow (cloud) and IdentityIQ (on-prem), access certifications, provisioning, role management, and real enterprise use cases.</p>
+          </div>
+
+          <h2 id="what-is-sailpoint">What is SailPoint?</h2>
+          <p>SailPoint provides <strong>Identity Governance</strong> - ensuring the right people have the right access to the right resources. Unlike Okta (authentication/SSO), SailPoint focuses on access certification, provisioning automation, and compliance.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    SAILPOINT IGA PLATFORM                                                │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   AUTHORITATIVE                  SAILPOINT                     TARGET SYSTEMS           │
+│   SOURCES                        IDENTITYNOW                                            │
+│                                                                                          │
+│   ┌─────────────────┐           ┌─────────────────────────┐   ┌─────────────────┐      │
+│   │ HR System       │──────────►│                         │──►│ Active Directory│      │
+│   │ (Workday)       │  Identity │  ┌───────────────────┐  │   └─────────────────┘      │
+│   └─────────────────┘  Source   │  │  Identity Cube    │  │   ┌─────────────────┐      │
+│                                 │  │  (User Profile)   │  │──►│ Entra ID        │      │
+│   ┌─────────────────┐           │  │                   │  │   └─────────────────┘      │
+│   │ Contractor      │──────────►│  │  • Attributes     │  │   ┌─────────────────┐      │
+│   │ System          │           │  │  • Entitlements   │  │──►│ Salesforce      │      │
+│   └─────────────────┘           │  │  • Access History │  │   └─────────────────┘      │
+│                                 │  │  • Risk Score     │  │   ┌─────────────────┐      │
+│                                 │  └───────────────────┘  │──►│ ServiceNow      │      │
+│                                 │                         │   └─────────────────┘      │
+│                                 │  ┌───────────────────┐  │   ┌─────────────────┐      │
+│   KEY FUNCTIONS:                │  │ Access           │  │──►│ SAP             │      │
+│   • Access Certifications       │  │ Certifications   │  │   └─────────────────┘      │
+│   • Automated Provisioning      │  └───────────────────┘  │   ┌─────────────────┐      │
+│   • Role Management             │                         │──►│ Database        │      │
+│   • SoD Policy Enforcement      │  ┌───────────────────┐  │   │ (Oracle, SQL)   │      │
+│   • Access Requests             │  │ Provisioning      │  │   └─────────────────┘      │
+│   • Compliance Reporting        │  │ Engine            │  │   ┌─────────────────┐      │
+│                                 │  └───────────────────┘  │──►│ Cloud Apps      │      │
+│                                 │                         │   │ (AWS, Azure)    │      │
+│                                 └─────────────────────────┘   └─────────────────┘      │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="products">SailPoint Products</h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Product</th><th>Deployment</th><th>Best For</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>IdentityNow</strong></td>
+                  <td>SaaS (Cloud)</td>
+                  <td>Mid-market, faster deployment, less customization</td>
+                </tr>
+                <tr>
+                  <td><strong>IdentityIQ</strong></td>
+                  <td>On-premises</td>
+                  <td>Large enterprises, complex requirements, heavy customization</td>
+                </tr>
+                <tr>
+                  <td><strong>Identity Security Cloud</strong></td>
+                  <td>SaaS (Next-gen)</td>
+                  <td>Modern cloud-native, AI-driven, replacing IdentityNow</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="identity-cube">The Identity Cube</h2>
+          <p>SailPoint's core concept - a complete view of each user's identity and access across all systems.</p>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Identity Cube Contents</span></div>
+            <pre><code>Identity: Sarah Chen
+├── Identity Attributes (from HR)
+│   ├── employeeId: 12345
+│   ├── firstName: Sarah
+│   ├── lastName: Chen
+│   ├── department: Engineering
+│   ├── manager: John Smith
+│   ├── location: Toronto
+│   └── startDate: 2023-01-15
+│
+├── Accounts (from connected systems)
+│   ├── Active Directory: schen
+│   ├── Entra ID: schen@company.com
+│   ├── Salesforce: sarah.chen@company.com
+│   ├── ServiceNow: sarah.chen
+│   └── SAP: SCHEN
+│
+├── Entitlements (permissions across systems)
+│   ├── AD Group: Engineering-Staff
+│   ├── AD Group: VPN-Users
+│   ├── Salesforce Profile: Standard User
+│   ├── Salesforce Role: Sales Rep
+│   └── SAP Role: Display Only
+│
+├── Roles (business roles in SailPoint)
+│   └── Engineer (grants: AD groups, Salesforce access)
+│
+├── Access History
+│   ├── 2023-01-15: Initial provisioning
+│   ├── 2023-06-01: Granted Salesforce access
+│   └── 2024-01-10: Certified by manager
+│
+└── Risk Score: Low (7/100)</code></pre>
+          </div>
+
+          <h2 id="access-certifications">Access Certifications</h2>
+          <p>Periodic review where managers/owners verify users still need their access. Critical for compliance (SOX, HIPAA, PCI-DSS).</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    ACCESS CERTIFICATION CAMPAIGN                                         │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   1. CAMPAIGN CREATED                                                                   │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │  Name: Q1 2024 Manager Access Review                                            │   │
+│   │  Type: Manager Certification (each manager reviews their direct reports)        │   │
+│   │  Scope: All employees, all applications                                         │   │
+│   │  Duration: 14 days                                                              │   │
+│   │  Reminders: Day 7, Day 12                                                       │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                          │
+│   2. REVIEWER SEES                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │  Employee: Sarah Chen                                                           │   │
+│   │  ┌─────────────────────────────────────────────────────────────────────────┐   │   │
+│   │  │  Access Item             │ Decision    │ Comments                       │   │   │
+│   │  ├─────────────────────────────────────────────────────────────────────────┤   │   │
+│   │  │  AD: Engineering-Staff   │ ✅ Approve  │ Required for job              │   │   │
+│   │  │  AD: Finance-ReadOnly    │ ❌ Revoke   │ No longer on project          │   │   │
+│   │  │  Salesforce: Standard    │ ✅ Approve  │ Still needs CRM access        │   │   │
+│   │  │  SAP: Display Only       │ ⏸️ Delegate │ Forward to SAP owner          │   │   │
+│   │  └─────────────────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                          │
+│   3. REVOCATION (Automatic after approval)                                              │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │  Sarah Chen: Remove from AD group "Finance-ReadOnly"                            │   │
+│   │  → SailPoint provisions change to Active Directory                              │   │
+│   │  → Access revoked within minutes                                                │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="provisioning">Automated Provisioning</h2>
+          <p>SailPoint can automatically create/modify/delete accounts based on HR events (joiner/mover/leaver).</p>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">Joiner Provisioning Flow</span></div>
+            <pre><code>TRIGGER: HR creates new employee in Workday
+
+1. AGGREGATION (scheduled or real-time)
+   SailPoint reads new employee from Workday:
+   {
+     "employeeId": "12345",
+     "firstName": "Sarah",
+     "lastName": "Chen",
+     "department": "Engineering",
+     "startDate": "2024-02-01"
+   }
+
+2. IDENTITY CREATION
+   SailPoint creates Identity Cube for Sarah Chen
+   Calculates which roles/access she should have (birthright)
+
+3. BIRTHRIGHT PROVISIONING
+   Based on rules:
+   IF department = "Engineering" THEN:
+     → Create AD account in OU=Engineering
+     → Add to groups: Engineering-Staff, All-Employees
+     → Create Entra ID account (via AD sync)
+     → Assign Salesforce license
+     → Create ServiceNow account
+
+4. ACCOUNT CREATION (via connectors)
+   SailPoint → AD Connector → Creates AD account
+   SailPoint → Salesforce Connector → Creates SF user
+   SailPoint → ServiceNow Connector → Creates SN user
+
+5. VERIFICATION
+   SailPoint aggregates from targets to confirm accounts created
+   Updates Identity Cube with new accounts/entitlements</code></pre>
+          </div>
+
+          <h2 id="connectors">Connectors</h2>
+          <p>SailPoint connects to systems via connectors (Virtual Appliance for on-prem, direct API for SaaS).</p>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>System Type</th><th>Connection Method</th><th>Capabilities</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Active Directory</strong></td>
+                  <td>VA + LDAP</td>
+                  <td>Full CRUD, group membership, password reset</td>
+                </tr>
+                <tr>
+                  <td><strong>Entra ID</strong></td>
+                  <td>Graph API</td>
+                  <td>User management, group membership, licenses</td>
+                </tr>
+                <tr>
+                  <td><strong>Salesforce</strong></td>
+                  <td>REST API</td>
+                  <td>User provisioning, profile/role assignment</td>
+                </tr>
+                <tr>
+                  <td><strong>ServiceNow</strong></td>
+                  <td>REST API</td>
+                  <td>User/group management, role assignment</td>
+                </tr>
+                <tr>
+                  <td><strong>SAP</strong></td>
+                  <td>VA + RFC/BAPI</td>
+                  <td>User management, role assignment</td>
+                </tr>
+                <tr>
+                  <td><strong>Databases</strong></td>
+                  <td>VA + JDBC</td>
+                  <td>Read accounts, limited write</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>IGA vs IdP:</strong> SailPoint = governance (certifications, compliance), Okta = authentication (SSO, MFA)</li>
+                <li><strong>Identity Cube:</strong> Central view of user's identity + all access across systems</li>
+                <li><strong>Access Certifications:</strong> Periodic reviews for compliance (SOX, HIPAA)</li>
+                <li><strong>Provisioning:</strong> Automated account creation based on HR triggers</li>
+                <li><strong>Aggregation:</strong> Collecting data from target systems into SailPoint</li>
+                <li><strong>Products:</strong> IdentityNow (SaaS), IdentityIQ (on-prem)</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="5-6-okta-admin.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Okta Administration</span>
+            </a>
+            <a href="6-2-iga-fundamentals.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">IGA Fundamentals</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

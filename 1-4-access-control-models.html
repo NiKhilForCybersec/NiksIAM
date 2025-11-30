@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Control Models - Ultimate IAM Security Guide</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">🔐</div>
+          <div class="sidebar-logo-text">IAM <span>Guide</span></div>
+        </a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="content-wrapper">
+        <article class="content-main">
+          <div class="badge badge-l1">L1 Fundamentals</div>
+          <h1>Access Control Models: DAC, MAC, RBAC, ABAC</h1>
+          
+          <div class="overview-box">
+            <h3>🎯 What This Page Covers</h3>
+            <p>Understanding access control models is essential for IAM architecture. This covers DAC, MAC, RBAC, and ABAC with real enterprise implementations.</p>
+          </div>
+
+          <h2 id="overview">Access Control Models Overview</h2>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         ACCESS CONTROL MODELS                                            │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│  DAC (Discretionary)     │  MAC (Mandatory)         │  RBAC (Role-Based)                │
+│  Owner controls access   │  System enforces labels  │  Roles grant permissions          │
+│  Ex: SharePoint sharing  │  Ex: Military/SELinux    │  Ex: AD Groups, Azure RBAC        │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│  ABAC (Attribute-Based)                │  ReBAC (Relationship-Based)                    │
+│  Policies evaluate attributes          │  Access based on relationships                 │
+│  Ex: AWS IAM, Conditional Access       │  Ex: Google Docs, GitHub                       │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <h2 id="dac">DAC: Discretionary Access Control</h2>
+          <p>Resource <strong>owner</strong> decides who gets access. Most common in everyday computing.</p>
+          
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">DAC Example: Windows NTFS</span></div>
+            <pre><code># View permissions
+icacls "D:\Projects\budget.xlsx"
+# CORP\schen:(F)         - Full Control (Owner)
+# CORP\Finance-Team:(R)  - Read only
+
+# Owner grants access
+icacls "D:\Projects\budget.xlsx" /grant "CORP\mwilson:(R)"</code></pre>
+          </div>
+
+          <h2 id="rbac">RBAC: Role-Based Access Control</h2>
+          <p><strong>Most widely used in enterprise.</strong> Users → Roles → Permissions.</p>
+
+          <div class="flow-diagram">
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              RBAC MODEL                                                  │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│   USERS              ROLES                    PERMISSIONS                               │
+│   Sarah ─────┐       ┌─────────────┐         ┌──────────────────────┐                  │
+│   Mike  ─────┼──────►│  Engineer   │────────►│ Read code repos      │                  │
+│              │       └─────────────┘         │ Write dev env        │                  │
+│   John ──────┼──────►┌─────────────┐         └──────────────────────┘                  │
+│              │       │  Manager    │────────►┌──────────────────────┐                  │
+│              └──────►└─────────────┘         │ Approve requests     │                  │
+│                                              │ + All Engineer perms │                  │
+│                                              └──────────────────────┘                  │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+            </pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">RBAC with AD Groups</span></div>
+            <pre><code># Assign role via group membership
+Add-ADGroupMember -Identity "APP-Salesforce-Users" -Members schen
+
+# Azure RBAC assignment
+New-AzRoleAssignment `
+  -SignInName "schen@company.com" `
+  -RoleDefinitionName "Contributor" `
+  -ResourceGroupName "prod-resources"</code></pre>
+          </div>
+
+          <h2 id="abac">ABAC: Attribute-Based Access Control</h2>
+          <p>Access based on <strong>attributes</strong> of user, resource, action, and environment.</p>
+
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Attribute Type</th><th>Examples</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Subject</strong></td><td>department, title, clearance, location</td></tr>
+                <tr><td><strong>Resource</strong></td><td>classification, owner, sensitivity</td></tr>
+                <tr><td><strong>Action</strong></td><td>read, write, delete, approve</td></tr>
+                <tr><td><strong>Environment</strong></td><td>time, IP address, device compliance</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header"><span class="code-language">ABAC: AWS IAM Policy</span></div>
+            <pre><code>{
+  "Effect": "Allow",
+  "Action": "s3:GetObject",
+  "Resource": "arn:aws:s3:::company-data/*",
+  "Condition": {
+    "StringEquals": {
+      "aws:PrincipalTag/Department": "Finance"
+    },
+    "IpAddress": {
+      "aws:SourceIp": "10.0.0.0/8"
+    }
+  }
+}</code></pre>
+          </div>
+
+          <h2 id="comparison">When to Use Each Model</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Model</th><th>Best For</th><th>Real Example</th></tr></thead>
+              <tbody>
+                <tr><td><strong>DAC</strong></td><td>File sharing, collaboration</td><td>SharePoint, Google Drive</td></tr>
+                <tr><td><strong>MAC</strong></td><td>Military, classified data</td><td>Government systems, SELinux</td></tr>
+                <tr><td><strong>RBAC</strong></td><td>Enterprise apps, clear roles</td><td>AD Groups, Azure RBAC</td></tr>
+                <tr><td><strong>ABAC</strong></td><td>Complex, dynamic policies</td><td>AWS IAM, Conditional Access</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="interview-tips">Interview Tips</h2>
+          <div class="callout interview">
+            <div class="callout-content">
+              <div class="callout-title">💡 Key Interview Points</div>
+              <ul>
+                <li><strong>RBAC vs ABAC:</strong> RBAC is simpler (static roles), ABAC is flexible (dynamic attributes)</li>
+                <li><strong>Most enterprises use hybrid:</strong> RBAC for base + ABAC for conditions</li>
+                <li><strong>Conditional Access = ABAC</strong> applied at authentication layer</li>
+                <li><strong>Know real examples:</strong> AD Groups (RBAC), AWS IAM Policies (ABAC)</li>
+              </ul>
+            </div>
+          </div>
+
+          <nav class="page-nav">
+            <a href="1-3-identity-lifecycle.html" class="page-nav-link prev">
+              <span class="page-nav-label">← Previous</span>
+              <span class="page-nav-title">Identity Lifecycle</span>
+            </a>
+            <a href="1-5-least-privilege-sod.html" class="page-nav-link next">
+              <span class="page-nav-label">Next →</span>
+              <span class="page-nav-title">Least Privilege & SoD</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
