@@ -1421,3 +1421,14 @@ li::marker {
     border: 1px solid #ddd;
   }
 }
+
+/* Sidebar Search */
+.sidebar-search {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-dark);
+}
+
+.sidebar-search .search-trigger {
+  width: 100%;
+  justify-content: flex-start;
+}
