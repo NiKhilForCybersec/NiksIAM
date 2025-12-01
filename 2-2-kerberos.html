@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kerberos - Ultimate IAM Security Guide</title>
   <link rel="stylesheet" href="main.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
 </head>
 <body>
   <div class="page-wrapper">
+    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -23,170 +23,9 @@
           <div class="sidebar-logo-text">IAM <span>Guide</span></div>
         </a>
       </div>
-      <div class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-section-header"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
-            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
-            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
-            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
-            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
-            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
-            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
-            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
-            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
-            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
-            <a href="2-4-saml.html" class="nav-item">SAML</a>
-            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
-            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
-            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
-            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
-            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
-            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
-            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
-            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
-            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
-            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
-            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
-            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
-            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
-            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
-            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
-            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
-            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
-            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
-            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
-            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
-            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
-            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
-            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
-            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
-            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
-            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
-            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
-            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
-            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
-            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
-            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
-            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
-            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
-            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
-            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
-            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
-            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
-            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
-            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
-            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
-            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
-            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
-            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
-            <a href="9-5-api-security.html" class="nav-item">API Security</a>
-            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
-            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
-            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
-            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
-            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
-            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
-            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
-            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
-            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
-            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
-            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
-            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
-            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
-            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
-            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
-          </div>
-        </div>
-      </div>
+      <!-- Navigation generated by JavaScript -->
     </nav>
     <main class="main-content">
-      <header class="content-header">
-        <div class="breadcrumb">
-          <a href="index.html">Home</a>
-          <span class="breadcrumb-separator">›</span>
-          <span>Authentication Protocols</span>
-          <span class="breadcrumb-separator">›</span>
-          <span>Kerberos</span>
-        </div>
-        <div class="header-actions">
-          <button class="search-trigger">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span>Search</span>
-            <kbd>⌘K</kbd>
-          </button>
-        </div>
-      </header>
       <div class="content-wrapper">
         <article class="content-main">
           <div class="badge badge-l2">L2 Technical</div>
@@ -194,302 +33,287 @@
           
           <div class="overview-box">
             <h3>🎯 What You'll Learn</h3>
-            <p>
-              Kerberos is a network authentication protocol that uses secret-key cryptography and a trusted 
-              third party (KDC) to authenticate users and services. This page covers the complete Kerberos 
-              flow, ticket types, Active Directory integration, and security considerations including 
-              Golden/Silver ticket attacks.
-            </p>
+            <p>Kerberos is THE authentication protocol for Active Directory. If you work with Windows domains, you MUST understand this. This page breaks it down with simple analogies and memory tricks.</p>
           </div>
 
-          <h2 id="overview">What is Kerberos?</h2>
-          <p>
-            Kerberos is a ticket-based authentication protocol developed at MIT. Named after the three-headed 
-            dog from Greek mythology, it involves three parties: the client, the server, and the Key Distribution 
-            Center (KDC). Kerberos v5 (RFC 4120) is the current standard and is the primary authentication 
-            protocol in Microsoft Active Directory environments.
-          </p>
+          <!-- MEMORY AID SECTION -->
+          <h2 id="simple-analogy">🎭 The Amusement Park Analogy</h2>
+          <div class="callout tip"><div class="callout-content"><div class="callout-title">🎢 Think of Kerberos Like an Amusement Park</div>
+            <p>Imagine you're visiting an amusement park. Here's how it maps to Kerberos:</p>
+            
+            <div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    🎢 AMUSEMENT PARK = KERBEROS                                          │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   YOU (Visitor)              =  CLIENT (User wanting to access resources)               │
+│                                                                                          │
+│   MAIN GATE                  =  KDC (Key Distribution Center)                           │
+│   (Where you show your ID)      The central authority that issues tickets               │
+│                                                                                          │
+│   WRISTBAND                  =  TGT (Ticket Granting Ticket)                            │
+│   (Proves you paid entry)       "I'm a valid user in this domain"                       │
+│                                 You get this ONCE when you log in                       │
+│                                                                                          │
+│   RIDE TICKET                =  SERVICE TICKET                                          │
+│   (For a specific ride)         "Let me access this specific server/service"            │
+│                                 You get a NEW one for each service                      │
+│                                                                                          │
+│   THE ROLLERCOASTER          =  SERVICE (File server, web app, database)                │
+│   (The ride you want)           What you actually want to access                        │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
+          </div></div>
 
+          <h2 id="flow-simple">📝 The Flow in Plain English</h2>
+          <div class="callout info"><div class="callout-content"><div class="callout-title">🚶 Walk Through: "I want to access a file server"</div>
+            
+            <p><strong>Step 1: Morning Login (You enter the park)</strong></p>
+            <p>You type your username and password at your Windows computer.</p>
+            <ul>
+              <li>Your computer sends a request to the Domain Controller (KDC)</li>
+              <li>"Hi, I'm john.smith, here's proof I know my password"</li>
+              <li>DC responds: "Welcome John! Here's your wristband (TGT)"</li>
+            </ul>
+            <p>✅ <strong>You now have a TGT.</strong> Valid for 10 hours (default). You don't need to enter your password again today.</p>
+
+            <p style="margin-top:1.5rem;"><strong>Step 2: Access File Server (You want to ride a rollercoaster)</strong></p>
+            <p>You try to open \\fileserver\shared</p>
+            <ul>
+              <li>Your computer shows the TGT to the DC: "I have my wristband, can I get a ticket for the file server?"</li>
+              <li>DC responds: "Here's your ride ticket (Service Ticket) for fileserver"</li>
+            </ul>
+            <p>✅ <strong>You now have a Service Ticket</strong> specifically for that file server.</p>
+
+            <p style="margin-top:1.5rem;"><strong>Step 3: Enter the File Server (Board the ride)</strong></p>
+            <ul>
+              <li>Your computer presents the Service Ticket to the file server</li>
+              <li>File server checks the ticket: "This is valid, let them in!"</li>
+            </ul>
+            <p>✅ <strong>You're in!</strong> The file server never saw your password.</p>
+          </div></div>
+
+          <!-- MEMORY TRICKS -->
+          <h2 id="memory-tricks">🧠 Memory Tricks</h2>
+          <div class="callout warning"><div class="callout-content"><div class="callout-title">💡 Remember These Forever</div>
+            
+            <p><strong>🔑 "TGT = The Golden Ticket"</strong></p>
+            <p>Like Willy Wonka's golden ticket, your TGT is your all-access pass. Show it to get tickets for any ride (service) in the park (domain).</p>
+
+            <p style="margin-top:1rem;"><strong>🎫 "Service Ticket = Specific Ticket"</strong></p>
+            <p>Each service needs its own ticket. Want the file server? Get a ticket. Want SharePoint? Get another ticket. You collect tickets as you go.</p>
+
+            <p style="margin-top:1rem;"><strong>🏰 "KDC = The King"</strong></p>
+            <p>The Key Distribution Center is the KING of the domain. Only the King can create valid tickets. In AD, every Domain Controller is a KDC.</p>
+
+            <p style="margin-top:1rem;"><strong>🔐 "krbtgt = The Crown Jewels"</strong></p>
+            <p>The krbtgt account's password hash is used to encrypt ALL TGTs. If attackers steal this, they can forge any ticket (Golden Ticket attack). PROTECT IT!</p>
+
+            <p style="margin-top:1rem;"><strong>📦 Encryption Rule:</strong></p>
+            <ul>
+              <li><strong>TGT</strong> = Encrypted with <strong>krbtgt</strong>'s key (only KDC can create/read)</li>
+              <li><strong>Service Ticket</strong> = Encrypted with <strong>service account</strong>'s key (only that service can read)</li>
+            </ul>
+          </div></div>
+
+          <!-- TECHNICAL DETAILS -->
           <h2 id="components">Kerberos Components</h2>
-          
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Component</th>
-                  <th>Description</th>
-                  <th>Role</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>KDC (Key Distribution Center)</strong></td>
-                  <td>Central authentication server</td>
-                  <td>Issues tickets, maintains secrets database</td>
-                </tr>
-                <tr>
-                  <td><strong>AS (Authentication Service)</strong></td>
-                  <td>Part of KDC</td>
-                  <td>Authenticates users, issues TGTs</td>
-                </tr>
-                <tr>
-                  <td><strong>TGS (Ticket Granting Service)</strong></td>
-                  <td>Part of KDC</td>
-                  <td>Issues service tickets using TGTs</td>
-                </tr>
-                <tr>
-                  <td><strong>TGT (Ticket Granting Ticket)</strong></td>
-                  <td>User's authentication proof</td>
-                  <td>Used to request service tickets</td>
-                </tr>
-                <tr>
-                  <td><strong>Service Ticket (TGS Ticket)</strong></td>
-                  <td>Access credential for specific service</td>
-                  <td>Presented to access resources</td>
-                </tr>
-                <tr>
-                  <td><strong>Principal</strong></td>
-                  <td>Unique identity (user or service)</td>
-                  <td>Format: name@REALM or service/host@REALM</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Component</th><th>What It Is</th><th>Memory Aid</th></tr></thead>
+            <tbody>
+              <tr><td><strong>KDC</strong></td><td>Key Distribution Center (runs on DC)</td><td>The "Ticket Booth" at the park entrance</td></tr>
+              <tr><td><strong>AS</strong></td><td>Authentication Service (part of KDC)</td><td>The gate agent who checks your ID</td></tr>
+              <tr><td><strong>TGS</strong></td><td>Ticket Granting Service (part of KDC)</td><td>The booth that gives ride tickets</td></tr>
+              <tr><td><strong>TGT</strong></td><td>Ticket Granting Ticket</td><td>Your WRISTBAND (proves you paid)</td></tr>
+              <tr><td><strong>Service Ticket</strong></td><td>Ticket for specific service</td><td>Your RIDE TICKET (for one specific ride)</td></tr>
+              <tr><td><strong>krbtgt</strong></td><td>Built-in account for signing TGTs</td><td>The MASTER KEY to the kingdom</td></tr>
+            </tbody>
+          </table></div>
 
-          <h2 id="authentication-flow">Kerberos Authentication Flow</h2>
-          
-          <div class="flow-diagram">
-            <pre>
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                    KERBEROS AUTHENTICATION FLOW                                 │
-├────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                 │
-│  ┌────────────┐                    ┌────────────────────────────┐              │
-│  │   CLIENT   │                    │           KDC              │              │
-│  │   (User)   │                    │  ┌──────────┬───────────┐  │              │
-│  └─────┬──────┘                    │  │    AS    │    TGS    │  │              │
-│        │                           │  └──────────┴───────────┘  │              │
-│        │                           └────────────────────────────┘              │
-│        │                                                                        │
-│   STEP 1: AS-REQ ─────────────────────────────────────────────►                │
-│   │  Client requests TGT                                                        │
-│   │  Contains: Username, Timestamp (encrypted with user's key)                 │
-│   │                                                                             │
-│   ◄─────────────────────────────────────────────────────── STEP 2: AS-REP      │
-│        │  KDC returns TGT + Session Key                                        │
-│        │  TGT encrypted with krbtgt key (only KDC can decrypt)                │
-│        │  Session Key encrypted with user's key                                │
-│        │                                                                        │
-│   STEP 3: TGS-REQ ────────────────────────────────────────────►                │
-│   │  Client requests Service Ticket                                            │
-│   │  Contains: TGT + Authenticator + Service Principal Name                   │
-│   │                                                                             │
-│   ◄─────────────────────────────────────────────────────── STEP 4: TGS-REP     │
-│        │  KDC returns Service Ticket                                           │
-│        │  Service Ticket encrypted with service's key                         │
-│        │                                                                        │
-│        │              ┌─────────────┐                                          │
-│        │              │   SERVICE   │                                          │
-│        │              │   SERVER    │                                          │
-│        │              └──────┬──────┘                                          │
-│        │                     │                                                  │
-│   STEP 5: AP-REQ ────────────┼──────────────────────────────►                  │
-│   │  Client presents Service Ticket + Authenticator                           │
-│   │                          │                                                  │
-│   ◄──────────────────────────┼──────────────────────────── STEP 6: AP-REP      │
-│        Access Granted!       │  (Optional mutual authentication)               │
-│                              │                                                  │
-└────────────────────────────────────────────────────────────────────────────────┘
-            </pre>
-          </div>
+          <h2 id="technical-flow">Technical Flow (With Acronyms)</h2>
+          <div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    KERBEROS AUTHENTICATION FLOW                                          │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   CLIENT (You)                              KDC (Domain Controller)                     │
+│   ────────────                              ────────────────────────                    │
+│                                                                                          │
+│   ①  AS-REQ  ─────────────────────────────►  AS (Authentication Service)               │
+│       "I'm john.smith, here's my timestamp                                              │
+│        encrypted with my password hash"                                                 │
+│                                                                                          │
+│   ②  AS-REP  ◄─────────────────────────────                                            │
+│       "Here's your TGT (encrypted with krbtgt)                                         │
+│        and a session key (encrypted with your key)"                                    │
+│                                                                                          │
+│   ③  TGS-REQ ─────────────────────────────►  TGS (Ticket Granting Service)             │
+│       "Here's my TGT, I want a ticket                                                   │
+│        for service: MSSQLSvc/sqlserver.corp.com"                                       │
+│                                                                                          │
+│   ④  TGS-REP ◄─────────────────────────────                                            │
+│       "Here's your Service Ticket                                                       │
+│        (encrypted with the SQL service account's key)"                                 │
+│                                                                                          │
+│   CLIENT                                    SERVICE (SQL Server)                        │
+│   ────────────                              ────────────────────                        │
+│                                                                                          │
+│   ⑤  AP-REQ  ─────────────────────────────►                                            │
+│       "Here's my Service Ticket, let me in"                                            │
+│                                                                                          │
+│   ⑥  AP-REP  ◄─────────────────────────────                                            │
+│       "Ticket valid! Access granted!"                                                   │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
 
-          <h3>Step-by-Step Explanation</h3>
-          <div class="steps">
-            <div class="step">
-              <div class="step-number">1</div>
-              <div class="step-content">
-                <h4>AS-REQ (Authentication Service Request)</h4>
-                <p>Client sends username and timestamp encrypted with their password-derived key to the KDC. This proves the user knows the password without sending it over the network.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">2</div>
-              <div class="step-content">
-                <h4>AS-REP (Authentication Service Response)</h4>
-                <p>KDC validates the request, creates a TGT encrypted with the krbtgt account's key, and a session key encrypted with the user's key. Only the KDC can create valid TGTs.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">3</div>
-              <div class="step-content">
-                <h4>TGS-REQ (Ticket Granting Service Request)</h4>
-                <p>Client presents TGT with an authenticator (timestamp encrypted with session key) to request a service ticket for a specific service (SPN).</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">4</div>
-              <div class="step-content">
-                <h4>TGS-REP (Ticket Granting Service Response)</h4>
-                <p>KDC decrypts TGT, validates authenticator, and issues a service ticket encrypted with the target service's key.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">5</div>
-              <div class="step-content">
-                <h4>AP-REQ (Application Request)</h4>
-                <p>Client presents service ticket to the target service. Service decrypts ticket with its own key to validate the client's identity.</p>
-              </div>
-            </div>
-          </div>
+MEMORY AID for the steps:
+AS-REQ/AS-REP = "Authenticate me!" (Get your TGT)
+TGS-REQ/TGS-REP = "Ticket please!" (Get Service Ticket)
+AP-REQ/AP-REP = "Access please!" (Use the ticket)</pre></div>
 
-          <h2 id="attacks">Kerberos Attacks</h2>
+          <h2 id="real-example">📋 Real-World Example: Accessing SQL Server</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">What Actually Happens</span></div><pre><code># SCENARIO: User opens SQL Server Management Studio
 
-          <div class="callout critical">
-            <div class="callout-content">
-              <div class="callout-title">🔴 Golden Ticket Attack</div>
-              <p>
-                An attacker who compromises the <strong>krbtgt</strong> account hash can forge TGTs for any user, 
-                including non-existent users, with any group memberships. This provides complete domain dominance.
-              </p>
-              <ul>
-                <li><strong>Requirement:</strong> krbtgt NTLM hash (requires Domain Admin access to extract)</li>
-                <li><strong>Impact:</strong> Forge TGTs for any user, persistent access even after password changes</li>
-                <li><strong>Detection:</strong> TGT lifetime anomalies, ticket without prior AS-REQ</li>
-                <li><strong>Mitigation:</strong> Reset krbtgt password twice, monitor for anomalous tickets</li>
-              </ul>
-            </div>
-          </div>
+1. USER LOGS INTO WINDOWS (8:00 AM)
+   └─► Gets TGT from Domain Controller
+   └─► TGT cached in memory (valid 10 hours until 6:00 PM)
 
-          <div class="callout warning">
-            <div class="callout-content">
-              <div class="callout-title">⚠️ Silver Ticket Attack</div>
-              <p>
-                An attacker who compromises a service account's password hash can forge service tickets 
-                for that specific service without contacting the KDC.
-              </p>
-              <ul>
-                <li><strong>Requirement:</strong> Service account NTLM hash</li>
-                <li><strong>Impact:</strong> Access to the specific service, bypasses KDC logging</li>
-                <li><strong>Detection:</strong> Service ticket without prior TGS-REQ in KDC logs</li>
-                <li><strong>Mitigation:</strong> Use gMSAs, PAC validation, AES encryption</li>
-              </ul>
-            </div>
-          </div>
+2. USER OPENS SSMS AND CONNECTS TO SQLSERVER01 (8:15 AM)
+   └─► Computer checks: "Do I have a Service Ticket for MSSQLSvc/sqlserver01?"
+   └─► NO! So computer:
+       ├─► Shows TGT to DC: "Give me a ticket for MSSQLSvc/sqlserver01"
+       ├─► DC returns Service Ticket
+       └─► Computer presents Service Ticket to SQL Server
+   └─► SQL Server validates ticket → CONNECTION ESTABLISHED!
 
-          <h3>Other Kerberos Attacks</h3>
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Attack</th>
-                  <th>Description</th>
-                  <th>Mitigation</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Kerberoasting</strong></td>
-                  <td>Request service tickets and crack offline</td>
-                  <td>Strong service account passwords, AES encryption</td>
-                </tr>
-                <tr>
-                  <td><strong>AS-REP Roasting</strong></td>
-                  <td>Target accounts without pre-auth</td>
-                  <td>Enable pre-authentication for all accounts</td>
-                </tr>
-                <tr>
-                  <td><strong>Pass-the-Ticket</strong></td>
-                  <td>Steal and reuse valid tickets</td>
-                  <td>Credential Guard, short ticket lifetimes</td>
-                </tr>
-                <tr>
-                  <td><strong>Overpass-the-Hash</strong></td>
-                  <td>Use NTLM hash to get Kerberos tickets</td>
-                  <td>Credential Guard, Windows Defender ATP</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+3. USER ACCESSES FILE SERVER (8:30 AM)  
+   └─► Needs NEW Service Ticket for CIFS/fileserver01
+   └─► Same process: TGT → DC → Service Ticket → File Server
 
-          <h2 id="ad-integration">Active Directory Integration</h2>
-          <p>
-            In Active Directory environments, every Domain Controller acts as a KDC. The krbtgt account 
-            is automatically created and its password hash is used to encrypt all TGTs in the domain.
-          </p>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span class="code-language">PowerShell - View Kerberos Tickets</span>
-              <button class="code-copy-btn"><span>📋</span> Copy</button>
-            </div>
-            <pre><code># View current Kerberos tickets
+# VIEW YOUR CURRENT TICKETS
 klist
 
-# View tickets with more detail
-klist tickets
+# OUTPUT SHOWS:
+Cached Tickets: (3)
 
-# Purge all tickets (force re-authentication)
-klist purge
+#0  Client: john.smith@CORP.COM
+    Server: krbtgt/CORP.COM@CORP.COM        ← This is your TGT!
+    Valid: 8:00 AM - 6:00 PM
 
-# View TGT information
-klist tgt</code></pre>
-          </div>
+#1  Client: john.smith@CORP.COM  
+    Server: MSSQLSvc/sqlserver01@CORP.COM   ← Service Ticket for SQL
+    
+#2  Client: john.smith@CORP.COM
+    Server: CIFS/fileserver01@CORP.COM      ← Service Ticket for Files</code></pre></div>
 
-          <h2 id="best-practices">Best Practices</h2>
-          <ul>
-            <li><strong>Use AES Encryption:</strong> Disable RC4 (arcfour-hmac) and DES encryption types</li>
-            <li><strong>Short Ticket Lifetimes:</strong> Reduce TGT and service ticket lifetimes (default 10 hours)</li>
-            <li><strong>Protected Users Group:</strong> Add privileged accounts to prevent NTLM and reduce ticket lifetime</li>
-            <li><strong>Credential Guard:</strong> Enable on Windows 10/Server 2016+ to protect secrets in memory</li>
-            <li><strong>Group Managed Service Accounts:</strong> Use gMSAs instead of regular service accounts</li>
-            <li><strong>Monitor krbtgt:</strong> Alert on any krbtgt password changes not initiated by administrators</li>
-          </ul>
+          <!-- ATTACKS SECTION WITH SIMPLE EXPLANATIONS -->
+          <h2 id="attacks">🔴 Kerberos Attacks (Simplified)</h2>
+          
+          <div class="callout critical"><div class="callout-content"><div class="callout-title">💀 Golden Ticket Attack</div>
+            <p><strong>The Analogy:</strong> Imagine stealing the amusement park's wristband-making machine. You could create unlimited wristbands for anyone, even fake people, with VIP access to everything.</p>
+            
+            <p><strong>What it is:</strong> Attacker steals the <code>krbtgt</code> password hash and forges their own TGTs.</p>
+            
+            <p><strong>Why it's devastating:</strong></p>
+            <ul>
+              <li>Can impersonate ANY user (even Domain Admin)</li>
+              <li>Can create tickets for users that don't exist</li>
+              <li>Survives password resets (until krbtgt is reset TWICE)</li>
+              <li>Valid for 10 years by default!</li>
+            </ul>
+            
+            <p><strong>How to detect:</strong> TGT without matching AS-REQ in logs, unusually long ticket lifetime</p>
+            <p><strong>How to fix:</strong> Reset krbtgt password TWICE (because of replication)</p>
+          </div></div>
+
+          <div class="callout warning"><div class="callout-content"><div class="callout-title">⚠️ Silver Ticket Attack</div>
+            <p><strong>The Analogy:</strong> Instead of stealing the wristband machine, you steal the rollercoaster operator's stamp. You can only make fake tickets for THAT ride, not the whole park.</p>
+            
+            <p><strong>What it is:</strong> Attacker steals a service account's password hash and forges Service Tickets for that service only.</p>
+            
+            <p><strong>Why it's dangerous:</strong></p>
+            <ul>
+              <li>Doesn't touch the KDC (no logs!)</li>
+              <li>Only affects one service</li>
+              <li>Hard to detect</li>
+            </ul>
+            
+            <p><strong>How to detect:</strong> Service access without matching TGS-REQ in KDC logs</p>
+            <p><strong>How to prevent:</strong> Use Group Managed Service Accounts (gMSAs)</p>
+          </div></div>
+
+          <div class="callout info"><div class="callout-content"><div class="callout-title">🎣 Kerberoasting</div>
+            <p><strong>The Analogy:</strong> You legitimately buy a ride ticket, but then you examine it to figure out how the park makes their tickets. Then you crack the code offline.</p>
+            
+            <p><strong>What it is:</strong></p>
+            <ol>
+              <li>Attacker (any domain user) requests Service Tickets for services with SPNs</li>
+              <li>Service Tickets are encrypted with the service account's password hash</li>
+              <li>Attacker takes tickets offline and cracks them (hashcat, John the Ripper)</li>
+              <li>Weak passwords crack quickly → Attacker now has service account credentials</li>
+            </ol>
+            
+            <p><strong>Prevention:</strong></p>
+            <ul>
+              <li>25+ character passwords on service accounts</li>
+              <li>Use gMSAs (auto-rotating complex passwords)</li>
+              <li>Monitor for mass TGS requests</li>
+            </ul>
+          </div></div>
+
+          <h2 id="quick-reference">⚡ Quick Reference Card</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">Kerberos Cheat Sheet</span></div><pre><code>WHAT TO REMEMBER FOR INTERVIEWS:
+─────────────────────────────────
+✓ Kerberos uses TICKETS, not passwords on the network
+✓ TGT = Master ticket (get once at login)
+✓ Service Ticket = Per-service ticket (get for each resource)
+✓ KDC = Domain Controller (issues all tickets)
+✓ krbtgt = Account that encrypts all TGTs (THE crown jewels)
+
+TICKET LIFETIMES (Defaults):
+─────────────────────────────────
+TGT: 10 hours
+Service Ticket: 10 hours
+Maximum renewal: 7 days
+
+PORTS:
+─────────────────────────────────
+TCP/UDP 88 = Kerberos
+
+KEY ATTACKS:
+─────────────────────────────────
+Golden Ticket = Forge TGT (need krbtgt hash)
+Silver Ticket = Forge Service Ticket (need service hash)
+Kerberoasting = Crack service account passwords offline
+AS-REP Roasting = Crack accounts without pre-auth
+
+POWERSHELL COMMANDS:
+─────────────────────────────────
+klist              # View cached tickets
+klist purge        # Clear all tickets (force new ones)
+klist tgt          # Show TGT details
+setspn -L user     # List SPNs for an account</code></pre></div>
 
           <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Points Interviewers Look For</div>
-              <ul>
-                <li>Ability to explain the complete Kerberos flow (AS-REQ → AS-REP → TGS-REQ → TGS-REP → AP-REQ)</li>
-                <li>Understanding of TGT vs Service Ticket and what encrypts each</li>
-                <li>Knowledge of Golden vs Silver ticket attacks and their prerequisites</li>
-                <li>Awareness of Kerberoasting and AS-REP roasting attack vectors</li>
-                <li>Understanding of why krbtgt is critical and how to protect it</li>
-                <li>Knowledge of detection strategies for Kerberos attacks</li>
-              </ul>
-              <p style="margin-top: 1rem;"><strong>Sample Question:</strong> "Explain the difference between a Golden Ticket and Silver Ticket attack. What does an attacker need for each, and how would you detect them?"</p>
-            </div>
-          </div>
+          <div class="callout interview"><div class="callout-content"><div class="callout-title">💡 How to Nail Kerberos Questions</div>
+            
+            <p><strong>If asked "Explain Kerberos":</strong></p>
+            <p>"Kerberos is a ticket-based authentication protocol. When a user logs in, they get a TGT from the Domain Controller - think of it as a wristband that proves they're authenticated. When they need to access a resource like a file server, they show their TGT to get a Service Ticket for that specific server. The password never travels across the network."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "Golden vs Silver Ticket":</strong></p>
+            <p>"Golden Ticket is worse - the attacker has the krbtgt hash and can forge TGTs for any user, giving them complete domain control. Silver Ticket is limited - they only have a service account's hash, so they can only forge tickets for that one service. Golden Ticket requires resetting krbtgt twice to remediate."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "What's Kerberoasting":</strong></p>
+            <p>"Any domain user can request Service Tickets for SPNs. These tickets are encrypted with the service account's password hash. Attackers take them offline and crack them. The defense is using gMSAs or very long passwords on service accounts."</p>
+          </div></div>
 
           <nav class="page-nav">
-            <a href="2-1-authentication-factors.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">Authentication Factors</span>
-            </a>
-            <a href="2-3-ntlm.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">NTLM</span>
-            </a>
+            <a href="2-1-authentication-factors.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Authentication Factors</span></a>
+            <a href="2-3-ntlm.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">NTLM</span></a>
           </nav>
         </article>
-        <aside class="toc">
-          <div class="toc-header">On This Page</div>
-          <ul class="toc-list"></ul>
-        </aside>
       </div>
     </main>
-    <div class="search-modal">
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" class="search-input" placeholder="Search documentation...">
-        </div>
-        <div class="search-results"></div>
-      </div>
-    </div>
   </div>
   <script src="main.js"></script>
 </body>

@@ -67,9 +67,9 @@
           <div class="table-wrapper"><table>
             <thead><tr><th>Principal</th><th>Format</th><th>Use Case</th></tr></thead>
             <tbody>
-              <tr><td><strong>Google Account</strong></td><td>user:alice@gmail.com</td><td>Individual users</td></tr>
-              <tr><td><strong>Service Account</strong></td><td>serviceAccount:sa@project.iam.gserviceaccount.com</td><td>Applications, VMs</td></tr>
-              <tr><td><strong>Google Group</strong></td><td>group:admins@company.com</td><td>Teams (recommended)</td></tr>
+              <tr><td><strong>Google Account</strong></td><td>user:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fb9a9792989ebb9c969a9297d5989496">[email&#160;protected]</a></td><td>Individual users</td></tr>
+              <tr><td><strong>Service Account</strong></td><td>serviceAccount:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b2c1d3f2c2c0ddd8d7d1c69cdbd3df9cd5c1d7c0c4dbd1d7d3d1d1ddc7dcc69cd1dddf">[email&#160;protected]</a></td><td>Applications, VMs</td></tr>
+              <tr><td><strong>Google Group</strong></td><td>group:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2342474e4a4d5063404c4e53424d5a0d404c4e">[email&#160;protected]</a></td><td>Teams (recommended)</td></tr>
               <tr><td><strong>Cloud Identity Domain</strong></td><td>domain:company.com</td><td>All users in domain</td></tr>
               <tr><td><strong>Workforce Identity</strong></td><td>principal://iam.googleapis.com/...</td><td>External IdP users</td></tr>
             </tbody>
@@ -92,19 +92,19 @@ gcloud iam service-accounts create my-sa \
 
 # Grant role to service account
 gcloud projects add-iam-policy-binding my-project \
-  --member="serviceAccount:my-sa@my-project.iam.gserviceaccount.com" \
+  --member="serviceAccount:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb8692c6988aab8692c69b9984818e889fc5828a86c58c988e999d82888e8a8888849e859fc5888486">[email&#160;protected]</a>" \
   --role="roles/storage.objectViewer"
 
 # Create key (avoid if possible - use attached SA instead)
 gcloud iam service-accounts keys create key.json \
-  --iam-account=my-sa@my-project.iam.gserviceaccount.com
+  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b69b9bdfd7db9bd7d5d5d9c3d8c28bdbcf9bc5d7f6dbcf9bc6c4d9dcd3d5c298dfd7db98d1c5d3c4c0dfd5d3d7d5d5d9c3d8c298d5d9db">[email&#160;protected]</a>
 
 # Impersonate service account (preferred over keys)
 gcloud auth print-access-token --impersonate-service-account=my-sa@...
 
 # Attach SA to VM (no keys needed)
 gcloud compute instances create my-vm \
-  --service-account=my-sa@my-project.iam.gserviceaccount.com</code></pre></div>
+  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="97babae4f2e5e1fef4f2baf6f4f4f8e2f9e3aafaeebae4f6d7faeebae7e5f8fdf2f4e3b9fef6fab9f0e4f2e5e1fef4f2f6f4f4f8e2f9e3b9f4f8fa">[email&#160;protected]</a></code></pre></div>
 
           <h2 id="workforce-identity">Workforce Identity Federation</h2>
           <p>Allow external IdP users (Okta, Entra ID) to access GCP without Google accounts.</p>
@@ -131,16 +131,7 @@ gcloud projects add-iam-policy-binding my-project \
             <ul>
               <li><strong>Hierarchy:</strong> Org → Folder → Project → Resource (policies inherit down)</li>
               <li><strong>Avoid basic roles:</strong> owner/editor/viewer are too broad for production</li>
-              <li><strong>Service accounts:</strong> Prefer attached SA over key files</li>
-              <li><strong>Groups:</strong> Always assign to groups, not individual users</li>
-              <li><strong>Workforce Identity:</strong> Federate external IdP without Google accounts</li>
-            </ul>
-          </div></div>
-
-          <nav class="page-nav">
-            <a href="8-3-azure-rbac.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Azure RBAC</span></a>
-            <a href="8-5-multi-cloud-identity.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">Multi-Cloud Identity</span></a>
-          </nav>
+            </nav>
         </article>
       </div>
     </main>

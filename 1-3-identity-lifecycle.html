@@ -368,7 +368,7 @@
 │  │                                                                                      ││
 │  │   COMPUTED FIELDS:                                                                   ││
 │  │   sAMAccountName = first initial + last name + number if collision (schen, schen2)  ││
-│  │   UPN = sAMAccountName@company.com                                                   ││
+│  │   UPN = <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fa89bbb7bb9999958f948eb49b979fba9995978a9b9483d4999597">[email&#160;protected]</a>                                                   ││
 │  │   OU = Based on department and location mapping table                                ││
 │  │   Groups = Based on job title/department birthright rules                            ││
 │  └─────────────────────────────────────────────────────────────────────────────────────┘│
@@ -544,7 +544,7 @@ If schen2 exists → schen3</code></pre>
                   <pre><code># What SailPoint does via AD connector
 New-ADUser `
   -SamAccountName "schen" `
-  -UserPrincipalName "schen@company.com" `
+  -UserPrincipalName "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="384b5b505d56785b575548595641165b5755">[email&#160;protected]</a>" `
   -Name "Sarah Chen" `
   -GivenName "Sarah" `
   -Surname "Chen" `
@@ -588,7 +588,7 @@ Add-ADGroupMember -Identity "Toronto-Building-Access" -Members schen</code></pre
                 <p>SailPoint assigns M365 E3 license via Graph API:</p>
                 <div class="code-block">
                   <pre><code># Graph API call
-POST https://graph.microsoft.com/v1.0/users/schen@company.com/assignLicense
+POST https://graph.microsoft.com/v1.0/users/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4635252e23280625292b3627283f6825292b">[email&#160;protected]</a>/assignLicense
 {
   "addLicenses": [{ "skuId": "05e9a617-0261-4cee-bb44-138d3ef5d965" }],  # E3
   "removeLicenses": []
@@ -870,10 +870,10 @@ Move-ADObject -Identity "CN=Sarah Chen,OU=Engineering,OU=Users,DC=corp,DC=compan
                 <li><strong>Revoke All Active Sessions</strong>
                   <div class="code-block">
                     <pre><code># Azure AD / Entra ID
-Revoke-AzureADUserAllRefreshToken -ObjectId (Get-AzureADUser -ObjectId jsmith@company.com).ObjectId
+Revoke-AzureADUserAllRefreshToken -ObjectId (Get-AzureADUser -ObjectId <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c362f313528341c3f33312c3d3225723f3331">[email&#160;protected]</a>).ObjectId
 
 # Microsoft Graph (newer)
-Invoke-MgGraphRequest -Method POST -Uri "https://graph.microsoft.com/v1.0/users/jsmith@company.com/revokeSignInSessions"</code></pre>
+Invoke-MgGraphRequest -Method POST -Uri "https://graph.microsoft.com/v1.0/users/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="412b322c28352901222e2c31202f386f222e2c">[email&#160;protected]</a>/revokeSignInSessions"</code></pre>
                   </div>
                 </li>
                 <li><strong>Reset Password</strong> (prevents cached credential use)
@@ -912,10 +912,10 @@ POST https://company.okta.com/api/v1/users/00u1abcd/lifecycle/suspend</code></pr
                   </ul>
                   <div class="code-block">
                     <pre><code># Convert to shared mailbox (Exchange Online)
-Set-Mailbox -Identity jsmith@company.com -Type Shared
+Set-Mailbox -Identity <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6dcc5dbdfc2def6d5d9dbc6d7d8cf98d5d9db">[email&#160;protected]</a> -Type Shared
 
 # Set forwarding
-Set-Mailbox -Identity jsmith@company.com -ForwardingAddress manager@company.com -DeliverToMailboxAndForward $false</code></pre>
+Set-Mailbox -Identity <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d6bca5bbbfa2be96b5b9bba6b7b8aff8b5b9bb">[email&#160;protected]</a> -ForwardingAddress <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86ebe7e8e7e1e3f4c6e5e9ebf6e7e8ffa8e5e9eb">[email&#160;protected]</a> -DeliverToMailboxAndForward $false</code></pre>
                   </div>
                 </div>
               </div>
@@ -936,7 +936,7 @@ Set-Mailbox -Identity jsmith@company.com -ForwardingAddress manager@company.com 
                   </ul>
                   <div class="code-block">
                     <pre><code># OneDrive ownership transfer (SharePoint Online Management Shell)
-Set-SPOUser -Site https://company-my.sharepoint.com/personal/jsmith_company_com -LoginName manager@company.com -IsSiteCollectionAdmin $true</code></pre>
+Set-SPOUser -Site https://company-my.sharepoint.com/personal/jsmith_company_com -LoginName <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2a474b444b4d4f586a4945475a4b445304494547">[email&#160;protected]</a> -IsSiteCollectionAdmin $true</code></pre>
                   </div>
                 </div>
               </div>
@@ -1152,28 +1152,11 @@ Set-SPOUser -Site https://company-my.sharepoint.com/personal/jsmith_company_com 
               <span class="page-nav-title">Authentication vs Authorization</span>
             </a>
             <a href="1-4-access-control-models.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">Access Control Models</span>
-            </a>
-          </nav>
+               </nav>
         </article>
-
-        <aside class="toc">
-          <div class="toc-header">On This Page</div>
-          <ul class="toc-list">
-            <li class="toc-item"><a href="#jml-overview" class="toc-link">JML Overview</a></li>
-            <li class="toc-item"><a href="#hr-integration" class="toc-link">HR Integration</a></li>
-            <li class="toc-item"><a href="#joiner-process" class="toc-link">Joiner Process</a></li>
-            <li class="toc-item"><a href="#mover-process" class="toc-link">Mover Process</a></li>
-            <li class="toc-item"><a href="#leaver-process" class="toc-link">Leaver Process</a></li>
-            <li class="toc-item"><a href="#automation" class="toc-link">Automation</a></li>
-            <li class="toc-item"><a href="#interview-tips" class="toc-link">Interview Tips</a></li>
-          </ul>
-        </aside>
       </div>
     </main>
   </div>
-
   <script src="main.js"></script>
 </body>
 </html>

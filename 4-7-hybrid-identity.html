@@ -275,7 +275,7 @@
 │   ┌─────────────────────────────────────────────────────────────────────────────────────┐│
 │   │                                USER EXPERIENCE                                       ││
 │   │                                                                                      ││
-│   │   User "jsmith" logs in ONCE with jsmith@company.com + password                     ││
+│   │   User "jsmith" logs in ONCE with <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f59f86989c819db5969a9885949b8cdb969a98">[email&#160;protected]</a> + password                     ││
 │   │                                                                                      ││
 │   │   ✅ On-prem file shares → Kerberos (AD)                                            ││
 │   │   ✅ Microsoft 365 → Entra ID (synced from AD)                                      ││
@@ -543,7 +543,7 @@ Get-ADUser jsmith -Properties ms-DS-ConsistencyGuid | Select-Object @{N="Immutab
                   <div class="code-block">
                     <pre><code># Find users with duplicate proxyAddresses
 Get-ADUser -Filter * -Properties proxyAddresses | 
-  Where-Object {$_.proxyAddresses -like "*smtp:duplicate@company.com*"}</code></pre>
+  Where-Object {$_.proxyAddresses -like "*smtp:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f4908184989d97958091b4979b9984959a8dda979b99">[email&#160;protected]</a>*"}</code></pre>
                   </div>
 
                   <p><strong>Error: "User not syncing"</strong></p>
@@ -615,7 +615,7 @@ Start-ADSyncSyncCycle -PolicyType Delta</code></pre>
                   <p><strong>For cloud-only users:</strong> Change in Entra ID (portal or Graph API)</p>
                   <div class="code-block">
                     <pre><code># Using Microsoft Graph PowerShell
-Update-MgUser -UserId "jsmith@company.com" -Department "Product Management"</code></pre>
+Update-MgUser -UserId "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d372e303429351d3e32302d3c3324733e3230">[email&#160;protected]</a>" -Department "Product Management"</code></pre>
                   </div>
                   
                   <div class="callout warning">
@@ -971,15 +971,11 @@ Set-MsolDomainAuthentication -DomainName "company.com" -Authentication Managed</
             <li class="toc-item"><a href="#auth-methods" class="toc-link">Authentication Methods</a></li>
             <li class="toc-item"><a href="#aad-connect" class="toc-link">Azure AD Connect</a></li>
             <li class="toc-item"><a href="#seamless-sso" class="toc-link">Seamless SSO</a></li>
-            <li class="toc-item"><a href="#scenarios" class="toc-link">Real-World Scenarios</a></li>
-            <li class="toc-item"><a href="#migration" class="toc-link">ADFS Migration</a></li>
-            <li class="toc-item"><a href="#interview-tips" class="toc-link">Interview Tips</a></li>
-          </ul>
-        </aside>
+            <li class="toc-item"><a href="#scena          </nav>
+        </article>
       </div>
     </main>
   </div>
-
   <script src="main.js"></script>
 </body>
 </html>

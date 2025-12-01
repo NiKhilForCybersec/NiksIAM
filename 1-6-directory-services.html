@@ -49,8 +49,8 @@
 │   ├── OU=Users  (Organizational Unit)                                                   │
 │   │   ├── CN=Sarah Chen  (Common Name - User Object)                                    │
 │   │   │   ├── sAMAccountName: schen                                                     │
-│   │   │   ├── userPrincipalName: schen@company.com                                      │
-│   │   │   ├── mail: sarah.chen@company.com                                              │
+│   │   │   ├── userPrincipalName: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccbfafa4a9a28cafa3a1bcada2b5e2afa3a1">[email&#160;protected]</a>                                      │
+│   │   │   ├── mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b5c6d4c7d4dd9bd6ddd0dbf5d6dad8c5d4dbcc9bd6dad8">[email&#160;protected]</a>                                              │
 │   │   │   ├── department: Engineering                                                   │
 │   │   │   ├── manager: CN=John Smith,OU=Users,DC=company,DC=com                        │
 │   │   │   └── memberOf: CN=Engineering-Staff,OU=Groups,DC=company,DC=com               │
@@ -126,7 +126,7 @@ Get-ADUser -Identity schen -Properties *
 # Key user attributes
 Get-ADUser schen -Properties `
   sAMAccountName,        # Logon name (pre-Windows 2000)
-  userPrincipalName,     # UPN: schen@company.com
+  userPrincipalName,     # UPN: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="99eafaf1fcf7d9faf6f4e9f8f7e0b7faf6f4">[email&#160;protected]</a>
   distinguishedName,     # Full path in directory
   memberOf,              # Group memberships
   manager,               # Manager's DN
@@ -323,8 +323,8 @@ New-ADUser -Name "Sarah Chen" `
   -GivenName "Sarah" `
   -Surname "Chen" `
   -SamAccountName "schen" `
-  -UserPrincipalName "schen@company.com" `
-  -EmailAddress "sarah.chen@company.com" `
+  -UserPrincipalName "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a1d2c2c9c4cfe1c2ceccd1c0cfd88fc2cecc">[email&#160;protected]</a>" `
+  -EmailAddress "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="04776576656c2a676c616a44676b6974656a7d2a676b69">[email&#160;protected]</a>" `
   -Department "Engineering" `
   -Title "Software Developer" `
   -Manager "CN=John Smith,OU=Users,DC=company,DC=com" `
@@ -438,16 +438,6 @@ Get-ADDomainController -Filter * | ForEach-Object {
               </ul>
             </div>
           </div>
-
-          <nav class="page-nav">
-            <a href="1-5-least-privilege-sod.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">Least Privilege & SoD</span>
-            </a>
-            <a href="1-7-identity-governance.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">Identity Governance</span>
-            </a>
           </nav>
         </article>
       </div>

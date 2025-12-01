@@ -59,15 +59,15 @@
 │                                                                                          │
 │   Step 1: Enumerate usernames (LinkedIn, email harvest, etc.)                           │
 │   ┌──────────────────────────────────────────────┐                                      │
-│   │ user1@company.com, user2@company.com, ...    │                                      │
+│   │ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0673756374374665696b7667687f2865696b">[email&#160;protected]</a>, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6712140215552704080a1706091e4904080a">[email&#160;protected]</a>, ...    │                                      │
 │   └──────────────────────────────────────────────┘                                      │
 │                                                                                          │
 │   Step 2: Try ONE common password against ALL users                                     │
 │                                                                                          │
-│   Password1! ──► user1@company.com ──► ❌ Fail                                          │
-│   Password1! ──► user2@company.com ──► ❌ Fail                                          │
-│   Password1! ──► user3@company.com ──► ✅ SUCCESS!                                      │
-│   Password1! ──► user4@company.com ──► ❌ Fail                                          │
+│   Password1! ──► <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9feaecfaedaedffcf0f2effef1e6b1fcf0f2">[email&#160;protected]</a> ──► ❌ Fail                                          │
+│   Password1! ──► <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="10656375622250737f7d60717e693e737f7d">[email&#160;protected]</a> ──► ❌ Fail                                          │
+│   Password1! ──► <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fe8b8d9b8ccdbe9d91938e9f9087d09d9193">[email&#160;protected]</a> ──► ✅ SUCCESS!                                      │
+│   Password1! ──► <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccb9bfa9bef88cafa3a1bcada2b5e2afa3a1">[email&#160;protected]</a> ──► ❌ Fail                                          │
 │                                                                                          │
 │   Wait 30 minutes (avoid lockout)                                                       │
 │                                                                                          │
@@ -165,15 +165,7 @@ index=azure sourcetype=azure:aad:signin result=50126
               <li><strong>Password spray:</strong> One password against many users (avoids lockout)</li>
               <li><strong>Credential stuffing:</strong> Leaked credentials from other breaches</li>
               <li><strong>Block legacy auth:</strong> No MFA support = perfect for attacks</li>
-              <li><strong>Smart lockout:</strong> ML-based lockout that distinguishes users from attackers</li>
-              <li><strong>FIDO2:</strong> Only defense against AiTM phishing attacks</li>
-            </ul>
-          </div></div>
-
-          <nav class="page-nav">
-            <a href="2-9-sso-mechanisms.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">SSO Mechanisms</span></a>
-            <a href="3-1-federation-fundamentals.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">Federation Fundamentals</span></a>
-          </nav>
+              <li><strong>Smart lockout:</s          </nav>
         </article>
       </div>
     </main>

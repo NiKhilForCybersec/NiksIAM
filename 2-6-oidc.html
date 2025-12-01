@@ -8,7 +8,6 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -31,220 +30,252 @@
           <h1>OpenID Connect (OIDC)</h1>
           
           <div class="overview-box">
-            <h3>🎯 What This Page Covers</h3>
-            <p>OIDC adds identity (authentication) on top of OAuth 2.0 (authorization). This covers the ID token, flows, claims, and how OIDC is used for SSO in modern applications.</p>
+            <h3>🎯 What You'll Learn</h3>
+            <p>OIDC = OAuth 2.0 + Identity. It's the modern protocol behind "Sign in with Google/Microsoft/Apple." This page shows you how OIDC adds authentication on top of OAuth.</p>
           </div>
 
-          <h2 id="oidc-vs-oauth">OIDC vs OAuth 2.0</h2>
-
-          <div class="flow-diagram">
-            <pre>
+          <!-- THE KEY DIFFERENCE -->
+          <h2 id="key-concept">🔑 The Key Relationship</h2>
+          <div class="callout tip"><div class="callout-content"><div class="callout-title">OIDC = OAuth 2.0 + ID Token</div>
+            
+            <div class="flow-diagram"><pre>
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                    OIDC = OAuth 2.0 + Identity Layer                                     │
+│                    OAUTH vs OIDC                                                         │
 ├─────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
-│   │                           OPENID CONNECT                                        │   │
-│   │   ┌─────────────────────────────────────────────────────────────────────────┐   │   │
-│   │   │  ID Token (JWT) - WHO the user is                                       │   │   │
-│   │   │  UserInfo Endpoint - Additional user claims                             │   │   │
-│   │   │  Standard Scopes (openid, profile, email)                               │   │   │
-│   │   │  Discovery Document (/.well-known/openid-configuration)                 │   │   │
-│   │   └─────────────────────────────────────────────────────────────────────────┘   │   │
-│   │                                                                                 │   │
-│   │   ┌─────────────────────────────────────────────────────────────────────────┐   │   │
-│   │   │                         OAUTH 2.0                                       │   │   │
-│   │   │  Access Token - WHAT the user can access                                │   │   │
-│   │   │  Refresh Token - Get new access tokens                                  │   │   │
-│   │   │  Authorization Flows - How to get tokens                                │   │   │
-│   │   └─────────────────────────────────────────────────────────────────────────┘   │   │
-│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│   ┌──────────────────────────────────────────────────────────────────────────────┐     │
+│   │                           OIDC (OpenID Connect)                               │     │
+│   │  ┌────────────────────────────────────────────────────────────────────────┐  │     │
+│   │  │                         OAuth 2.0                                       │  │     │
+│   │  │                                                                         │  │     │
+│   │  │   Access Token = "You can access this API"                             │  │     │
+│   │  │   (Authorization)                                                       │  │     │
+│   │  │                                                                         │  │     │
+│   │  └────────────────────────────────────────────────────────────────────────┘  │     │
+│   │                                                                               │     │
+│   │   + ID Token = "Here's who the user is"                                      │     │
+│   │     (Authentication)                                                          │     │
+│   │                                                                               │     │
+│   │   + UserInfo Endpoint = "Get more details about the user"                    │     │
+│   │                                                                               │     │
+│   │   + Standard Scopes = openid, profile, email, etc.                           │     │
+│   │                                                                               │     │
+│   └──────────────────────────────────────────────────────────────────────────────┘     │
 │                                                                                          │
-│   KEY DIFFERENCE:                                                                       │
-│   • OAuth 2.0: "App X can access your calendar" (Authorization)                        │
-│   • OIDC: "You are john@example.com" (Authentication)                                   │
+│   SIMPLE VERSION:                                                                       │
+│   OAuth = "What can I do?" (authorization)                                              │
+│   OIDC  = "Who am I?" + "What can I do?" (authentication + authorization)             │
 │                                                                                          │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-            </pre>
-          </div>
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
+          </div></div>
 
-          <h2 id="id-token">The ID Token</h2>
-          <p>The ID Token is a JWT (JSON Web Token) that contains claims about the authenticated user.</p>
+          <!-- MEMORY TRICKS -->
+          <h2 id="memory-tricks">🧠 Memory Tricks</h2>
+          <div class="callout warning"><div class="callout-content"><div class="callout-title">💡 Remember These Forever</div>
+            
+            <p><strong>🎫 "ID Token = Passport"</strong></p>
+            <p>The ID Token is like a passport - it contains verified information about WHO you are. Name, email, when you authenticated - all stamped and signed by the Identity Provider.</p>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">ID Token Structure (Decoded JWT)</span></div>
-            <pre><code>// HEADER
+            <p style="margin-top:1rem;"><strong>🎟️ "Access Token = Ticket"</strong></p>
+            <p>The Access Token is your ticket to access services (APIs). The ID Token proves who you are, the Access Token lets you in.</p>
+
+            <p style="margin-top:1rem;"><strong>📋 "ID Token for the APP, Access Token for the API"</strong></p>
+            <p>The app reads the ID Token to know who logged in. The Access Token goes to APIs. NEVER send the ID Token to APIs!</p>
+
+            <p style="margin-top:1rem;"><strong>🔑 The Magic Scope: "openid"</strong></p>
+            <p>To get an ID Token, you MUST include the <code>openid</code> scope in your request. No openid scope = no ID Token = just OAuth (not OIDC).</p>
+          </div></div>
+
+          <!-- ID TOKEN EXPLAINED -->
+          <h2 id="id-token">🪪 The ID Token Explained</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">What's Inside an ID Token</span></div><pre><code># ID TOKEN IS A JWT (JSON Web Token)
+# Three parts separated by dots: HEADER.PAYLOAD.SIGNATURE
+
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vMTIzNDU2Nzg5IiwiYXVkIjoibXktYXBwLWlkIiwic3ViIjoiYWJjZGVmZyIsImVtYWlsIjoiam9obkBjb21wYW55LmNvbSIsIm5hbWUiOiJKb2huIFNtaXRoIiwiaWF0IjoxNzA0MDY3MjAwLCJleHAiOjE3MDQwNzA4MDB9.
+SIGNATURE_HERE
+
+# DECODED PAYLOAD:
 {
-  "typ": "JWT",
-  "alg": "RS256",
-  "kid": "abc123"  // Key ID for signature verification
+  "iss": "https://login.microsoftonline.com/12345",  ← ISSUER: Who issued this token
+  "aud": "my-app-id",                                 ← AUDIENCE: Who is this for
+  "sub": "abcdefg",                                   ← SUBJECT: Unique user ID
+  "email": "john@company.com",                        ← User's email
+  "name": "John Smith",                               ← User's display name
+  "iat": 1704067200,                                  ← ISSUED AT: When token was created
+  "exp": 1704070800,                                  ← EXPIRES: When token becomes invalid
+  "nonce": "random123"                                ← Replay prevention
 }
 
-// PAYLOAD (Claims)
-{
-  // Required Claims
-  "iss": "https://login.microsoftonline.com/tenant-id/v2.0",  // Issuer
-  "sub": "AaBbCcDdEeFf...",                                    // Subject (unique user ID)
-  "aud": "client-id-12345",                                    // Audience (your app)
-  "exp": 1704067200,                                           // Expiration (Unix timestamp)
-  "iat": 1704063600,                                           // Issued At
-  "nonce": "random-nonce-value",                               // Replay protection
-  
-  // Common Optional Claims
-  "name": "Sarah Chen",
-  "preferred_username": "schen@company.com",
-  "email": "sarah.chen@company.com",
-  "email_verified": true,
-  "given_name": "Sarah",
-  "family_name": "Chen",
-  "picture": "https://graph.microsoft.com/v1.0/me/photo",
-  
-  // Entra ID Specific
-  "tid": "tenant-id",        // Tenant ID
-  "oid": "object-id",        // Object ID in directory
-  "groups": ["group1-id", "group2-id"]
-}
+# WHAT YOUR APP SHOULD CHECK:
+✓ Signature is valid (using IdP's public key)
+✓ "iss" matches expected issuer
+✓ "aud" matches your app's client ID  
+✓ "exp" is in the future (not expired)
+✓ "nonce" matches what you sent (if you sent one)</code></pre></div>
 
-// SIGNATURE
-// RS256 signature verified with IdP's public key (from JWKS endpoint)</code></pre>
-          </div>
+          <!-- STANDARD SCOPES -->
+          <h2 id="scopes">📋 Standard OIDC Scopes</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Scope</th><th>What You Get</th><th>Example Claims</th></tr></thead>
+            <tbody>
+              <tr><td><strong>openid</strong></td><td>REQUIRED for OIDC</td><td>sub (subject/user ID)</td></tr>
+              <tr><td><strong>profile</strong></td><td>Basic profile info</td><td>name, family_name, given_name, picture</td></tr>
+              <tr><td><strong>email</strong></td><td>Email address</td><td>email, email_verified</td></tr>
+              <tr><td><strong>address</strong></td><td>Physical address</td><td>address (formatted object)</td></tr>
+              <tr><td><strong>phone</strong></td><td>Phone number</td><td>phone_number, phone_number_verified</td></tr>
+              <tr><td><strong>offline_access</strong></td><td>Refresh token</td><td>(Gets you a refresh token)</td></tr>
+            </tbody>
+          </table></div>
 
-          <h2 id="flows">OIDC Flows</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">Scope Examples</span></div><pre><code># MINIMAL LOGIN (just get user ID)
+scope=openid
 
-          <div class="table-wrapper">
-            <table>
-              <thead><tr><th>Flow</th><th>Returns</th><th>Use Case</th><th>Security</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td><strong>Authorization Code + PKCE</strong></td>
-                  <td>Code → ID Token + Access Token</td>
-                  <td>Web apps, SPAs, mobile</td>
-                  <td>✅ Recommended</td>
-                </tr>
-                <tr>
-                  <td><strong>Implicit (DEPRECATED)</strong></td>
-                  <td>ID Token directly in URL</td>
-                  <td>Legacy SPAs</td>
-                  <td>❌ Avoid</td>
-                </tr>
-                <tr>
-                  <td><strong>Hybrid</strong></td>
-                  <td>Code + ID Token, then Access Token</td>
-                  <td>Server-side apps needing immediate ID</td>
-                  <td>🟡 Complex</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h2 id="scopes">Standard OIDC Scopes</h2>
-
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">OIDC Scopes</span></div>
-            <pre><code># Required
-openid          # Indicates OIDC request, returns sub claim
-
-# Optional Standard Scopes
-profile         # name, family_name, given_name, picture, etc.
-email           # email, email_verified
-address         # formatted address
-phone           # phone_number, phone_number_verified
-
-# Request Example
+# TYPICAL LOGIN (ID + profile info)
 scope=openid profile email
 
-# This returns an ID token with:
-{
-  "sub": "user-id",
-  "name": "Sarah Chen",
-  "email": "sarah.chen@company.com",
-  "email_verified": true
-}</code></pre>
-          </div>
+# WITH REFRESH TOKEN
+scope=openid profile email offline_access
 
-          <h2 id="discovery">Discovery Document</h2>
-          <p>OIDC providers publish a discovery document with all endpoints and configuration.</p>
+# WITH CUSTOM API ACCESS
+scope=openid profile email api://my-api/read</code></pre></div>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Discovery Document Example</span></div>
-            <pre><code># URL: https://login.microsoftonline.com/{tenant}/v2.0/.well-known/openid-configuration
+          <!-- THE FLOW -->
+          <h2 id="flow">📝 OIDC Flow in Plain English</h2>
+          <div class="callout info"><div class="callout-content"><div class="callout-title">🚶 "Sign in with Microsoft" Step by Step</div>
+            
+            <p><strong>Step 1: User clicks "Sign in with Microsoft"</strong></p>
+            <p>Your app redirects to Microsoft's authorization endpoint with:</p>
+            <ul>
+              <li>client_id (your app's ID)</li>
+              <li>scope=openid profile email (what info you want)</li>
+              <li>response_type=code (using auth code flow)</li>
+              <li>redirect_uri (where to come back)</li>
+            </ul>
+            
+            <p style="margin-top:1rem;"><strong>Step 2: User authenticates at Microsoft</strong></p>
+            <p>Microsoft's login page → user enters credentials → MFA if required</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 3: Consent (first time only)</strong></p>
+            <p>"This app wants to see your name and email. Allow?"</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 4: Redirect back with code</strong></p>
+            <p>Microsoft redirects to your app with an authorization code</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 5: Exchange code for tokens</strong></p>
+            <p>Your backend exchanges the code for:</p>
+            <ul>
+              <li><strong>ID Token</strong> - Who is this user?</li>
+              <li><strong>Access Token</strong> - To call APIs</li>
+              <li><strong>Refresh Token</strong> - To get new tokens (if offline_access scope)</li>
+            </ul>
+            
+            <p style="margin-top:1rem;"><strong>Step 6: App reads ID Token</strong></p>
+            <p>Your app decodes the ID Token to get user info:</p>
+            <p>"Welcome, John Smith (john@company.com)!"</p>
+          </div></div>
 
+          <!-- ENDPOINTS -->
+          <h2 id="discovery">🔍 Discovery Document</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">OIDC Discovery</span></div><pre><code># Every OIDC provider has a discovery document at:
+/.well-known/openid-configuration
+
+# EXAMPLE: Microsoft
+GET https://login.microsoftonline.com/{tenant}/v2.0/.well-known/openid-configuration
+
+# RETURNS:
 {
   "issuer": "https://login.microsoftonline.com/{tenant}/v2.0",
   "authorization_endpoint": "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize",
   "token_endpoint": "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token",
   "userinfo_endpoint": "https://graph.microsoft.com/oidc/userinfo",
   "jwks_uri": "https://login.microsoftonline.com/{tenant}/discovery/v2.0/keys",
-  "end_session_endpoint": "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/logout",
-  
   "scopes_supported": ["openid", "profile", "email", "offline_access"],
   "response_types_supported": ["code", "id_token", "token"],
-  "subject_types_supported": ["pairwise"],
-  "id_token_signing_alg_values_supported": ["RS256"],
-  "claims_supported": ["sub", "name", "email", "preferred_username", ...]
-}</code></pre>
-          </div>
+  ...
+}
 
-          <h2 id="validation">ID Token Validation</h2>
+# WHY THIS MATTERS:
+- Automatic configuration! No hardcoding endpoints
+- jwks_uri = Where to get public keys to verify token signatures
+- Libraries use this to auto-configure</code></pre></div>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Token Validation Checklist</span></div>
-            <pre><code># Your app MUST validate these before trusting the ID token:
+          <!-- COMMON MISTAKES -->
+          <h2 id="mistakes">🚫 Common OIDC Mistakes</h2>
+          <div class="callout critical"><div class="callout-content"><div class="callout-title">Don't Do These!</div>
+            <ul>
+              <li>❌ <strong>Sending ID Token to APIs</strong> - ID Token is for YOUR app only. Send Access Token to APIs!</li>
+              <li>❌ <strong>Not validating ID Token</strong> - Always check signature, issuer, audience, expiry</li>
+              <li>❌ <strong>Trusting claims without validation</strong> - Anyone can create a JWT, you must verify the signature</li>
+              <li>❌ <strong>Forgetting the "openid" scope</strong> - No openid = no ID Token = just OAuth, not OIDC</li>
+              <li>❌ <strong>Storing tokens in localStorage</strong> - Use httpOnly cookies or secure memory</li>
+            </ul>
+          </div></div>
 
-1. SIGNATURE
-   ✓ Fetch public keys from jwks_uri
-   ✓ Verify signature matches using correct key (kid)
-   
-2. ISSUER (iss)
-   ✓ Must match expected issuer exactly
-   ✓ "https://login.microsoftonline.com/{tenant}/v2.0"
+          <!-- VS SAML -->
+          <h2 id="vs-saml">⚔️ OIDC vs SAML</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Aspect</th><th>OIDC</th><th>SAML</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Format</strong></td><td>JSON (JWT)</td><td>XML</td></tr>
+              <tr><td><strong>Designed For</strong></td><td>Modern apps, mobile, APIs</td><td>Enterprise web SSO</td></tr>
+              <tr><td><strong>Token Size</strong></td><td>Smaller</td><td>Larger (XML verbose)</td></tr>
+              <tr><td><strong>Mobile Friendly</strong></td><td>Yes</td><td>Not really</td></tr>
+              <tr><td><strong>Developer Experience</strong></td><td>Easier</td><td>More complex</td></tr>
+              <tr><td><strong>Enterprise Adoption</strong></td><td>Growing rapidly</td><td>Dominant (legacy)</td></tr>
+            </tbody>
+          </table></div>
 
-3. AUDIENCE (aud)
-   ✓ Must contain YOUR client_id
-   ✓ Reject tokens meant for other apps
-
-4. EXPIRATION (exp)
-   ✓ Current time must be before exp
-   ✓ Token expired = reject
-
-5. ISSUED AT (iat)
-   ✓ Should be reasonable (not in distant past/future)
-
-6. NONCE
-   ✓ Must match nonce you sent in auth request
-   ✓ Prevents replay attacks
-
-# Example validation (pseudo-code)
-if (token.iss !== expectedIssuer) throw "Invalid issuer";
-if (!token.aud.includes(myClientId)) throw "Invalid audience";
-if (Date.now() > token.exp * 1000) throw "Token expired";
-if (token.nonce !== sessionNonce) throw "Invalid nonce";</code></pre>
-          </div>
-
+          <!-- INTERVIEW TIPS -->
           <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Interview Points</div>
-              <ul>
-                <li><strong>OIDC vs OAuth:</strong> OIDC = Authentication (who), OAuth = Authorization (what access)</li>
-                <li><strong>ID Token:</strong> JWT with user claims, NOT for API access</li>
-                <li><strong>Access Token:</strong> For API access, may or may not be JWT</li>
-                <li><strong>Required scope:</strong> "openid" must be included for OIDC</li>
-                <li><strong>Validation:</strong> Always verify issuer, audience, expiration, signature</li>
-                <li><strong>Discovery:</strong> /.well-known/openid-configuration has all endpoints</li>
-              </ul>
-            </div>
-          </div>
+          <div class="callout interview"><div class="callout-content"><div class="callout-title">💡 How to Nail OIDC Questions</div>
+            
+            <p><strong>If asked "What is OIDC?":</strong></p>
+            <p>"OpenID Connect is an identity layer built on top of OAuth 2.0. While OAuth handles authorization - what resources you can access - OIDC adds authentication - proving who you are. It does this by adding an ID Token, which is a JWT containing user identity claims, signed by the Identity Provider."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "What's the ID Token?":</strong></p>
+            <p>"The ID Token is a JWT that contains claims about the user - their unique ID, name, email, when they authenticated. It's signed by the Identity Provider so the app can verify it's authentic. The app reads the ID Token to know who logged in, but never sends it to APIs - that's what the Access Token is for."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "How do you validate an ID Token?":</strong></p>
+            <p>"First, verify the signature using the IdP's public keys from the JWKS endpoint. Then check that the issuer matches the expected IdP, the audience matches your client ID, and the token hasn't expired. If you sent a nonce, verify that matches too."</p>
+          </div></div>
+
+          <h2 id="quick-reference">⚡ Quick Reference Card</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">OIDC Cheat Sheet</span></div><pre><code>OIDC = OAuth 2.0 + ID Token (Authentication layer)
+
+TOKENS:
+─────────────────────────────────────────────────
+ID Token = WHO you are (for your app)
+Access Token = WHAT you can access (for APIs)
+Refresh Token = Get new tokens
+
+REQUIRED SCOPE: openid
+COMMON SCOPES: openid profile email offline_access
+
+ID TOKEN VALIDATION:
+─────────────────────────────────────────────────
+✓ Verify signature (JWKS)
+✓ Check issuer (iss)
+✓ Check audience (aud) 
+✓ Check expiry (exp)
+✓ Check nonce (if used)
+
+DISCOVERY ENDPOINT:
+─────────────────────────────────────────────────
+/.well-known/openid-configuration
+
+KEY CLAIMS IN ID TOKEN:
+─────────────────────────────────────────────────
+sub = Subject (unique user ID)
+iss = Issuer
+aud = Audience (your app)
+exp = Expiration time
+iat = Issued at
+name, email, etc. = User info</code></pre></div>
 
           <nav class="page-nav">
-            <a href="2-5-oauth2.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">OAuth 2.0</span>
-            </a>
-            <a href="2-7-radius-tacacs.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">RADIUS & TACACS+</span>
-            </a>
+            <a href="2-5-oauth2.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">OAuth 2.0</span></a>
+            <a href="2-7-radius-tacacs.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">RADIUS & TACACS+</span></a>
           </nav>
         </article>
       </div>

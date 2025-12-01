@@ -8,7 +8,6 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -28,263 +27,267 @@
       <div class="content-wrapper">
         <article class="content-main">
           <div class="badge badge-l2">L2 Technical</div>
-          <h1>OAuth 2.0: Authorization Framework</h1>
+          <h1>OAuth 2.0</h1>
           
           <div class="overview-box">
-            <h3>🎯 What This Page Covers</h3>
-            <p>OAuth 2.0 is the standard for API authorization. Understand grant types, when to use each, security considerations, and common implementation patterns.</p>
+            <h3>🎯 What You'll Learn</h3>
+            <p>OAuth 2.0 is about <strong>AUTHORIZATION</strong> (access to resources), NOT authentication. It's the protocol behind "Sign in with Google" and "Allow this app to access your calendar." This page makes it crystal clear.</p>
           </div>
 
-          <div class="callout warning">
-            <div class="callout-content">
-              <div class="callout-title">⚠️ OAuth 2.0 is for Authorization, NOT Authentication</div>
-              <p>OAuth grants access to resources. For authentication (login), use OpenID Connect (OIDC) which builds on OAuth 2.0.</p>
-            </div>
-          </div>
+          <!-- THE MOST IMPORTANT THING -->
+          <h2 id="key-concept">🚨 The #1 Thing to Remember</h2>
+          <div class="callout critical"><div class="callout-content"><div class="callout-title">OAuth is NOT Authentication!</div>
+            <p><strong>OAuth 2.0 = AUTHORIZATION</strong> (what can you access)</p>
+            <p><strong>OIDC = AUTHENTICATION</strong> (who are you) - built ON TOP of OAuth</p>
+            
+            <p style="margin-top:1rem;">Think of it this way:</p>
+            <ul>
+              <li><strong>OAuth:</strong> "Give this app permission to read my calendar"</li>
+              <li><strong>OIDC:</strong> "Log me in using my Google account"</li>
+            </ul>
+            <p>They're related but different! OIDC adds an ID Token for authentication.</p>
+          </div></div>
 
-          <h2 id="core-concepts">Core Concepts</h2>
-
-          <div class="table-wrapper">
-            <table>
-              <thead><tr><th>Role</th><th>Description</th><th>Example</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td><strong>Resource Owner</strong></td>
-                  <td>User who owns the data</td>
-                  <td>You (your Google Drive files)</td>
-                </tr>
-                <tr>
-                  <td><strong>Client</strong></td>
-                  <td>App requesting access</td>
-                  <td>Third-party app wanting Drive access</td>
-                </tr>
-                <tr>
-                  <td><strong>Authorization Server</strong></td>
-                  <td>Issues tokens after auth</td>
-                  <td>accounts.google.com</td>
-                </tr>
-                <tr>
-                  <td><strong>Resource Server</strong></td>
-                  <td>Hosts the protected resources</td>
-                  <td>drive.googleapis.com</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h2 id="grant-types">OAuth 2.0 Grant Types</h2>
-
-          <h3>Authorization Code Flow (Recommended for Web Apps)</h3>
-          <div class="flow-diagram">
-            <pre>
+          <!-- SIMPLE ANALOGY -->
+          <h2 id="analogy">🎭 The Valet Parking Analogy</h2>
+          <div class="callout tip"><div class="callout-content"><div class="callout-title">🚗 OAuth is Like Valet Parking</div>
+            
+            <div class="flow-diagram"><pre>
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                    AUTHORIZATION CODE FLOW                                               │
+│                    🚗 VALET PARKING = OAUTH 2.0                                          │
 ├─────────────────────────────────────────────────────────────────────────────────────────┤
-│   USER              CLIENT                  AUTH SERVER             RESOURCE SERVER     │
-│     │                 │                          │                        │             │
-│     │  1. Click       │                          │                        │             │
-│     │    "Login"      │                          │                        │             │
-│     │────────────────►│                          │                        │             │
-│     │                 │  2. Redirect to auth     │                        │             │
-│     │◄────────────────│     endpoint             │                        │             │
-│     │────────────────────────────────────────────►                        │             │
-│     │                 │  3. User authenticates   │                        │             │
-│     │                 │     and consents         │                        │             │
-│     │◄────────────────────────────────────────────                        │             │
-│     │  4. Redirect back with authorization code  │                        │             │
-│     │────────────────►│                          │                        │             │
-│     │                 │  5. Exchange code for    │                        │             │
-│     │                 │     tokens (server-side) │                        │             │
-│     │                 │─────────────────────────►│                        │             │
-│     │                 │  6. Access + Refresh     │                        │             │
-│     │                 │     tokens               │                        │             │
-│     │                 │◄─────────────────────────│                        │             │
-│     │                 │  7. API request with     │                        │             │
-│     │                 │     access token         │                        │             │
-│     │                 │──────────────────────────────────────────────────►│             │
-│     │                 │  8. Protected resource   │                        │             │
-│     │◄────────────────│◄─────────────────────────────────────────────────│             │
+│                                                                                          │
+│   YOU (Car Owner)           =  RESOURCE OWNER (User)                                    │
+│   You own the car              You own your data (calendar, photos, etc.)               │
+│                                                                                          │
+│   YOUR CAR                  =  RESOURCE (Your data)                                     │
+│   The thing being accessed     Your Google Calendar, photos, emails                     │
+│                                                                                          │
+│   VALET KEY                 =  ACCESS TOKEN                                             │
+│   Limited access key           A token that grants specific permissions                 │
+│   (can drive, can't open        (can read calendar, can't delete it)                    │
+│    trunk or glove box)                                                                  │
+│                                                                                          │
+│   VALET DRIVER              =  CLIENT (Third-party App)                                 │
+│   Wants to use your car        The app wanting access to your data                      │
+│                                 (Calendly wanting to read your calendar)                │
+│                                                                                          │
+│   HOTEL                     =  AUTHORIZATION SERVER                                     │
+│   Manages the valet service    (Google, Microsoft, Okta)                                │
+│                                 Issues the access tokens                                │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
+            
+            <p><strong>The Story:</strong> You (Resource Owner) arrive at a hotel. Instead of giving the valet (Client App) your full key ring, you give them a valet key (Access Token) that only lets them drive your car - they can't open the trunk or access the glove box. The hotel (Authorization Server) manages who gets what kind of access.</p>
+          </div></div>
+
+          <!-- MEMORY TRICKS -->
+          <h2 id="memory-tricks">🧠 Memory Tricks</h2>
+          <div class="callout warning"><div class="callout-content"><div class="callout-title">💡 Remember These Forever</div>
+            
+            <p><strong>🎫 "Access Token = Movie Ticket"</strong></p>
+            <p>Gets you into the theater (API) for a specific showing (limited time). Once it expires, you need a new one.</p>
+
+            <p style="margin-top:1rem;"><strong>🔄 "Refresh Token = Season Pass"</strong></p>
+            <p>When your movie ticket expires, show your season pass to get a new one - without going through the whole purchase process again.</p>
+
+            <p style="margin-top:1rem;"><strong>📋 "Scopes = Permissions Menu"</strong></p>
+            <p>Like ordering from a menu: "I want read access to calendar" (calendar.read) "and ability to send emails" (mail.send). You pick what you need.</p>
+
+            <p style="margin-top:1rem;"><strong>🔑 The 4 Key Players:</strong></p>
+            <ol>
+              <li><strong>Resource Owner</strong> = You (the human)</li>
+              <li><strong>Client</strong> = The app wanting access</li>
+              <li><strong>Authorization Server</strong> = Issues tokens (Google, Okta)</li>
+              <li><strong>Resource Server</strong> = Has the data (API)</li>
+            </ol>
+          </div></div>
+
+          <!-- GRANT TYPES -->
+          <h2 id="grant-types">🎯 Grant Types (Which Flow to Use)</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Grant Type</th><th>Use Case</th><th>Memory Aid</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Authorization Code + PKCE</strong></td><td>Web apps, mobile apps, SPAs</td><td>🏆 THE DEFAULT - Use this for everything with a user</td></tr>
+              <tr><td><strong>Client Credentials</strong></td><td>Machine-to-machine (no user)</td><td>🤖 Server talks to server - no human involved</td></tr>
+              <tr><td><strong>Device Code</strong></td><td>Smart TVs, CLI tools</td><td>📺 "Go to this URL on your phone to authorize"</td></tr>
+              <tr><td><strong>Implicit (DEPRECATED)</strong></td><td>Don't use it!</td><td>☠️ OLD AND INSECURE - replaced by Auth Code + PKCE</td></tr>
+            </tbody>
+          </table></div>
+
+          <!-- AUTHORIZATION CODE FLOW -->
+          <h2 id="auth-code-flow">📝 Authorization Code Flow (The Main One)</h2>
+          <div class="callout info"><div class="callout-content"><div class="callout-title">🚶 Step-by-Step: "Calendly wants to read my Google Calendar"</div>
+            
+            <p><strong>Step 1: Click "Connect Google Calendar" in Calendly</strong></p>
+            <p>Calendly redirects you to Google with: "I'm Calendly, I want calendar.read permission"</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 2: Google Asks You</strong></p>
+            <p>"Calendly wants to view your calendar. Allow?"</p>
+            <p>You click "Allow" (this is the CONSENT screen)</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 3: Google Redirects Back with a Code</strong></p>
+            <p>Google sends you back to Calendly with a short-lived authorization code</p>
+            <p>This code is like a claim ticket - it proves you said yes</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 4: Calendly Exchanges Code for Token (Backend)</strong></p>
+            <p>Calendly's server calls Google: "Here's the code + my client secret, give me a token"</p>
+            <p>Google responds with an Access Token (and maybe a Refresh Token)</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 5: Calendly Uses the Token</strong></p>
+            <p>Calendly calls Google Calendar API with the token in the header:</p>
+            <p><code>Authorization: Bearer eyJhbGciOiJSUzI1NiIs...</code></p>
+            <p>Google Calendar returns your calendar data</p>
+          </div></div>
+
+          <div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    AUTHORIZATION CODE FLOW + PKCE                                        │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  USER           CLIENT (Calendly)        AUTH SERVER (Google)       RESOURCE (Calendar) │
+│  ────           ─────────────────        ───────────────────        ────────────────────│
+│    │                  │                          │                          │           │
+│    │ ① Click "Connect"│                          │                          │           │
+│    │ ─────────────────►                          │                          │           │
+│    │                  │                          │                          │           │
+│    │ ② Redirect to Google (+ code_challenge)    │                          │           │
+│    │ ◄─────────────────                          │                          │           │
+│    │                  │                          │                          │           │
+│    │ ③ "Allow Calendly to read calendar?"       │                          │           │
+│    │ ──────────────────────────────────────────►│                          │           │
+│    │                  │                          │                          │           │
+│    │ ④ User clicks "Allow"                      │                          │           │
+│    │ ──────────────────────────────────────────►│                          │           │
+│    │                  │                          │                          │           │
+│    │ ⑤ Redirect back with authorization_code    │                          │           │
+│    │ ◄──────────────────────────────────────────│                          │           │
+│    │                  │                          │                          │           │
+│    │                  │ ⑥ Exchange code for token│                          │           │
+│    │                  │    (+ code_verifier)     │                          │           │
+│    │                  │ ─────────────────────────►                          │           │
+│    │                  │                          │                          │           │
+│    │                  │ ⑦ Access Token           │                          │           │
+│    │                  │ ◄─────────────────────────                          │           │
+│    │                  │                          │                          │           │
+│    │                  │ ⑧ GET /calendar with token                         │           │
+│    │                  │ ────────────────────────────────────────────────────►           │
+│    │                  │                          │                          │           │
+│    │                  │ ⑨ Calendar data                                    │           │
+│    │                  │ ◄────────────────────────────────────────────────────           │
+│    │                  │                          │                          │           │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
-            </pre>
-          </div>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Authorization Code Flow URLs</span></div>
-            <pre><code># Step 2: Redirect to Authorization Server
-https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize?
-  client_id=YOUR_CLIENT_ID
-  &response_type=code
-  &redirect_uri=https://yourapp.com/callback
-  &scope=openid profile User.Read
-  &state=random_state_value
-  &code_challenge=BASE64_CHALLENGE      # PKCE
-  &code_challenge_method=S256
+PKCE (Proof Key for Code Exchange) = Extra security layer
+- code_verifier = Random secret generated by client
+- code_challenge = Hash of the verifier (sent in step 2)  
+- code_verifier sent in step 6 = Proves same client that started the flow</pre></div>
 
-# Step 4: Callback with code
-https://yourapp.com/callback?
-  code=AUTHORIZATION_CODE
-  &state=random_state_value
+          <!-- CLIENT CREDENTIALS -->
+          <h2 id="client-credentials">🤖 Client Credentials (Machine-to-Machine)</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">When There's No Human</span></div><pre><code># SCENARIO: Your backend server needs to call Microsoft Graph API
+# No user is involved - just server talking to server
 
-# Step 5: Exchange code for tokens
-POST https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=authorization_code
-&client_id=YOUR_CLIENT_ID
-&client_secret=YOUR_CLIENT_SECRET
-&code=AUTHORIZATION_CODE
-&redirect_uri=https://yourapp.com/callback
-&code_verifier=ORIGINAL_CODE_VERIFIER   # PKCE</code></pre>
-          </div>
-
-          <h3>Grant Type Comparison</h3>
-          <div class="table-wrapper">
-            <table>
-              <thead><tr><th>Grant Type</th><th>Use Case</th><th>Security</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td><strong>Authorization Code + PKCE</strong></td>
-                  <td>Web apps, SPAs, mobile apps</td>
-                  <td>✅ Most secure for user flows</td>
-                </tr>
-                <tr>
-                  <td><strong>Client Credentials</strong></td>
-                  <td>Machine-to-machine (no user)</td>
-                  <td>✅ Secure for backend services</td>
-                </tr>
-                <tr>
-                  <td><strong>Device Code</strong></td>
-                  <td>TVs, IoT, CLI tools</td>
-                  <td>✅ Good for input-limited devices</td>
-                </tr>
-                <tr>
-                  <td><strong>Implicit (DEPRECATED)</strong></td>
-                  <td>Legacy SPAs</td>
-                  <td>❌ Tokens in URL, insecure</td>
-                </tr>
-                <tr>
-                  <td><strong>Resource Owner Password (DEPRECATED)</strong></td>
-                  <td>Legacy migration only</td>
-                  <td>❌ Exposes user credentials to client</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h2 id="client-credentials">Client Credentials Flow (M2M)</h2>
-          <p>For backend services calling APIs without user context.</p>
-
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Client Credentials Example</span></div>
-            <pre><code># Request token for service-to-service
+# THE REQUEST (server sends to token endpoint)
 POST https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials
-&client_id=SERVICE_APP_ID
-&client_secret=SERVICE_APP_SECRET
+&client_id=your-app-id
+&client_secret=your-app-secret
 &scope=https://graph.microsoft.com/.default
 
-# Response
+# THE RESPONSE
 {
+  "access_token": "eyJhbGciOiJSUzI1NiIs...",
   "token_type": "Bearer",
-  "expires_in": 3599,
-  "access_token": "eyJ0eXAiOiJKV1Q..."
+  "expires_in": 3600
 }
 
-# Use token to call API
+# USE THE TOKEN
 GET https://graph.microsoft.com/v1.0/users
-Authorization: Bearer eyJ0eXAiOiJKV1Q...</code></pre>
-          </div>
+Authorization: Bearer eyJhbGciOiJSUzI1NiIs...
 
-          <h2 id="tokens">Token Types</h2>
+# KEY POINTS:
+- No user interaction
+- Client authenticates with client_id + client_secret
+- Used for daemon/background services
+- Token represents the APPLICATION, not a user</code></pre></div>
 
-          <div class="table-wrapper">
-            <table>
-              <thead><tr><th>Token</th><th>Purpose</th><th>Lifetime</th><th>Storage</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td><strong>Access Token</strong></td>
-                  <td>Access protected resources</td>
-                  <td>Short (1 hour typical)</td>
-                  <td>Memory only (never persist)</td>
-                </tr>
-                <tr>
-                  <td><strong>Refresh Token</strong></td>
-                  <td>Get new access tokens</td>
-                  <td>Long (days to months)</td>
-                  <td>Secure storage (encrypted)</td>
-                </tr>
-                <tr>
-                  <td><strong>ID Token (OIDC)</strong></td>
-                  <td>Prove user identity</td>
-                  <td>Short (1 hour typical)</td>
-                  <td>Memory for session validation</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <!-- TOKEN TYPES -->
+          <h2 id="tokens">🎫 Token Types Explained</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Token</th><th>Purpose</th><th>Lifetime</th><th>Security Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Access Token</strong></td><td>Access the API</td><td>Short (1 hour typical)</td><td>Include in API requests. If stolen, limited damage due to short life</td></tr>
+              <tr><td><strong>Refresh Token</strong></td><td>Get new Access Token</td><td>Long (days to months)</td><td>Store securely! Can be used to get new access tokens</td></tr>
+              <tr><td><strong>ID Token (OIDC)</strong></td><td>Prove identity</td><td>Short (5-60 min)</td><td>Contains user info (name, email). NEVER send to APIs!</td></tr>
+              <tr><td><strong>Authorization Code</strong></td><td>Exchange for tokens</td><td>Very short (10 min)</td><td>One-time use only</td></tr>
+            </tbody>
+          </table></div>
 
-          <h2 id="scopes">Scopes (Permissions)</h2>
-          <p>Scopes define what actions the access token can perform.</p>
+          <!-- COMMON MISTAKES -->
+          <h2 id="mistakes">🚫 Common OAuth Mistakes</h2>
+          <div class="callout critical"><div class="callout-content"><div class="callout-title">Don't Do These!</div>
+            <ul>
+              <li>❌ <strong>Using Implicit flow</strong> - Deprecated, use Auth Code + PKCE instead</li>
+              <li>❌ <strong>Storing tokens in localStorage</strong> - Vulnerable to XSS, use httpOnly cookies or memory</li>
+              <li>❌ <strong>Not validating tokens</strong> - Always verify signature, expiry, audience</li>
+              <li>❌ <strong>Requesting too many scopes</strong> - Only request what you need (least privilege)</li>
+              <li>❌ <strong>Not using PKCE</strong> - Required for public clients (SPAs, mobile apps)</li>
+              <li>❌ <strong>Sending ID Token to APIs</strong> - ID Token proves identity, Access Token grants access</li>
+            </ul>
+          </div></div>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Microsoft Graph Scopes</span></div>
-            <pre><code># Delegated (user context)
-User.Read           - Read current user profile
-Mail.Read           - Read user's mail
-Files.ReadWrite     - Full access to user's files
-Calendars.ReadWrite - Full access to user's calendars
-
-# Application (no user, service context)
-User.Read.All       - Read all users (admin consent required)
-Mail.Read           - Read all users' mail (admin consent)
-Directory.Read.All  - Read directory data
-
-# Request specific scopes
-scope=openid profile User.Read Mail.Read</code></pre>
-          </div>
-
-          <h2 id="security">Security Best Practices</h2>
-          <div class="callout tip">
-            <div class="callout-content">
-              <div class="callout-title">🔒 OAuth Security Checklist</div>
-              <ul>
-                <li><strong>Always use PKCE</strong> for public clients (SPAs, mobile apps)</li>
-                <li><strong>Validate tokens</strong> - Check signature, issuer, audience, expiration</li>
-                <li><strong>Use short-lived access tokens</strong> - 1 hour or less</li>
-                <li><strong>Store refresh tokens securely</strong> - Encrypted, never in localStorage</li>
-                <li><strong>Use state parameter</strong> - Prevent CSRF attacks</li>
-                <li><strong>Validate redirect URIs</strong> - Exact match, no wildcards</li>
-                <li><strong>Implement token revocation</strong> - Allow users to revoke access</li>
-              </ul>
-            </div>
-          </div>
-
+          <!-- INTERVIEW TIPS -->
           <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Interview Points</div>
-              <ul>
-                <li><strong>OAuth is authorization, not authentication</strong> - Use OIDC for login</li>
-                <li><strong>Know grant types:</strong> Authorization Code+PKCE (users), Client Credentials (M2M)</li>
-                <li><strong>Implicit flow is deprecated</strong> - Always use Auth Code + PKCE for SPAs</li>
-                <li><strong>Access tokens are short-lived</strong> - Use refresh tokens to get new ones</li>
-                <li><strong>Scopes = permissions</strong> - Define what actions token can perform</li>
-                <li><strong>PKCE prevents code interception</strong> - Required for public clients</li>
-              </ul>
-            </div>
-          </div>
+          <div class="callout interview"><div class="callout-content"><div class="callout-title">💡 How to Nail OAuth Questions</div>
+            
+            <p><strong>If asked "Explain OAuth 2.0":</strong></p>
+            <p>"OAuth 2.0 is an authorization framework - it's about granting access to resources, not proving identity. A user can allow a third-party app to access their data without sharing their password. The app gets an access token that has specific scopes, like 'read calendar' but not 'delete calendar'. The token is short-lived for security."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "What's the difference between OAuth and OIDC?":</strong></p>
+            <p>"OAuth is about authorization - what can you access. OIDC is built on top of OAuth and adds authentication - who are you. OIDC adds the ID Token which contains user identity information. If you need login, use OIDC. If you just need API access, OAuth is enough."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "Why was Implicit flow deprecated?":</strong></p>
+            <p>"Implicit returned the access token directly in the URL fragment, making it visible in browser history and vulnerable to interception. Authorization Code with PKCE is more secure because the token exchange happens server-side, and PKCE prevents authorization code interception attacks."</p>
+          </div></div>
+
+          <h2 id="quick-reference">⚡ Quick Reference Card</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">OAuth 2.0 Cheat Sheet</span></div><pre><code>OAUTH 2.0 = AUTHORIZATION (not authentication!)
+
+KEY PLAYERS:
+─────────────────────────────────────────────────
+Resource Owner = User (owns the data)
+Client = App wanting access
+Authorization Server = Issues tokens
+Resource Server = Has the data (API)
+
+GRANT TYPES:
+─────────────────────────────────────────────────
+Auth Code + PKCE = DEFAULT for everything with users
+Client Credentials = Machine-to-machine
+Device Code = Smart TVs, CLIs
+Implicit = DEPRECATED, don't use
+
+TOKENS:
+─────────────────────────────────────────────────
+Access Token = Short-lived, sent to API
+Refresh Token = Long-lived, get new access tokens
+ID Token = OIDC only, user identity
+
+SCOPES = What permissions you're requesting
+Examples: calendar.read, mail.send, user.read
+
+PKCE (Proof Key for Code Exchange):
+─────────────────────────────────────────────────
+- Prevents code interception attacks
+- Required for public clients (SPAs, mobile)
+- code_verifier → hash → code_challenge</code></pre></div>
 
           <nav class="page-nav">
-            <a href="2-4-saml.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">SAML</span>
-            </a>
-            <a href="2-6-oidc.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">OpenID Connect</span>
-            </a>
+            <a href="2-4-saml.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">SAML</span></a>
+            <a href="2-6-oidc.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">OpenID Connect</span></a>
           </nav>
         </article>
       </div>

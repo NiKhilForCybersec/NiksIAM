@@ -1432,3 +1432,298 @@ li::marker {
   width: 100%;
   justify-content: flex-start;
 }
+
+/* ============================================
+   ENHANCED STYLES FOR MEMORY AIDS
+   ============================================ */
+
+/* Callout Info Box */
+.callout.info {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+  border-left: 4px solid #3b82f6;
+}
+
+.callout.info .callout-title {
+  color: #3b82f6;
+}
+
+/* Callout Tip Box */
+.callout.tip {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+  border-left: 4px solid #10b981;
+}
+
+.callout.tip .callout-title {
+  color: #10b981;
+}
+
+/* Callout Warning Box */
+.callout.warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+  border-left: 4px solid #f59e0b;
+}
+
+.callout.warning .callout-title {
+  color: #f59e0b;
+}
+
+/* Callout Critical Box */
+.callout.critical {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  border-left: 4px solid #ef4444;
+}
+
+.callout.critical .callout-title {
+  color: #ef4444;
+}
+
+/* Callout Interview Box */
+.callout.interview {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+  border-left: 4px solid #8b5cf6;
+}
+
+.callout.interview .callout-title {
+  color: #8b5cf6;
+}
+
+/* General callout improvements */
+.callout {
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.callout-content {
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.callout-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.callout ul, .callout ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.callout li {
+  margin: 0.4rem 0;
+}
+
+.callout p {
+  margin: 0.75rem 0;
+}
+
+.callout p:first-of-type {
+  margin-top: 0;
+}
+
+/* Flow Diagram Enhanced */
+.flow-diagram {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 159, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.flow-diagram pre {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #e2e8f0;
+  white-space: pre;
+}
+
+/* Code block improvements */
+.code-block {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 159, 0.15);
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.code-header {
+  background: rgba(0, 255, 159, 0.1);
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 255, 159, 0.1);
+}
+
+.code-language {
+  color: #00ff9f;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+/* Overview box */
+.overview-box {
+  background: linear-gradient(135deg, rgba(0, 255, 159, 0.1), rgba(0, 255, 159, 0.03));
+  border: 1px solid rgba(0, 255, 159, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.overview-box h3 {
+  color: #00ff9f;
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.overview-box p {
+  margin-bottom: 0;
+  color: #cbd5e1;
+}
+
+/* Table improvements */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table-wrapper th {
+  background: rgba(0, 255, 159, 0.15);
+  color: #00ff9f;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(0, 255, 159, 0.3);
+}
+
+.table-wrapper td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.table-wrapper tr:hover td {
+  background: rgba(0, 255, 159, 0.05);
+}
+
+.table-wrapper td strong {
+  color: #00ff9f;
+}
+
+/* Badge improvements */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.badge-l1 {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-l2 {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-l3 {
+  background: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Page navigation */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-nav-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.page-nav-link:hover {
+  background: rgba(0, 255, 159, 0.1);
+  border-color: rgba(0, 255, 159, 0.3);
+}
+
+.page-nav-link.next {
+  text-align: right;
+}
+
+.page-nav-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.page-nav-title {
+  font-size: 0.95rem;
+  color: #00ff9f;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flow-diagram pre {
+    font-size: 0.7rem;
+  }
+  
+  .callout {
+    padding: 1rem;
+  }
+  
+  .page-nav {
+    flex-direction: column;
+  }
+  
+  .page-nav-link.next {
+    text-align: left;
+  }
+}

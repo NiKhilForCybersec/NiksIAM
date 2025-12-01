@@ -42,9 +42,9 @@
 Connect-MgGraph -Scopes "User.ReadWrite.All","Group.ReadWrite.All"
 
 # Users
-Get-MgUser -UserId "user@domain.com"
+Get-MgUser -UserId "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4c393f293e0c2823212d2522622f2321">[email&#160;protected]</a>"
 Get-MgUser -Filter "department eq 'Finance'"
-New-MgUser -DisplayName "John" -UserPrincipalName "john@domain.com" -MailNickname "john" -AccountEnabled -PasswordProfile @{Password="P@ss"}
+New-MgUser -DisplayName "John" -UserPrincipalName "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1b717473755b7f74767a727535787476">[email&#160;protected]</a>" -MailNickname "john" -AccountEnabled -PasswordProfile @{Password="P@ss"}
 
 # Groups
 Get-MgGroup -Filter "displayName eq 'Finance-Team'"
@@ -62,13 +62,13 @@ Get-MgAuditLogSignIn -Filter "userId eq 'user-id'" -Top 10</code></pre>
 az login
 
 # RBAC
-az role assignment list --assignee "user@domain.com"
-az role assignment create --assignee "user@domain.com" --role "Contributor" --resource-group "my-rg"
+az role assignment list --assignee "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="314442544371555e5c50585f1f525e5c">[email&#160;protected]</a>"
+az role assignment create --assignee "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="087d7b6d7a486c6765696166266b6765">[email&#160;protected]</a>" --role "Contributor" --resource-group "my-rg"
 az role definition list --query "[].roleName"
 
 # Entra ID
 az ad user list --filter "department eq 'Finance'"
-az ad user create --display-name "John" --user-principal-name "john@domain.com" --password "P@ss"
+az ad user create --display-name "John" --user-principal-name "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c3a9acabad83a7acaea2aaadeda0acae">[email&#160;protected]</a>" --password "P@ss"
 az ad group member add --group "Finance-Team" --member-id "user-object-id"</code></pre>
           </div>
 
@@ -103,12 +103,12 @@ gcloud auth list
 
 # IAM Policy
 gcloud projects get-iam-policy PROJECT_ID
-gcloud projects add-iam-policy-binding PROJECT_ID --member="user:john@company.com" --role="roles/viewer"
+gcloud projects add-iam-policy-binding PROJECT_ID --member="user:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ef4f1f6f0defdf1f3eefff0e7b0fdf1f3">[email&#160;protected]</a>" --role="roles/viewer"
 
 # Service Accounts
 gcloud iam service-accounts list
 gcloud iam service-accounts create my-sa --display-name="My Service Account"
-gcloud iam service-accounts keys create key.json --iam-account=my-sa@project.iam.gserviceaccount.com</code></pre>
+gcloud iam service-accounts keys create key.json <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fbd6d6929a96d69a9898948e958fc69682d6889abb8b8994919e988fd5929a96d59c889e898d92989e9a9898948e958fd5989496">[email&#160;protected]</a></code></pre>
           </div>
 
           <h2 id="okta-api">Okta API</h2>
@@ -119,14 +119,14 @@ curl -X GET "https://your-org.okta.com/api/v1/users" \
   -H "Authorization: SSWS ${API_TOKEN}"
 
 # Get User
-curl -X GET "https://your-org.okta.com/api/v1/users/john@company.com" \
+curl -X GET "https://your-org.okta.com/api/v1/users/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b2d8dddadcf2d1dddfc2d3dccb9cd1dddf">[email&#160;protected]</a>" \
   -H "Authorization: SSWS ${API_TOKEN}"
 
 # Create User
 curl -X POST "https://your-org.okta.com/api/v1/users?activate=true" \
   -H "Authorization: SSWS ${API_TOKEN}" \
   -H "Content-Type: application/json" \
-  -d '{"profile":{"firstName":"John","lastName":"Doe","email":"john@company.com","login":"john@company.com"}}'
+  -d '{"profile":{"firstName":"John","lastName":"Doe","email":"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0dadfd8def0d3dfddc0d1dec99ed3dfdd">[email&#160;protected]</a>","login":"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a202522240a2925273a2b243364292527">[email&#160;protected]</a>"}}'
 
 # Suspend User
 curl -X POST "https://your-org.okta.com/api/v1/users/{userId}/lifecycle/suspend" \
@@ -150,39 +150,7 @@ Get-ADPrincipalGroupMembership -Identity jsmith
 
 # Account Status
 Search-ADAccount -LockedOut
-Search-ADAccount -AccountDisabled
-Search-ADAccount -PasswordExpired</code></pre>
-          </div>
-
-          <h2 id="vault">HashiCorp Vault CLI</h2>
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Bash</span></div>
-            <pre><code># Auth
-vault login
-vault token lookup
-
-# KV Secrets
-vault kv put secret/myapp/db username="admin" password="secret"
-vault kv get secret/myapp/db
-vault kv get -field=password secret/myapp/db
-
-# Dynamic Database Creds
-vault read database/creds/my-role
-
-# PKI
-vault write pki/issue/my-role common_name="app.example.com" ttl="24h"</code></pre>
-          </div>
-
-          <nav class="page-nav">
-            <a href="12-5-comparison-tables.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">Comparison Tables</span>
-            </a>
-            <a href="index.html" class="page-nav-link next">
-              <span class="page-nav-label">Back to →</span>
-              <span class="page-nav-title">Home</span>
-            </a>
-          </nav>
+Se          </nav>
         </article>
       </div>
     </main>

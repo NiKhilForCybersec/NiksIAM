@@ -44,7 +44,7 @@
                 <tr>
                   <td><strong>User</strong></td>
                   <td>Human identity or service account</td>
-                  <td>sarah@company.com</td>
+                  <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7f0c1e0d1e173f1c10120f1e1106511c1012">[email&#160;protected]</a></td>
                 </tr>
                 <tr>
                   <td><strong>Group</strong></td>
@@ -83,11 +83,11 @@
 Connect-MgGraph -Scopes "User.ReadWrite.All"
 
 # Get user details
-Get-MgUser -UserId "sarah@company.com" | Select DisplayName, UserPrincipalName, Id, AccountEnabled
+Get-MgUser -UserId "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6e1d0f1c0f062e0d01031e0f0017400d0103">[email&#160;protected]</a>" | Select DisplayName, UserPrincipalName, Id, AccountEnabled
 
 # Create cloud-only user
 New-MgUser -DisplayName "John Smith" `
-  -UserPrincipalName "jsmith@company.com" `
+  -UserPrincipalName "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c766f717568745c7f73716c7d7265327f7371">[email&#160;protected]</a>" `
   -MailNickname "jsmith" `
   -AccountEnabled:$true `
   -PasswordProfile @{Password="TempP@ss123!"; ForceChangePasswordNextSignIn=$true}
@@ -225,13 +225,7 @@ print(secret.value)</code></pre>
           <nav class="page-nav">
             <a href="4-1-entra-overview.html" class="page-nav-link prev">
               <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">Entra ID Overview</span>
-            </a>
-            <a href="4-3-conditional-access.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">Conditional Access</span>
-            </a>
-          </nav>
+              <span class="page-nav-title">Entra ID Overview</span>          </nav>
         </article>
       </div>
     </main>

@@ -67,7 +67,7 @@
 
           <h2 id="entra-b2b">Entra ID B2B (Guest Access)</h2>
           <div class="code-block"><div class="code-header"><span class="code-language">B2B Guest User Flow</span></div><pre><code># INVITE GUEST USER
-1. Admin invites partner: vendor@partner.com
+1. Admin invites partner: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0375666d676c7143736271776d66712d606c6e">[email&#160;protected]</a>
 2. Guest receives email invitation
 3. Guest clicks link, authenticates with their IdP (partner.com)
 4. Guest account created in your tenant (as Guest type)
@@ -79,7 +79,7 @@ Source: External Azure AD / Microsoft Account / Email OTP
 UPN: vendor_partner.com#EXT#@yourtenant.onmicrosoft.com
 
 # POWERSHELL - INVITE GUEST
-New-MgInvitation -InvitedUserEmailAddress "vendor@partner.com" `
+New-MgInvitation -InvitedUserEmailAddress "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="087e6d666c677a4878697a7c666d7a266b6765">[email&#160;protected]</a>" `
   -InviteRedirectUrl "https://myapps.microsoft.com" `
   -SendInvitationMessage $true
 
@@ -163,8 +163,7 @@ Entra ID → External Identities → Cross-tenant access settings
 
           <nav class="page-nav">
             <a href="3-4-ws-federation-legacy.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">WS-Federation</span></a>
-            <a href="3-6-federation-troubleshooting.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">Federation Troubleshooting</span></a>
-          </nav>
+            <a href="3-6-federation-troubleshooting.html" class="page-nav-          </nav>
         </article>
       </div>
     </main>

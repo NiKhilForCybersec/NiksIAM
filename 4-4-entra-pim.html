@@ -8,7 +8,6 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -28,217 +27,240 @@
       <div class="content-wrapper">
         <article class="content-main">
           <div class="badge badge-l2">L2 Technical</div>
-          <h1>Entra Privileged Identity Management (PIM)</h1>
+          <h1>Entra PIM (Privileged Identity Management)</h1>
           
           <div class="overview-box">
-            <h3>🎯 What This Page Covers</h3>
-            <p>PIM enables Just-in-Time (JIT) privileged access, eliminating standing admin accounts. Essential for Zero Trust and compliance. Covers Entra roles, Azure roles, and access reviews.</p>
+            <h3>🎯 What You'll Learn</h3>
+            <p>PIM is Microsoft's Just-In-Time (JIT) access solution. Instead of having admin rights 24/7, users elevate their access only when needed, for a limited time. This page makes PIM crystal clear.</p>
           </div>
 
-          <h2 id="why-pim">Why PIM Matters</h2>
-
-          <div class="flow-diagram">
-            <pre>
+          <!-- THE CORE CONCEPT -->
+          <h2 id="core-concept">🔑 The Key Card Analogy</h2>
+          <div class="callout tip"><div class="callout-content"><div class="callout-title">PIM = Temporary VIP Access</div>
+            
+            <div class="flow-diagram"><pre>
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│              WITHOUT PIM vs WITH PIM                                                     │
+│                    WITHOUT PIM vs WITH PIM                                               │
 ├─────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                          │
-│   ❌ WITHOUT PIM (Standing Privileges)                                                   │
-│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
-│   │  User "jsmith" is PERMANENT Global Administrator                                │   │
-│   │  Attack surface: 24/7/365                                                       │   │
-│   │  If credential stolen: Complete tenant compromise immediately                   │   │
-│   │  Audit trail: No record of WHY they used admin access                          │   │
-│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│   ❌ WITHOUT PIM (Standing Access)         ✅ WITH PIM (Just-In-Time)                   │
+│   ─────────────────────────────────        ─────────────────────────────────            │
 │                                                                                          │
-│   ✅ WITH PIM (Just-in-Time)                                                             │
-│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
-│   │  User "jsmith" is ELIGIBLE for Global Administrator                             │   │
-│   │  To use: Must request activation → Provide justification → Approve (optional)  │   │
-│   │  Duration: 2 hours only, then auto-revokes                                     │   │
-│   │  Attack surface: Only during activation window                                 │   │
-│   │  Audit trail: Full record of when, why, and what they did                      │   │
-│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│   John is Global Admin 24/7/365            John is ELIGIBLE for Global Admin            │
 │                                                                                          │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-            </pre>
-          </div>
+│   ┌─────────────────────────────┐         ┌─────────────────────────────┐              │
+│   │ 🔓 Always has the keys     │         │ 🔒 Keys locked in safe      │              │
+│   │                             │         │                             │              │
+│   │ Even when sleeping          │         │ John requests access        │              │
+│   │ Even on vacation            │         │ ↓                           │              │
+│   │ Even if account compromised │         │ Approval required (maybe)   │              │
+│   │                             │         │ ↓                           │              │
+│   │ RISK: 24/7 attack window   │         │ MFA verification            │              │
+│   │                             │         │ ↓                           │              │
+│   └─────────────────────────────┘         │ 🔓 Access granted for 4 hrs │              │
+│                                            │ ↓                           │              │
+│                                            │ 🔒 Auto-expires!            │              │
+│                                            └─────────────────────────────┘              │
+│                                                                                          │
+│   Think of it like a hotel:                                                             │
+│   • Standing access = You own the building (always have all keys)                       │
+│   • PIM = You're a guest (get a key card for your room, for your stay only)            │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
+          </div></div>
 
-          <h2 id="assignment-types">Assignment Types</h2>
+          <!-- MEMORY TRICKS -->
+          <h2 id="memory-tricks">🧠 Memory Tricks</h2>
+          <div class="callout warning"><div class="callout-content"><div class="callout-title">💡 Remember These Forever</div>
+            
+            <p><strong>🎭 "Eligible vs Active = Ticket vs Seat"</strong></p>
+            <ul>
+              <li><strong>Eligible:</strong> You have a TICKET to the show (can request access)</li>
+              <li><strong>Active:</strong> You're in your SEAT watching (currently have access)</li>
+            </ul>
 
-          <div class="table-wrapper">
-            <table>
-              <thead><tr><th>Type</th><th>Description</th><th>When to Use</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td><strong>Eligible</strong></td>
-                  <td>User CAN activate the role when needed</td>
-                  <td>Standard for all admin roles (recommended)</td>
-                </tr>
-                <tr>
-                  <td><strong>Active</strong></td>
-                  <td>User HAS the role permanently (standing access)</td>
-                  <td>Break-glass accounts, service accounts only</td>
-                </tr>
-                <tr>
-                  <td><strong>Time-bound Eligible</strong></td>
-                  <td>Eligible only for specific period</td>
-                  <td>Project-based access, temporary contractors</td>
-                </tr>
-                <tr>
-                  <td><strong>Time-bound Active</strong></td>
-                  <td>Active only for specific period</td>
-                  <td>Auditor access during audit window</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <p style="margin-top:1rem;"><strong>⏰ "JIT = Just In Time"</strong></p>
+            <p>Access arrives just when you need it, not before, not permanently after.</p>
 
-          <h2 id="activation-flow">Activation Flow</h2>
+            <p style="margin-top:1rem;"><strong>🎯 The PIM Formula:</strong></p>
+            <div class="code-block"><pre style="margin:0.5rem 0;"><code>ELIGIBLE + ACTIVATION = ACTIVE (temporary)
+         ↓
+   Request access
+   + Justification
+   + MFA
+   + Approval (optional)
+         ↓
+   = Active for X hours</code></pre></div>
 
-          <div class="steps">
-            <div class="step">
-              <div class="step-number">1</div>
-              <div class="step-content">
-                <h4>User Requests Activation</h4>
-                <p>Opens PIM → My Roles → Clicks "Activate" on eligible role</p>
-                <p>Provides: Duration (up to max allowed), Justification (ticket number, reason)</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">2</div>
-              <div class="step-content">
-                <h4>Approval (if configured)</h4>
-                <p>Approver gets notification → Reviews request → Approves/Denies</p>
-                <p>Optional: Can skip for certain roles or configure auto-approval</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">3</div>
-              <div class="step-content">
-                <h4>MFA Verification</h4>
-                <p>User must complete MFA challenge (always required for PIM)</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-number">4</div>
-              <div class="step-content">
-                <h4>Role Activated</h4>
-                <p>User now has the role for requested duration</p>
-                <p>Auto-deactivates when time expires</p>
-              </div>
-            </div>
-          </div>
+            <p style="margin-top:1rem;"><strong>📋 What PIM Covers:</strong></p>
+            <ul>
+              <li><strong>Entra ID Roles:</strong> Global Admin, User Admin, etc.</li>
+              <li><strong>Azure RBAC Roles:</strong> Subscription Owner, Contributor, etc.</li>
+              <li><strong>Groups:</strong> Privileged group membership</li>
+            </ul>
+          </div></div>
 
-          <h2 id="role-settings">Configuring Role Settings</h2>
+          <!-- THE FLOW -->
+          <h2 id="activation-flow">📝 Activation Flow</h2>
+          <div class="callout info"><div class="callout-content"><div class="callout-title">🚶 Step-by-Step: "I need Global Admin access"</div>
+            
+            <p><strong>Step 1: User Requests Activation</strong></p>
+            <p>John goes to PIM portal, clicks "Activate" on Global Administrator</p>
+            <p>→ Enters justification: "Need to configure Conditional Access policy #1234"</p>
+            <p>→ Selects duration: 4 hours</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 2: MFA Challenge</strong></p>
+            <p>PIM requires MFA before activation (even if already authenticated)</p>
+            <p>→ John completes MFA prompt</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 3: Approval (If Required)</strong></p>
+            <p>If role requires approval, request goes to approvers</p>
+            <p>→ Approver gets email/Teams notification</p>
+            <p>→ Approver reviews justification, approves or denies</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 4: Activation</strong></p>
+            <p>John's Global Admin role is now ACTIVE</p>
+            <p>→ He can perform admin tasks</p>
+            <p>→ All actions are logged</p>
+            
+            <p style="margin-top:1rem;"><strong>Step 5: Auto-Expiration</strong></p>
+            <p>After 4 hours, access automatically revokes</p>
+            <p>→ John is back to eligible-only</p>
+            <p>→ Must activate again if needed</p>
+          </div></div>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">PIM Role Settings (Best Practices)</span></div>
-            <pre><code>Role: Global Administrator
-─────────────────────────────────────────────────
-Activation Settings:
-  ☑ Require justification on activation
-  ☑ Require ticket information on activation
-  ☑ Require Azure AD MFA on activation
-  ☑ Require approval to activate
-    Approvers: IT Security Team, IAM Manager
-  
-  Maximum activation duration: 2 hours
-  
-Assignment Settings:
-  ☑ Require Azure AD MFA on active assignment
-  ☑ Require justification on active assignment
-  
-  Allow permanent eligible assignment: No
-  Expire eligible assignments after: 6 months
-  Allow permanent active assignment: No (except break-glass)
-  Expire active assignments after: Never (for break-glass only)
+          <div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    PIM ACTIVATION FLOW                                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐        │
+│   │ ELIGIBLE │───►│ REQUEST  │───►│   MFA    │───►│ APPROVAL │───►│  ACTIVE  │        │
+│   │          │    │          │    │          │    │ (maybe)  │    │          │        │
+│   └──────────┘    └──────────┘    └──────────┘    └──────────┘    └─────┬────┘        │
+│        │                                                                  │             │
+│        │                                                                  │             │
+│        │                              ┌───────────────────────────────────┘             │
+│        │                              │                                                 │
+│        │                              ▼                                                 │
+│        │                         ┌──────────┐                                          │
+│        │                         │  EXPIRE  │                                          │
+│        │                         │ (auto!)  │                                          │
+│        │                         └─────┬────┘                                          │
+│        │                               │                                                │
+│        └───────────────────────────────┘                                               │
+│                                                                                          │
+│   ELIGIBLE = Can request   │   ACTIVE = Currently has access (time-limited)            │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
 
-Notification Settings:
-  ☑ Send notifications when members are assigned as eligible
-  ☑ Send notifications when members are assigned as active
-  ☑ Send notifications when eligible members activate this role</code></pre>
-          </div>
+          <!-- ROLE SETTINGS -->
+          <h2 id="settings">⚙️ Role Settings You Can Configure</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Setting</th><th>What It Does</th><th>Recommendation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Activation max duration</strong></td><td>How long can activation last</td><td>4-8 hours for most roles</td></tr>
+              <tr><td><strong>Require MFA</strong></td><td>MFA on activation</td><td>Always ON</td></tr>
+              <tr><td><strong>Require justification</strong></td><td>User must explain why</td><td>Always ON</td></tr>
+              <tr><td><strong>Require approval</strong></td><td>Someone must approve</td><td>ON for highly privileged roles</td></tr>
+              <tr><td><strong>Require ticket</strong></td><td>Link to ticket system</td><td>ON for change-controlled access</td></tr>
+              <tr><td><strong>Allow permanent active</strong></td><td>Standing access (no expiry)</td><td>OFF except break-glass</td></tr>
+              <tr><td><strong>Allow permanent eligible</strong></td><td>Eligibility never expires</td><td>Usually OK for full-time admins</td></tr>
+            </tbody>
+          </table></div>
 
-          <h2 id="powershell">PowerShell Operations</h2>
+          <!-- REAL EXAMPLE -->
+          <h2 id="example">📋 Configuring Global Admin in PIM</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">Best Practice Configuration</span></div><pre><code># ROLE: Global Administrator (most privileged!)
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">PIM PowerShell Examples</span></div>
-            <pre><code># Connect to Microsoft Graph
-Connect-MgGraph -Scopes "RoleManagement.ReadWrite.Directory"
+ACTIVATION SETTINGS:
+├── Activation maximum duration: 4 hours
+├── On activation, require: 
+│   ├── ✅ Azure MFA (not just claims)
+│   ├── ✅ Justification
+│   └── ✅ Ticket information
+└── Require approval: ✅ YES
+    └── Approvers: Security team + another GA
 
-# List eligible role assignments
-Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance | 
-  Select-Object PrincipalId, RoleDefinitionId, StartDateTime, EndDateTime
+ASSIGNMENT SETTINGS:
+├── Allow permanent eligible: ✅ (for core admin team)
+├── Expire eligible after: Never (or 1 year for contractors)
+├── Allow permanent active: ❌ NO!
+└── Expire active after: 4 hours
 
-# Activate an eligible role (as the user)
-$params = @{
-    action = "selfActivate"
-    principalId = "user-object-id"
-    roleDefinitionId = "role-definition-id"
-    directoryScopeId = "/"
-    justification = "INC12345 - Emergency access needed"
-    scheduleInfo = @{
-        startDateTime = (Get-Date)
-        expiration = @{
-            type = "afterDuration"
-            duration = "PT2H"  # 2 hours
-        }
-    }
-}
-New-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -BodyParameter $params
+NOTIFICATION SETTINGS:
+├── Email to admins when activated: ✅
+├── Email to approvers when pending: ✅
+└── Email to requester when approved: ✅
 
-# List active PIM assignments (who has what activated now)
-Get-MgRoleManagementDirectoryRoleAssignmentScheduleInstance |
-  Where-Object {$_.AssignmentType -eq "Activated"}</code></pre>
-          </div>
+# RESULT:
+# - No one has standing Global Admin access
+# - Every activation is MFA'd, justified, and approved
+# - Max 4 hours of access per activation
+# - Full audit trail</code></pre></div>
 
-          <h2 id="access-reviews">Access Reviews</h2>
-          <p>PIM includes access reviews to periodically verify users still need their eligible roles.</p>
+          <!-- ALERTS -->
+          <h2 id="alerts">🚨 PIM Alerts to Monitor</h2>
+          <div class="callout critical"><div class="callout-content"><div class="callout-title">Set Up These Alerts!</div>
+            <ul>
+              <li><strong>Roles being assigned outside PIM:</strong> Someone bypassing JIT!</li>
+              <li><strong>Permanent active assignments:</strong> Standing access = bad</li>
+              <li><strong>Unused eligible assignments:</strong> Remove if not needed</li>
+              <li><strong>Roles expiring soon:</strong> Review and renew if still needed</li>
+              <li><strong>Frequent activations:</strong> Maybe this person needs a different solution?</li>
+            </ul>
+          </div></div>
 
-          <div class="code-block">
-            <div class="code-header"><span class="code-language">Access Review Configuration</span></div>
-            <pre><code>Access Review: "Quarterly Global Admin Review"
-─────────────────────────────────────────────────
-What to review: Global Administrator eligible assignments
-Review frequency: Quarterly
-Duration: 14 days
-Reviewers: User's manager + IT Security Team
-
-Auto-apply results: Yes
-If reviewers don't respond: Remove access
-Notifications: Email on start, weekly reminders
-
-Actions on completion:
-  - Approved: Keep assignment
-  - Denied: Remove eligible assignment
-  - Not reviewed: Remove access (configurable)</code></pre>
-          </div>
-
+          <!-- INTERVIEW TIPS -->
           <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Interview Points</div>
-              <ul>
-                <li><strong>JIT access:</strong> Users are "eligible" not "active" - must activate when needed</li>
-                <li><strong>Benefits:</strong> Reduced attack surface, audit trail, compliance (SOX, PCI)</li>
-                <li><strong>Activation requires:</strong> Justification, MFA, optional approval</li>
-                <li><strong>Time-limited:</strong> Auto-deactivates after duration (typically 1-8 hours)</li>
-                <li><strong>Break-glass exception:</strong> 2 accounts with permanent active Global Admin for emergencies</li>
-                <li><strong>Covers:</strong> Entra ID roles + Azure RBAC roles + Groups (PIM for Groups)</li>
-              </ul>
-            </div>
-          </div>
+          <div class="callout interview"><div class="callout-content"><div class="callout-title">💡 How to Nail PIM Questions</div>
+            
+            <p><strong>If asked "What is PIM?":</strong></p>
+            <p>"Privileged Identity Management is Microsoft's Just-In-Time access solution. Instead of giving admins permanent privileged access, users are made 'eligible' for roles. When they need access, they activate the role - which requires MFA, a justification, and potentially approval. The access is time-limited and automatically expires. This reduces the attack surface because privileged accounts aren't privileged 24/7."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "Eligible vs Active?":</strong></p>
+            <p>"Eligible means you CAN request access - like having a ticket to a show. Active means you currently HAVE access - like being in your seat. Users move from eligible to active through the activation process, which enforces controls like MFA and approval. Active access automatically expires back to just being eligible."</p>
+
+            <p style="margin-top:1rem;"><strong>If asked "Why use PIM?":</strong></p>
+            <p>"Three main reasons: Security - reduces standing privileged access and attack surface. Compliance - provides full audit trail of who had access when and why. Least privilege - access is just-in-time and just-enough, not permanent."</p>
+          </div></div>
+
+          <h2 id="quick-reference">⚡ Quick Reference Card</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">PIM Cheat Sheet</span></div><pre><code>PIM = Privileged Identity Management
+     = Just-In-Time (JIT) access for Entra ID
+
+ELIGIBLE vs ACTIVE:
+─────────────────────────────────────────────────
+Eligible = Can request access (has ticket)
+Active = Currently has access (in seat)
+
+ACTIVATION FLOW:
+─────────────────────────────────────────────────
+Request → MFA → Approval → Active → Auto-Expire
+
+COVERS:
+─────────────────────────────────────────────────
+• Entra ID roles (Global Admin, etc.)
+• Azure RBAC roles (Subscription Owner, etc.)
+• Privileged group membership
+
+BEST PRACTICES:
+─────────────────────────────────────────────────
+✅ Require MFA on all activations
+✅ Require justification
+✅ Require approval for highly privileged roles
+✅ Set reasonable duration (4-8 hours)
+❌ Never allow permanent active (except break-glass)
+
+MONITOR:
+─────────────────────────────────────────────────
+• Assignments outside PIM
+• Permanent active assignments
+• Frequent activations</code></pre></div>
 
           <nav class="page-nav">
-            <a href="4-3-conditional-access.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">Conditional Access</span>
-            </a>
-            <a href="4-5-entra-governance.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">Entra Governance</span>
-            </a>
+            <a href="4-3-conditional-access.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Conditional Access</span></a>
+            <a href="4-5-entra-governance.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">Entra Governance</span></a>
           </nav>
         </article>
       </div>
