@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>B2B & B2C Federation - Ultimate IAM Security Guide</title>
   <link rel="stylesheet" href="main.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
 </head>
 <body>
   <div class="page-wrapper">
+    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -23,275 +23,151 @@
           <div class="sidebar-logo-text">IAM <span>Guide</span></div>
         </a>
       </div>
-      <div class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-section-header"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
-            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
-            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
-            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
-            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
-            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
-            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
-            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
-            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
-            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
-            <a href="2-4-saml.html" class="nav-item">SAML</a>
-            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
-            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
-            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
-            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
-            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
-            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
-            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
-            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
-            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
-            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
-            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
-            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
-            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
-            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
-            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
-            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
-            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
-            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
-            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
-            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
-            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
-            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
-            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
-            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
-            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
-            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
-            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
-            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
-            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
-            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
-            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
-            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
-            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
-            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
-            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
-            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
-            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
-            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
-            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
-            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
-            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
-            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
-            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
-            <a href="9-5-api-security.html" class="nav-item">API Security</a>
-            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
-            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
-            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
-            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
-            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
-            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
-            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
-            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
-            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
-            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
-            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
-            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
-            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
-            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
-            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
-          </div>
-        </div>
-      </div>
+      <!-- Navigation generated by JavaScript -->
     </nav>
     <main class="main-content">
-      <header class="content-header">
-        <div class="breadcrumb">
-          <a href="index.html">Home</a>
-          <span class="breadcrumb-separator">›</span>
-          <span>Federation & SSO</span>
-          <span class="breadcrumb-separator">›</span>
-          <span>B2B & B2C Federation</span>
-        </div>
-        <div class="header-actions">
-          <button class="search-trigger">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span>Search</span>
-            <kbd>⌘K</kbd>
-          </button>
-        </div>
-      </header>
       <div class="content-wrapper">
         <article class="content-main">
           <div class="badge badge-l2">L2 Technical</div>
           <h1>B2B & B2C Federation</h1>
           
           <div class="overview-box">
-            <h3>🎯 What You'll Learn</h3>
-            <p>
-              This comprehensive guide covers B2B & B2C Federation concepts, implementation best practices, 
-              security considerations, and real-world enterprise examples. Essential knowledge
-              for security professionals and IAM practitioners.
-            </p>
+            <h3>🎯 What This Page Covers</h3>
+            <p>B2B (Business-to-Business) federation enables partner access. B2C (Business-to-Consumer) / CIAM handles customer identity with social login. This covers guest access, partner federation, and customer identity patterns.</p>
           </div>
 
-          <h2 id="overview">Overview</h2>
-          <p>
-            B2B & B2C Federation is a critical component of enterprise identity and access management.
-            Understanding these concepts is essential for designing, implementing, and
-            maintaining secure IAM solutions.
-          </p>
+          <h2 id="b2b-vs-b2c">B2B vs B2C</h2>
+          <div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    B2B vs B2C IDENTITY                                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   B2B (Partner/Guest)                      B2C (Customer/CIAM)                          │
+│   ┌─────────────────────────────┐         ┌─────────────────────────────┐              │
+│   │ WHO: Partners, vendors,     │         │ WHO: Customers, public      │              │
+│   │      contractors            │         │      users                  │              │
+│   │                             │         │                             │              │
+│   │ SCALE: 100s-1000s          │         │ SCALE: 100000s-millions     │              │
+│   │                             │         │                             │              │
+│   │ AUTH: Their corporate IdP   │         │ AUTH: Social login,         │              │
+│   │       (federated)           │         │       email/password        │              │
+│   │                             │         │                             │              │
+│   │ ACCESS: Internal apps,      │         │ ACCESS: Customer-facing     │              │
+│   │         collaboration       │         │         apps only           │              │
+│   │                             │         │                             │              │
+│   │ EXAMPLE: Vendor accesses    │         │ EXAMPLE: Customer logs      │              │
+│   │ your SharePoint with their  │         │ into your app with Google   │              │
+│   │ Okta credentials            │         │ account                     │              │
+│   └─────────────────────────────┘         └─────────────────────────────┘              │
+│                                                                                          │
+│   Products: Entra External ID (B2B)       Products: Entra External ID (B2C),           │
+│             Okta B2B                                Auth0, Okta CIAM                    │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
 
-          <h2 id="key-concepts">Key Concepts</h2>
-          <p>
-            This section covers the fundamental concepts and terminology you need to understand
-            for B2B & B2C Federation.
-          </p>
+          <h2 id="entra-b2b">Entra ID B2B (Guest Access)</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">B2B Guest User Flow</span></div><pre><code># INVITE GUEST USER
+1. Admin invites partner: vendor@partner.com
+2. Guest receives email invitation
+3. Guest clicks link, authenticates with their IdP (partner.com)
+4. Guest account created in your tenant (as Guest type)
+5. Guest can now access resources you've shared
 
-          <div class="callout info">
-            <div class="callout-content">
-              <div class="callout-title">📚 Core Principles</div>
-              <p>
-                Understanding the core principles of B2B & B2C Federation enables you to make informed
-                decisions about implementation strategies and security controls.
-              </p>
-            </div>
-          </div>
+# GUEST USER PROPERTIES
+UserType: Guest (not Member)
+Source: External Azure AD / Microsoft Account / Email OTP
+UPN: vendor_partner.com#EXT#@yourtenant.onmicrosoft.com
 
-          <h2 id="implementation">Implementation Guide</h2>
-          <p>
-            Step-by-step guidance for implementing B2B & B2C Federation in enterprise environments.
-          </p>
+# POWERSHELL - INVITE GUEST
+New-MgInvitation -InvitedUserEmailAddress "vendor@partner.com" `
+  -InviteRedirectUrl "https://myapps.microsoft.com" `
+  -SendInvitationMessage $true
 
-          <h2 id="best-practices">Best Practices</h2>
-          <ul>
-            <li>Follow the principle of least privilege</li>
-            <li>Implement defense in depth strategies</li>
-            <li>Maintain comprehensive audit logs</li>
-            <li>Regular access reviews and certifications</li>
-            <li>Automated provisioning and deprovisioning</li>
-          </ul>
+# CROSS-TENANT ACCESS SETTINGS (Control federation)
+Entra ID → External Identities → Cross-tenant access settings
+├── Inbound: Which external orgs can access YOUR resources
+├── Outbound: Which external orgs YOUR users can access
+└── Trust settings: Trust MFA from partner? Trust compliant devices?</code></pre></div>
 
-          <h2 id="security-considerations">Security Considerations</h2>
-          <div class="callout warning">
-            <div class="callout-content">
-              <div class="callout-title">⚠️ Security Best Practices</div>
-              <p>
-                Always consider security implications when implementing B2B & B2C Federation.
-                Regular security assessments and monitoring are essential.
-              </p>
-            </div>
-          </div>
+          <h2 id="b2b-security">B2B Security Controls</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Control</th><th>Configuration</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Guest Access Restrictions</strong></td><td>Limit guest permissions</td><td>Guests can't enumerate directory</td></tr>
+              <tr><td><strong>MFA for Guests</strong></td><td>Conditional Access requiring MFA</td><td>Even if partner doesn't require MFA</td></tr>
+              <tr><td><strong>Access Reviews</strong></td><td>Quarterly guest certification</td><td>Remove stale guest accounts</td></tr>
+              <tr><td><strong>Allowed Domains</strong></td><td>Whitelist partner domains</td><td>Only approved partners can be invited</td></tr>
+              <tr><td><strong>Sponsor Required</strong></td><td>Internal user must sponsor guest</td><td>Accountability for guest access</td></tr>
+            </tbody>
+          </table></div>
+
+          <h2 id="social-login">B2C / Social Login</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">Social Identity Providers</span></div><pre><code># COMMON SOCIAL IDENTITY PROVIDERS
+┌─────────────────────────────────────────────────────────┐
+│ Provider        │ Protocol │ Use Case                   │
+├─────────────────────────────────────────────────────────┤
+│ Google          │ OIDC     │ Consumer apps, widespread │
+│ Apple           │ OIDC     │ iOS apps, privacy-focused │
+│ Facebook        │ OIDC     │ Social/consumer apps      │
+│ Microsoft       │ OIDC     │ Enterprise + consumer     │
+│ LinkedIn        │ OIDC     │ Professional networking   │
+│ GitHub          │ OAuth    │ Developer tools           │
+└─────────────────────────────────────────────────────────┘
+
+# IMPLEMENTATION (Auth0 Example)
+1. Register your app with social provider (get client_id/secret)
+2. Configure connection in Auth0
+3. User clicks "Login with Google"
+4. Redirect to Google → User consents → Redirect back with token
+5. Auth0 creates/updates user profile with Google data
+6. Your app receives Auth0 token (abstracted from Google)</code></pre></div>
+
+          <h2 id="day-to-day">🔧 Security Engineer Day-to-Day Tasks</h2>
+          <div class="callout tip"><div class="callout-content"><div class="callout-title">👨‍💻 What You Actually Do</div>
+            
+            <p><strong>B2B Guest Management:</strong></p>
+            <ul>
+              <li>Process guest invitation requests</li>
+              <li>Configure cross-tenant access for new partners</li>
+              <li>Run quarterly guest access reviews</li>
+              <li>Troubleshoot partner SSO issues</li>
+              <li>Remove guests when partnerships end</li>
+            </ul>
+
+            <p><strong>B2C/CIAM Operations:</strong></p>
+            <ul>
+              <li>Monitor social provider connection health</li>
+              <li>Handle customer login issues</li>
+              <li>Configure progressive profiling</li>
+              <li>Implement account linking (social + email)</li>
+            </ul>
+
+            <p><strong>Common Issues:</strong></p>
+            <ul>
+              <li><strong>"Guest can't access SharePoint"</strong> → Check sharing settings, guest permissions</li>
+              <li><strong>"Partner MFA not trusted"</strong> → Configure cross-tenant trust settings</li>
+              <li><strong>"Social login failed"</strong> → Check provider status, API credentials</li>
+            </ul>
+          </div></div>
 
           <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Points Interviewers Look For</div>
-              <ul>
-                <li>Clear understanding of core concepts</li>
-                <li>Real-world implementation experience</li>
-                <li>Knowledge of security best practices</li>
-                <li>Ability to troubleshoot common issues</li>
-                <li>Understanding of enterprise requirements</li>
-              </ul>
-            </div>
-          </div>
+          <div class="callout interview"><div class="callout-content"><div class="callout-title">💡 Key Interview Points</div>
+            <ul>
+              <li><strong>B2B:</strong> Partner access using their corporate credentials (federated)</li>
+              <li><strong>B2C/CIAM:</strong> Customer identity with social login, scale-focused</li>
+              <li><strong>Guest vs Member:</strong> Guests have limited permissions by default</li>
+              <li><strong>Cross-tenant access:</strong> Control inbound/outbound federation trust</li>
+              <li><strong>Products:</strong> Entra External ID, Auth0, Okta CIAM</li>
+            </ul>
+          </div></div>
 
           <nav class="page-nav">
-            <a href="3-4-ws-federation-legacy.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">WS-Federation & Legacy</span>
-            </a>
-            <a href="3-6-federation-troubleshooting.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">Federation Troubleshooting</span>
-            </a>
+            <a href="3-4-ws-federation-legacy.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">WS-Federation</span></a>
+            <a href="3-6-federation-troubleshooting.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">Federation Troubleshooting</span></a>
           </nav>
         </article>
-        <aside class="toc">
-          <div class="toc-header">On This Page</div>
-          <ul class="toc-list"></ul>
-        </aside>
       </div>
     </main>
-    <div class="search-modal">
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" class="search-input" placeholder="Search documentation...">
-        </div>
-        <div class="search-results"></div>
-      </div>
-    </div>
   </div>
   <script src="main.js"></script>
 </body>

@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IGA Fundamentals - Ultimate IAM Security Guide</title>
   <link rel="stylesheet" href="main.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
 </head>
 <body>
   <div class="page-wrapper">
+    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -23,275 +23,154 @@
           <div class="sidebar-logo-text">IAM <span>Guide</span></div>
         </a>
       </div>
-      <div class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-section-header"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
-            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
-            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
-            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
-            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
-            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
-            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
-            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
-            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
-            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
-            <a href="2-4-saml.html" class="nav-item">SAML</a>
-            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
-            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
-            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
-            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
-            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
-            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
-            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
-            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
-            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
-            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
-            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
-            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
-            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
-            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
-            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
-            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
-            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
-            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
-            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
-            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
-            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
-            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
-            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
-            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
-            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
-            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
-            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
-            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
-            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
-            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
-            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
-            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
-            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
-            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
-            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
-            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
-            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
-            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
-            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
-            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
-            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
-            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
-            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
-            <a href="9-5-api-security.html" class="nav-item">API Security</a>
-            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
-            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
-            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
-            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
-            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
-            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
-            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
-            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
-            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
-            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
-            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
-            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
-            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
-            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
-            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
-          </div>
-        </div>
-      </div>
+      <!-- Navigation generated by JavaScript -->
     </nav>
     <main class="main-content">
-      <header class="content-header">
-        <div class="breadcrumb">
-          <a href="index.html">Home</a>
-          <span class="breadcrumb-separator">›</span>
-          <span>SailPoint & IGA</span>
-          <span class="breadcrumb-separator">›</span>
-          <span>IGA Fundamentals</span>
-        </div>
-        <div class="header-actions">
-          <button class="search-trigger">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span>Search</span>
-            <kbd>⌘K</kbd>
-          </button>
-        </div>
-      </header>
       <div class="content-wrapper">
         <article class="content-main">
-          <div class="badge badge-l1">L1 Fundamentals</div>
+          <div class="badge badge-l2">L2 Technical</div>
           <h1>IGA Fundamentals</h1>
           
           <div class="overview-box">
-            <h3>🎯 What You'll Learn</h3>
-            <p>
-              This comprehensive guide covers IGA Fundamentals concepts, implementation best practices, 
-              security considerations, and real-world enterprise examples. Essential knowledge
-              for security professionals and IAM practitioners.
-            </p>
+            <h3>🎯 What This Page Covers</h3>
+            <p>Identity Governance and Administration (IGA) provides visibility, control, and compliance for access management. This covers IGA concepts, core capabilities, and how security engineers use IGA platforms daily.</p>
           </div>
 
-          <h2 id="overview">Overview</h2>
-          <p>
-            IGA Fundamentals is a critical component of enterprise identity and access management.
-            Understanding these concepts is essential for designing, implementing, and
-            maintaining secure IAM solutions.
-          </p>
+          <h2 id="iga-vs-iam">IGA vs IAM</h2>
+          <div class="flow-diagram"><pre>
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    IAM vs IGA                                                            │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   IAM (Identity & Access Management)    IGA (Identity Governance & Administration)      │
+│   ┌─────────────────────────────────┐   ┌─────────────────────────────────┐            │
+│   │ OPERATIONAL                     │   │ GOVERNANCE                      │            │
+│   │                                 │   │                                 │            │
+│   │ • Authentication (who are you?) │   │ • Access certification          │            │
+│   │ • Authorization (what can you do│   │ • Access request workflows      │            │
+│   │ • SSO/Federation               │   │ • Policy enforcement (SoD)      │            │
+│   │ • MFA                          │   │ • Compliance reporting          │            │
+│   │ • Directory services           │   │ • Role management               │            │
+│   │                                 │   │ • Audit trails                  │            │
+│   │ "Can this user log in?"        │   │ "Should this user have access?" │            │
+│   └─────────────────────────────────┘   └─────────────────────────────────┘            │
+│                                                                                          │
+│   Products: Okta, Entra ID, Ping       Products: SailPoint, Saviynt, One Identity       │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre></div>
 
-          <h2 id="key-concepts">Key Concepts</h2>
-          <p>
-            This section covers the fundamental concepts and terminology you need to understand
-            for IGA Fundamentals.
-          </p>
+          <h2 id="core-capabilities">Core IGA Capabilities</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Capability</th><th>What It Does</th><th>Business Value</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Access Request</strong></td><td>Self-service portal for access</td><td>Reduces IT tickets, faster provisioning</td></tr>
+              <tr><td><strong>Access Certification</strong></td><td>Periodic review of who has what</td><td>SOX/HIPAA compliance, reduce risk</td></tr>
+              <tr><td><strong>Lifecycle Management</strong></td><td>Automate JML processes</td><td>Reduce orphaned accounts, faster onboarding</td></tr>
+              <tr><td><strong>Role Management</strong></td><td>Define and manage access roles</td><td>Simplify access, enable birthright</td></tr>
+              <tr><td><strong>SoD Management</strong></td><td>Prevent toxic access combinations</td><td>Prevent fraud, meet audit requirements</td></tr>
+              <tr><td><strong>Reporting/Analytics</strong></td><td>Visibility into access landscape</td><td>Audit evidence, risk insights</td></tr>
+            </tbody>
+          </table></div>
 
-          <div class="callout info">
-            <div class="callout-content">
-              <div class="callout-title">📚 Core Principles</div>
-              <p>
-                Understanding the core principles of IGA Fundamentals enables you to make informed
-                decisions about implementation strategies and security controls.
-              </p>
-            </div>
-          </div>
+          <h2 id="identity-cube">The Identity Cube Concept</h2>
+          <div class="code-block"><div class="code-header"><span class="code-language">SailPoint Identity Cube</span></div><pre><code># An Identity Cube aggregates all access for one person
 
-          <h2 id="implementation">Implementation Guide</h2>
-          <p>
-            Step-by-step guidance for implementing IGA Fundamentals in enterprise environments.
-          </p>
+IDENTITY: John Smith (john.smith@company.com)
+├── ACCOUNTS (linked accounts across systems)
+│   ├── Active Directory: jsmith
+│   ├── Salesforce: john.smith@company.com
+│   ├── AWS: arn:aws:iam::123:user/jsmith
+│   ├── ServiceNow: john.smith
+│   └── SAP: JSMITH
+│
+├── ENTITLEMENTS (what access they have)
+│   ├── AD Groups: Finance-Users, VPN-Access
+│   ├── Salesforce Profiles: Sales User
+│   ├── AWS Policies: S3-ReadOnly, EC2-Developer
+│   ├── ServiceNow Roles: itil, catalog_admin
+│   └── SAP Roles: Z_FI_DISPLAY
+│
+├── ROLES (business roles assigned)
+│   ├── Finance Analyst (birthright)
+│   └── Project Alpha Member (requested)
+│
+└── ATTRIBUTES (identity data)
+    ├── Department: Finance
+    ├── Manager: Jane Doe
+    ├── Location: Toronto
+    ├── Cost Center: 12345
+    └── Employment Type: FTE
 
-          <h2 id="best-practices">Best Practices</h2>
-          <ul>
-            <li>Follow the principle of least privilege</li>
-            <li>Implement defense in depth strategies</li>
-            <li>Maintain comprehensive audit logs</li>
-            <li>Regular access reviews and certifications</li>
-            <li>Automated provisioning and deprovisioning</li>
-          </ul>
+# Single view of all access = foundation for governance</code></pre></div>
 
-          <h2 id="security-considerations">Security Considerations</h2>
-          <div class="callout warning">
-            <div class="callout-content">
-              <div class="callout-title">⚠️ Security Best Practices</div>
-              <p>
-                Always consider security implications when implementing IGA Fundamentals.
-                Regular security assessments and monitoring are essential.
-              </p>
-            </div>
-          </div>
+          <h2 id="day-to-day">🔧 Security Engineer Day-to-Day Tasks</h2>
+          <div class="callout tip"><div class="callout-content"><div class="callout-title">👨‍💻 What You Actually Do</div>
+            
+            <p><strong>Access Request Management:</strong></p>
+            <ul>
+              <li>Review and approve/deny access requests in queue</li>
+              <li>Configure approval workflows for new applications</li>
+              <li>Troubleshoot failed provisioning</li>
+              <li>Handle escalations from business users</li>
+            </ul>
+
+            <p><strong>Certification Campaigns:</strong></p>
+            <ul>
+              <li>Configure and launch quarterly access reviews</li>
+              <li>Monitor campaign completion rates</li>
+              <li>Chase non-responders (escalate to managers' managers)</li>
+              <li>Review and remediate revoked access</li>
+              <li>Generate compliance reports for auditors</li>
+            </ul>
+
+            <p><strong>Connector Management:</strong></p>
+            <ul>
+              <li>Monitor connector health (is data syncing?)</li>
+              <li>Troubleshoot aggregation failures</li>
+              <li>Onboard new applications to IGA</li>
+              <li>Map attributes and entitlements</li>
+            </ul>
+
+            <p><strong>Role Engineering:</strong></p>
+            <ul>
+              <li>Analyze access patterns for role mining</li>
+              <li>Define new business roles with stakeholders</li>
+              <li>Review and update existing roles</li>
+              <li>Configure birthright access rules</li>
+            </ul>
+          </div></div>
+
+          <h2 id="metrics">Key IGA Metrics</h2>
+          <div class="table-wrapper"><table>
+            <thead><tr><th>Metric</th><th>Target</th><th>Why It Matters</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Certification Completion</strong></td><td>> 95%</td><td>Audit requirement, incomplete = findings</td></tr>
+              <tr><td><strong>Orphaned Accounts</strong></td><td>< 1%</td><td>Security risk, compliance violation</td></tr>
+              <tr><td><strong>Time to Provision</strong></td><td>< 4 hours</td><td>Employee productivity</td></tr>
+              <tr><td><strong>Time to Deprovision</strong></td><td>< 1 hour</td><td>Security risk reduction</td></tr>
+              <tr><td><strong>Access Request Backlog</strong></td><td>< 48 hours</td><td>User satisfaction, productivity</td></tr>
+              <tr><td><strong>SoD Violations</strong></td><td>0 critical</td><td>Fraud prevention, audit</td></tr>
+            </tbody>
+          </table></div>
 
           <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Points Interviewers Look For</div>
-              <ul>
-                <li>Clear understanding of core concepts</li>
-                <li>Real-world implementation experience</li>
-                <li>Knowledge of security best practices</li>
-                <li>Ability to troubleshoot common issues</li>
-                <li>Understanding of enterprise requirements</li>
-              </ul>
-            </div>
-          </div>
+          <div class="callout interview"><div class="callout-content"><div class="callout-title">💡 Key Interview Points</div>
+            <ul>
+              <li><strong>IGA vs IAM:</strong> IGA = governance (who should have access), IAM = operations (authentication)</li>
+              <li><strong>Identity Cube:</strong> Aggregated view of one person's access across all systems</li>
+              <li><strong>Key capabilities:</strong> Request, Certification, Lifecycle, Roles, SoD, Reporting</li>
+              <li><strong>Compliance:</strong> IGA enables SOX, HIPAA, PCI-DSS access control requirements</li>
+              <li><strong>Platforms:</strong> SailPoint, Saviynt, One Identity, Oracle</li>
+            </ul>
+          </div></div>
 
           <nav class="page-nav">
-            <a href="6-1-sailpoint-overview.html" class="page-nav-link prev">
-              <span class="page-nav-label">← Previous</span>
-              <span class="page-nav-title">SailPoint Overview</span>
-            </a>
-            <a href="6-3-access-certifications.html" class="page-nav-link next">
-              <span class="page-nav-label">Next →</span>
-              <span class="page-nav-title">Access Certifications</span>
-            </a>
+            <a href="6-1-sailpoint-overview.html" class="page-nav-link prev"><span class="page-nav-label">← Previous</span><span class="page-nav-title">SailPoint Overview</span></a>
+            <a href="6-3-access-certifications.html" class="page-nav-link next"><span class="page-nav-label">Next →</span><span class="page-nav-title">Access Certifications</span></a>
           </nav>
         </article>
-        <aside class="toc">
-          <div class="toc-header">On This Page</div>
-          <ul class="toc-list"></ul>
-        </aside>
       </div>
     </main>
-    <div class="search-modal">
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" class="search-input" placeholder="Search documentation...">
-        </div>
-        <div class="search-results"></div>
-      </div>
-    </div>
   </div>
   <script src="main.js"></script>
 </body>

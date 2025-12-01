@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IAM Glossary - Ultimate IAM Security Guide</title>
   <link rel="stylesheet" href="main.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
 </head>
 <body>
   <div class="page-wrapper">
+    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" aria-label="Toggle navigation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -23,244 +23,116 @@
           <div class="sidebar-logo-text">IAM <span>Guide</span></div>
         </a>
       </div>
-      <div class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-section-header"><span>1. IAM Foundations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="1-1-iam-overview.html" class="nav-item">IAM Overview</a>
-            <a href="1-2-authn-vs-authz.html" class="nav-item">Authentication vs Authorization</a>
-            <a href="1-3-identity-lifecycle.html" class="nav-item">Identity Lifecycle</a>
-            <a href="1-4-access-control-models.html" class="nav-item">Access Control Models</a>
-            <a href="1-5-least-privilege-sod.html" class="nav-item">Least Privilege & SoD</a>
-            <a href="1-6-directory-services.html" class="nav-item">Directory Services</a>
-            <a href="1-7-identity-governance.html" class="nav-item">Identity Governance</a>
-            <a href="1-8-privileged-access.html" class="nav-item">Privileged Access</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>2. Authentication Protocols</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="2-1-authentication-factors.html" class="nav-item">Authentication Factors</a>
-            <a href="2-2-kerberos.html" class="nav-item">Kerberos</a>
-            <a href="2-3-ntlm.html" class="nav-item">NTLM</a>
-            <a href="2-4-saml.html" class="nav-item">SAML</a>
-            <a href="2-5-oauth2.html" class="nav-item">OAuth 2.0</a>
-            <a href="2-6-oidc.html" class="nav-item">OpenID Connect</a>
-            <a href="2-7-radius-tacacs.html" class="nav-item">RADIUS & TACACS+</a>
-            <a href="2-8-certificates-pki.html" class="nav-item">Certificates & PKI</a>
-            <a href="2-9-sso-mechanisms.html" class="nav-item">SSO Mechanisms</a>
-            <a href="2-10-auth-attacks-defense.html" class="nav-item">Auth Attacks & Defense</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>3. Federation & SSO</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="3-1-federation-fundamentals.html" class="nav-item">Federation Fundamentals</a>
-            <a href="3-2-saml-federation.html" class="nav-item">SAML Federation</a>
-            <a href="3-3-oidc-federation.html" class="nav-item">OIDC Federation</a>
-            <a href="3-4-ws-federation-legacy.html" class="nav-item">WS-Federation & Legacy</a>
-            <a href="3-5-b2b-b2c-federation.html" class="nav-item">B2B & B2C Federation</a>
-            <a href="3-6-federation-troubleshooting.html" class="nav-item">Federation Troubleshooting</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>4. Microsoft Entra ID</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="4-1-entra-overview.html" class="nav-item">Entra ID Overview</a>
-            <a href="4-2-entra-objects.html" class="nav-item">Entra ID Objects</a>
-            <a href="4-3-conditional-access.html" class="nav-item">Conditional Access</a>
-            <a href="4-4-entra-pim.html" class="nav-item">Entra PIM</a>
-            <a href="4-5-entra-governance.html" class="nav-item">Entra Governance</a>
-            <a href="4-6-entra-protection.html" class="nav-item">Entra Protection</a>
-            <a href="4-7-hybrid-identity.html" class="nav-item">Hybrid Identity</a>
-            <a href="4-8-entra-workload-id.html" class="nav-item">Workload Identity</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>5. Okta</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="5-1-okta-overview.html" class="nav-item">Okta Overview</a>
-            <a href="5-2-okta-authentication.html" class="nav-item">Okta Authentication</a>
-            <a href="5-3-okta-authorization.html" class="nav-item">Okta Authorization</a>
-            <a href="5-4-okta-lifecycle.html" class="nav-item">Okta Lifecycle</a>
-            <a href="5-5-okta-integration.html" class="nav-item">Okta Integration</a>
-            <a href="5-6-okta-admin.html" class="nav-item">Okta Administration</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>6. SailPoint & IGA</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="6-1-sailpoint-overview.html" class="nav-item">SailPoint Overview</a>
-            <a href="6-2-iga-fundamentals.html" class="nav-item">IGA Fundamentals</a>
-            <a href="6-3-access-certifications.html" class="nav-item">Access Certifications</a>
-            <a href="6-4-role-management.html" class="nav-item">Role Management</a>
-            <a href="6-5-sod-management.html" class="nav-item">SoD Management</a>
-            <a href="6-6-provisioning-workflows.html" class="nav-item">Provisioning Workflows</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>7. Privileged Access (PAM)</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="7-1-pam-overview.html" class="nav-item">PAM Overview</a>
-            <a href="7-2-password-vaulting.html" class="nav-item">Password Vaulting</a>
-            <a href="7-3-session-management.html" class="nav-item">Session Management</a>
-            <a href="7-4-jit-access.html" class="nav-item">Just-in-Time Access</a>
-            <a href="7-5-secrets-management.html" class="nav-item">Secrets Management</a>
-            <a href="7-6-pam-vendors.html" class="nav-item">PAM Vendors</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>8. Cloud IAM</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="8-1-aws-iam.html" class="nav-item">AWS IAM</a>
-            <a href="8-2-aws-identity-center.html" class="nav-item">AWS Identity Center</a>
-            <a href="8-3-azure-rbac.html" class="nav-item">Azure RBAC</a>
-            <a href="8-4-gcp-iam.html" class="nav-item">GCP IAM</a>
-            <a href="8-5-multi-cloud-identity.html" class="nav-item">Multi-Cloud Identity</a>
-            <a href="8-6-kubernetes-iam.html" class="nav-item">Kubernetes IAM</a>
-            <a href="8-7-infrastructure-as-code.html" class="nav-item">Infrastructure as Code</a>
-            <a href="8-8-cloud-pam.html" class="nav-item">Cloud PAM</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>9. IAM Architecture</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="9-1-enterprise-iam-arch.html" class="nav-item">Enterprise IAM Architecture</a>
-            <a href="9-2-zero-trust-iam.html" class="nav-item">Zero Trust IAM</a>
-            <a href="9-3-hybrid-cloud-iam.html" class="nav-item">Hybrid Cloud IAM</a>
-            <a href="9-4-ciam-architecture.html" class="nav-item">CIAM Architecture</a>
-            <a href="9-5-api-security.html" class="nav-item">API Security</a>
-            <a href="9-6-high-availability.html" class="nav-item">High Availability</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>10. IAM Migrations</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="10-1-migration-planning.html" class="nav-item">Migration Planning</a>
-            <a href="10-2-idp-migrations.html" class="nav-item">IdP Migrations</a>
-            <a href="10-3-legacy-modernization.html" class="nav-item">Legacy Modernization</a>
-            <a href="10-4-iga-pam-migrations.html" class="nav-item">IGA & PAM Migrations</a>
-            <a href="10-5-app-migration.html" class="nav-item">Application Migration</a>
-            <a href="10-6-coexistence-cutover.html" class="nav-item">Coexistence & Cutover</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>11. Security & Attacks</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="11-1-identity-threat-landscape.html" class="nav-item">Identity Threat Landscape</a>
-            <a href="11-2-credential-attacks.html" class="nav-item">Credential Attacks</a>
-            <a href="11-3-token-session-attacks.html" class="nav-item">Token & Session Attacks</a>
-            <a href="11-4-privilege-escalation.html" class="nav-item">Privilege Escalation</a>
-            <a href="11-5-detection-response.html" class="nav-item">Detection & Response</a>
-          </div>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-header collapsed"><span>12. Reference & Interview</span><span class="nav-section-icon">▼</span></div>
-          <div class="nav-section-items">
-            <a href="12-1-iam-glossary.html" class="nav-item">IAM Glossary</a>
-            <a href="12-2-interview-questions.html" class="nav-item">Interview Questions</a>
-            <a href="12-3-scenario-questions.html" class="nav-item">Scenario Questions</a>
-            <a href="12-4-protocol-flows.html" class="nav-item">Protocol Flows</a>
-            <a href="12-5-comparison-tables.html" class="nav-item">Comparison Tables</a>
-            <a href="12-6-cli-api-reference.html" class="nav-item">CLI & API Reference</a>
-          </div>
-        </div>
-      </div>
     </nav>
     <main class="main-content">
-      <header class="content-header">
-        <div class="breadcrumb">
-          <a href="index.html">Home</a>
-          <span class="breadcrumb-separator">›</span>
-          <span>Reference & Interview Prep</span>
-          <span class="breadcrumb-separator">›</span>
-          <span>IAM Glossary</span>
-        </div>
-        <div class="header-actions">
-          <button class="search-trigger">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span>Search</span>
-            <kbd>⌘K</kbd>
-          </button>
-        </div>
-      </header>
       <div class="content-wrapper">
         <article class="content-main">
           <div class="badge badge-l1">L1 Fundamentals</div>
-          <h1>IAM Glossary</h1>
+          <h1>IAM Glossary & Terminology</h1>
           
           <div class="overview-box">
-            <h3>🎯 What You'll Learn</h3>
-            <p>
-              This comprehensive guide covers IAM Glossary concepts, implementation best practices, 
-              security considerations, and real-world enterprise examples. Essential knowledge
-              for security professionals and IAM practitioners.
-            </p>
+            <h3>🎯 Quick Reference</h3>
+            <p>Essential IAM terms and acronyms. Use this as a quick reference during interviews or when reading documentation.</p>
           </div>
 
-          <h2 id="overview">Overview</h2>
-          <p>
-            IAM Glossary is a critical component of enterprise identity and access management.
-            Understanding these concepts is essential for designing, implementing, and
-            maintaining secure IAM solutions.
-          </p>
-
-          <h2 id="key-concepts">Key Concepts</h2>
-          <p>
-            This section covers the fundamental concepts and terminology you need to understand
-            for IAM Glossary.
-          </p>
-
-          <div class="callout info">
-            <div class="callout-content">
-              <div class="callout-title">📚 Core Principles</div>
-              <p>
-                Understanding the core principles of IAM Glossary enables you to make informed
-                decisions about implementation strategies and security controls.
-              </p>
-            </div>
+          <h2 id="a-c">A - C</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+              <tbody>
+                <tr><td><strong>ABAC</strong></td><td>Attribute-Based Access Control. Access decisions based on attributes (user department, resource sensitivity, time of day).</td></tr>
+                <tr><td><strong>Access Certification</strong></td><td>Periodic review where managers confirm users still need their access. Also called attestation or access review.</td></tr>
+                <tr><td><strong>Access Token</strong></td><td>Credential used to access protected resources/APIs. Short-lived (typically 1 hour).</td></tr>
+                <tr><td><strong>ACL</strong></td><td>Access Control List. List of permissions attached to an object specifying who can access it.</td></tr>
+                <tr><td><strong>Active Directory (AD)</strong></td><td>Microsoft's on-premises directory service using Kerberos, NTLM, LDAP.</td></tr>
+                <tr><td><strong>ADFS</strong></td><td>Active Directory Federation Services. Microsoft's on-prem federation server for SSO.</td></tr>
+                <tr><td><strong>Authentication (AuthN)</strong></td><td>Verifying WHO you are. "Prove your identity."</td></tr>
+                <tr><td><strong>Authorization (AuthZ)</strong></td><td>Determining WHAT you can do. "Check your permissions."</td></tr>
+                <tr><td><strong>Azure AD Connect</strong></td><td>Tool that syncs on-prem AD to Entra ID for hybrid identity.</td></tr>
+                <tr><td><strong>Birthright Access</strong></td><td>Access automatically granted based on user attributes (department, job title) when they join.</td></tr>
+                <tr><td><strong>CAE</strong></td><td>Continuous Access Evaluation. Enables real-time token revocation in Entra ID.</td></tr>
+                <tr><td><strong>CIAM</strong></td><td>Customer Identity and Access Management. IAM for external customers (vs employees).</td></tr>
+                <tr><td><strong>Claims</strong></td><td>Statements about a user in a token (name, email, groups, roles).</td></tr>
+                <tr><td><strong>Conditional Access</strong></td><td>Microsoft's Zero Trust policy engine. Evaluates signals, applies access controls.</td></tr>
+              </tbody>
+            </table>
           </div>
 
-          <h2 id="implementation">Implementation Guide</h2>
-          <p>
-            Step-by-step guidance for implementing IAM Glossary in enterprise environments.
-          </p>
-
-          <h2 id="best-practices">Best Practices</h2>
-          <ul>
-            <li>Follow the principle of least privilege</li>
-            <li>Implement defense in depth strategies</li>
-            <li>Maintain comprehensive audit logs</li>
-            <li>Regular access reviews and certifications</li>
-            <li>Automated provisioning and deprovisioning</li>
-          </ul>
-
-          <h2 id="security-considerations">Security Considerations</h2>
-          <div class="callout warning">
-            <div class="callout-content">
-              <div class="callout-title">⚠️ Security Best Practices</div>
-              <p>
-                Always consider security implications when implementing IAM Glossary.
-                Regular security assessments and monitoring are essential.
-              </p>
-            </div>
+          <h2 id="d-i">D - I</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+              <tbody>
+                <tr><td><strong>DAC</strong></td><td>Discretionary Access Control. Owner controls who can access their resource.</td></tr>
+                <tr><td><strong>Directory Service</strong></td><td>Database optimized for storing and querying identity data (AD, LDAP, Entra ID).</td></tr>
+                <tr><td><strong>Entitlement</strong></td><td>A specific permission or access right (group membership, role, privilege).</td></tr>
+                <tr><td><strong>Entra ID</strong></td><td>Microsoft's cloud identity service (formerly Azure AD).</td></tr>
+                <tr><td><strong>Federation</strong></td><td>Trust relationship between identity providers enabling SSO across organizations.</td></tr>
+                <tr><td><strong>FIDO2</strong></td><td>Passwordless authentication standard using hardware security keys. Phishing-resistant.</td></tr>
+                <tr><td><strong>IAM</strong></td><td>Identity and Access Management. Discipline of managing identities and their access.</td></tr>
+                <tr><td><strong>ID Token</strong></td><td>JWT containing user identity claims in OIDC. Used for authentication, NOT API access.</td></tr>
+                <tr><td><strong>IdP</strong></td><td>Identity Provider. System that authenticates users and issues tokens (Okta, Entra ID).</td></tr>
+                <tr><td><strong>IGA</strong></td><td>Identity Governance and Administration. Access certifications, lifecycle management, compliance.</td></tr>
+              </tbody>
+            </table>
           </div>
 
-          <h2 id="interview-tips">Interview Tips</h2>
-          <div class="callout interview">
-            <div class="callout-content">
-              <div class="callout-title">💡 Key Points Interviewers Look For</div>
-              <ul>
-                <li>Clear understanding of core concepts</li>
-                <li>Real-world implementation experience</li>
-                <li>Knowledge of security best practices</li>
-                <li>Ability to troubleshoot common issues</li>
-                <li>Understanding of enterprise requirements</li>
-              </ul>
-            </div>
+          <h2 id="j-o">J - O</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+              <tbody>
+                <tr><td><strong>JIT</strong></td><td>Just-In-Time. Access granted only when needed, for limited time. Core PAM concept.</td></tr>
+                <tr><td><strong>JML</strong></td><td>Joiner, Mover, Leaver. The three identity lifecycle events.</td></tr>
+                <tr><td><strong>JWT</strong></td><td>JSON Web Token. Base64-encoded JSON with header, payload, signature. Used for tokens.</td></tr>
+                <tr><td><strong>Kerberos</strong></td><td>Authentication protocol using tickets. Used by Active Directory.</td></tr>
+                <tr><td><strong>LDAP</strong></td><td>Lightweight Directory Access Protocol. Protocol for querying directories.</td></tr>
+                <tr><td><strong>Least Privilege</strong></td><td>Principle of granting minimum access needed to perform a job.</td></tr>
+                <tr><td><strong>MAC</strong></td><td>Mandatory Access Control. System-enforced access based on security labels.</td></tr>
+                <tr><td><strong>MFA</strong></td><td>Multi-Factor Authentication. Requires 2+ factors from different categories.</td></tr>
+                <tr><td><strong>OAuth 2.0</strong></td><td>Authorization framework for API access. NOT authentication.</td></tr>
+                <tr><td><strong>OIDC</strong></td><td>OpenID Connect. Identity layer on OAuth 2.0. Used for authentication.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="p-s">P - S</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+              <tbody>
+                <tr><td><strong>PAM</strong></td><td>Privileged Access Management. Securing admin/root access with vaulting, session recording, JIT.</td></tr>
+                <tr><td><strong>PIM</strong></td><td>Privileged Identity Management. Microsoft's JIT solution in Entra ID.</td></tr>
+                <tr><td><strong>PKCE</strong></td><td>Proof Key for Code Exchange. Secures OAuth for public clients. Pronounced "pixy."</td></tr>
+                <tr><td><strong>Principal</strong></td><td>Entity that can authenticate (user, service account, application).</td></tr>
+                <tr><td><strong>Provisioning</strong></td><td>Creating accounts and granting access in target systems.</td></tr>
+                <tr><td><strong>RBAC</strong></td><td>Role-Based Access Control. Access granted through role assignments.</td></tr>
+                <tr><td><strong>Refresh Token</strong></td><td>Long-lived token used to get new access tokens without re-authentication.</td></tr>
+                <tr><td><strong>SAML</strong></td><td>Security Assertion Markup Language. XML-based SSO protocol for enterprise apps.</td></tr>
+                <tr><td><strong>SCIM</strong></td><td>System for Cross-domain Identity Management. Standard for automated user provisioning.</td></tr>
+                <tr><td><strong>SoD</strong></td><td>Separation of Duties. Preventing toxic access combinations (e.g., create + approve).</td></tr>
+                <tr><td><strong>SP</strong></td><td>Service Provider. Application that relies on IdP for authentication.</td></tr>
+                <tr><td><strong>SSO</strong></td><td>Single Sign-On. One login grants access to multiple applications.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="t-z">T - Z</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Tenant</strong></td><td>Dedicated instance of Entra ID for an organization.</td></tr>
+                <tr><td><strong>TGT</strong></td><td>Ticket Granting Ticket. Kerberos ticket obtained after initial authentication.</td></tr>
+                <tr><td><strong>Token</strong></td><td>Credential representing identity or authorization (ID token, access token, refresh token).</td></tr>
+                <tr><td><strong>Trust</strong></td><td>Relationship where one system accepts identity assertions from another.</td></tr>
+                <tr><td><strong>UPN</strong></td><td>User Principal Name. User identifier in format user@domain.com.</td></tr>
+                <tr><td><strong>Vaulting</strong></td><td>Securely storing privileged credentials with check-out/check-in and rotation.</td></tr>
+                <tr><td><strong>WebAuthn</strong></td><td>W3C standard for passwordless authentication. Browser API for FIDO2.</td></tr>
+                <tr><td><strong>Zero Trust</strong></td><td>Security model: "Never trust, always verify." Continuous verification regardless of location.</td></tr>
+                <tr><td><strong>ZTNA</strong></td><td>Zero Trust Network Access. Secure remote access without traditional VPN.</td></tr>
+              </tbody>
+            </table>
           </div>
 
           <nav class="page-nav">
@@ -274,24 +146,8 @@
             </a>
           </nav>
         </article>
-        <aside class="toc">
-          <div class="toc-header">On This Page</div>
-          <ul class="toc-list"></ul>
-        </aside>
       </div>
     </main>
-    <div class="search-modal">
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" class="search-input" placeholder="Search documentation...">
-        </div>
-        <div class="search-results"></div>
-      </div>
-    </div>
   </div>
   <script src="main.js"></script>
 </body>
